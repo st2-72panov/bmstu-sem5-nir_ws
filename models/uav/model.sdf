@@ -301,14 +301,14 @@
 
     <link name="X3/camera_link">
       <pose>0.2 0 0.1 0 1 0</pose>
-      <inertial>
+      <!-- <inertial>
         <mass>0.1</mass>
         <inertia>
           <ixx>0.000166667</ixx>
           <iyy>0.000166667</iyy>
           <izz>0.000166667</izz>
         </inertia>
-      </inertial>
+      </inertial> -->
       <collision name="X3/camera_collision">
         <geometry>
           <box><size>0.1 0.1 0.1</size></box>
