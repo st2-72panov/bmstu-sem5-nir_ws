@@ -6,7 +6,8 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     world_name = "uav_world"
-    sdf_file = "/home/viktor/BMSTU/nir_ws/src/uav_aruco/uav_world.sdf"
+    sdf_file = "/home/viktor/BMSTU/nir_ws/uav_world.sdf"
+    bridge_config = '/home/viktor/BMSTU/nir_ws/src/uav_aruco/config/bridge.yaml'
 
     # 1. Запуск Gazebo (на основе gazebo.html "Launch Gazebo from ROS 2")
     gz_sim = ExecuteProcess(
@@ -18,15 +19,7 @@ def generate_launch_description():
     bridge_topics = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['--ros-args', '-p', f'config_file:={sdf_file.replace(".sdf", ".yaml")}'], # Путь к вашему yaml
-        parameters=[{'config_file': '/home/viktor/BMSTU/nir_ws/src/uav_aruco/config/bridge.yaml'}], # В реальном проекте используйте полный путь или find_package
-        output='screen'
-    )
-    # Примечание: Для корректной работы в launch файле лучше указать полный путь к yaml или использовать RosGzBridge action.
-    # Ниже упрощенный вариант запуска с аргументами CLI для надежности согласно документации.
-    bridge_topics_cmd = ExecuteProcess(
-        cmd=['ros2', 'run', 'ros_gz_bridge', 'parameter_bridge',
-             '--ros-args', '-p', 'config_file:=/home/viktor/BMSTU/nir_ws/src/uav_aruco/config/bridge.yaml'],
+        parameters=[{'config_file': bridge_config}],
         output='screen'
     )
 
@@ -71,7 +64,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         gz_sim,
-        bridge_topics_cmd,
+        bridge_topics,
         bridge_service,
         delay_unpause,
         # command_node,
