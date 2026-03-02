@@ -27,7 +27,7 @@ START_Y = -3.0
 START_Z = 0.015       # Чуть выше земли
 
 # Файлы
-WORLD_FILE = "world.sdf"
+WORLD_FILE = "uav_world.sdf"
 MARKERS_DIR = "markers"
 OUTPUT_FILE = "world_with_markers.sdf"
 
