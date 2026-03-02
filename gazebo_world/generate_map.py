@@ -27,9 +27,9 @@ START_Y = -3.0
 START_Z = 0.015       # Чуть выше земли
 
 # Файлы
-WORLD_FILE = "uav_world.sdf"
-MARKERS_DIR = "markers"
-OUTPUT_FILE = "world_with_markers.sdf"
+WORLD_FILE = "gazebo_world/uav_world_0.sdf"
+MARKERS_DIR = "gazebo_world/markers"
+OUTPUT_FILE = "gazebo_world/uav_world.sdf"
 
 # ================= ГЕНЕРАЦИЯ МАРКЕРОВ =================
 def generate_marker_images():
