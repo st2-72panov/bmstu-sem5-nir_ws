@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="uav_world996786453">
+  <world name="uav_world6">
     <physics name="1ms" type="ignored">
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1.0</real_time_factor>
@@ -135,7 +135,7 @@
     </include>
     <include>
       <name>grasspatch_3</name>
-      <pose>7.5 -7.5 1 0.001 0 0</pose>
+      <pose>7.5 -7.5 0.001 0 0 0</pose>
       <uri>https://fuel.gazebosim.org/1.0/hexarotor/models/grasspatch</uri>
     </include>
     <include>
@@ -163,9 +163,14 @@
             </plane>
           </geometry>
           <material>
-            <ambient>0.02 0.03 0 1</ambient>
-            <diffuse>0.02 0.03 0 1</diffuse>
-            <specular>0.02 0.03 0 1</specular>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>1 1 1 1</specular>
+            <pbr>
+              <metal>
+                <albedo_map>models/textures/grass_dry.png</albedo_map>
+                <normal_map>models/textures/grass_dry.png</normal_map>
+              </metal>
+            </pbr>
           </material>
         </visual>
       </link>
@@ -177,7 +182,7 @@
     
     <include>
       <name>X3</name>
-      <uri>file:///home/viktor/BMSTU/nir_ws/models/uav</uri>
+      <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav</uri>
       <pose>2 4 5 0 0 0</pose>
       <plugin
         filename="gz-sim-multicopter-motor-model-system"

@@ -1,0 +1,4959 @@
+<sdf version='1.10'>
+  <world name='uav_world123'>
+    <physics name='1ms' type='ignored'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <plugin name='gz::sim::systems::Physics' filename='gz-sim-physics-system'/>
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>
+    <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system'/>
+    <plugin name='gz::sim::systems::Sensors' filename='gz-sim-sensors-system'>
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <gui fullscreen='false'>
+      <plugin name='3D View' filename='GzScene3D'>
+        <ignition-gui>
+          <title>3D View</title>
+          <property type='bool' key='showTitleBar'>false</property>
+          <property type='string' key='state'>docked</property>
+        </ignition-gui>
+        <engine>ogre2</engine>
+        <scene>scene</scene>
+        <ambient_light>0.4 0.4 0.4</ambient_light>
+        <background_color>0.8 0.8 0.8</background_color>
+        <camera_follow>
+          <target>X3</target>
+          <p_gain>0.5</p_gain>
+          <offset>-3 0.5 1</offset>
+        </camera_follow>
+      </plugin>
+      <plugin name='World control' filename='WorldControl'>
+        <ignition-gui>
+          <title>World control</title>
+          <property type='bool' key='showTitleBar'>false</property>
+          <property type='bool' key='resizable'>false</property>
+          <property type='double' key='height'>72</property>
+          <property type='double' key='width'>121</property>
+          <property type='double' key='z'>1</property>
+          <property type='string' key='state'>floating</property>
+          <anchors target='3D View'>
+            <line own='left' target='left'/>
+            <line own='bottom' target='bottom'/>
+          </anchors>
+        </ignition-gui>
+        <play_pause>true</play_pause>
+        <step>true</step>
+        <start_paused>true</start_paused>
+      </plugin>
+      <plugin name='World stats' filename='WorldStats'>
+        <ignition-gui>
+          <title>World stats</title>
+          <property type='bool' key='showTitleBar'>false</property>
+          <property type='bool' key='resizable'>false</property>
+          <property type='double' key='height'>110</property>
+          <property type='double' key='width'>290</property>
+          <property type='double' key='z'>1</property>
+          <property type='string' key='state'>floating</property>
+          <anchors target='3D View'>
+            <line own='right' target='right'/>
+            <line own='bottom' target='bottom'/>
+          </anchors>
+        </ignition-gui>
+        <sim_time>true</sim_time>
+        <real_time>true</real_time>
+        <real_time_factor>true</real_time_factor>
+        <iterations>true</iterations>
+      </plugin>
+      <plugin name='Teleop' filename='Teleop'>
+        <ignition-gui>
+          <property type='string' key='state'>docked</property>
+        </ignition-gui>
+        <topic>/X3/cmd_vel</topic>
+      </plugin>
+    </gui>
+    <gravity>0 0 -9.8000000000000007</gravity>
+    <magnetic_field>5.5644999999999998e-06 2.2875799999999999e-05 -4.2388400000000002e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <scene>
+      <ambient>0.400000006 0.400000006 0.400000006 1</ambient>
+      <background>0.699999988 0.699999988 0.699999988 1</background>
+      <shadows>true</shadows>
+    </scene>
+    <model name='X3'>
+      <pose>2 4 5 0 0 0</pose>
+      <link name='X3/base_link'>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1.5</mass>
+          <inertia>
+            <ixx>0.034756299999999997</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.070000000000000007</iyy>
+            <iyz>0</iyz>
+            <izz>0.097699999999999995</izz>
+          </inertia>
+        </inertial>
+        <collision name='X3/base_link_inertia_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.46999999999999997 0.46999999999999997 0.11</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='X3/base_link_inertia_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav/meshes/x3.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <link name='X3/rotor_0'>
+        <pose>0.12999999999999989 -0.2200000000000002 0.022999999999999687 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>0.0050000000000000001</mass>
+          <inertia>
+            <ixx>9.7499999999999998e-07</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>4.1704099999999999e-05</iyy>
+            <iyz>0</iyz>
+            <izz>4.2604100000000001e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='X3/rotor_0_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.0050000000000000001</length>
+              <radius>0.10000000000000001</radius>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='X3/rotor_0_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.10000000000000001 0.10000000000000001 0.10000000000000001</scale>
+              <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav/meshes/propeller_ccw.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Blue</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>true</gravity>
+        <velocity_decay/>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='X3/rotor_0_joint' type='revolute'>
+        <child>X3/rotor_0</child>
+        <parent>X3/base_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-10000000000000000</lower>
+            <upper>10000000000000000</upper>
+            <effort>inf</effort>
+            <velocity>inf</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+        <pose>0 0 0 0 0 0</pose>
+      </joint>
+      <link name='X3/rotor_1'>
+        <pose>-0.12999999999999989 0.20000000000000018 0.022999999999999687 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>0.0050000000000000001</mass>
+          <inertia>
+            <ixx>9.7499999999999998e-07</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>4.1704099999999999e-05</iyy>
+            <iyz>0</iyz>
+            <izz>4.2604100000000001e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='X3/rotor_1_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.0050000000000000001</length>
+              <radius>0.10000000000000001</radius>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='X3/rotor_1_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.10000000000000001 0.10000000000000001 0.10000000000000001</scale>
+              <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav/meshes/propeller_ccw.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Red</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>true</gravity>
+        <velocity_decay/>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='X3/rotor_1_joint' type='revolute'>
+        <child>X3/rotor_1</child>
+        <parent>X3/base_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-10000000000000000</lower>
+            <upper>10000000000000000</upper>
+            <effort>inf</effort>
+            <velocity>inf</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+        <pose>0 0 0 0 0 0</pose>
+      </joint>
+      <link name='X3/rotor_2'>
+        <pose>0.12999999999999989 0.21999999999999975 0.022999999999999687 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>0.0050000000000000001</mass>
+          <inertia>
+            <ixx>9.7499999999999998e-07</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>4.1704099999999999e-05</iyy>
+            <iyz>0</iyz>
+            <izz>4.2604100000000001e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='X3/rotor_2_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.0050000000000000001</length>
+              <radius>0.10000000000000001</radius>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='X3/rotor_2_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.10000000000000001 0.10000000000000001 0.10000000000000001</scale>
+              <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav/meshes/propeller_cw.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Blue</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>true</gravity>
+        <velocity_decay/>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='X3/rotor_2_joint' type='revolute'>
+        <child>X3/rotor_2</child>
+        <parent>X3/base_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-10000000000000000</lower>
+            <upper>10000000000000000</upper>
+            <effort>inf</effort>
+            <velocity>inf</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+        <pose>0 0 0 0 0 0</pose>
+      </joint>
+      <link name='X3/rotor_3'>
+        <pose>-0.12999999999999989 -0.20000000000000018 0.022999999999999687 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>0.0050000000000000001</mass>
+          <inertia>
+            <ixx>9.7499999999999998e-07</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>4.1704099999999999e-05</iyy>
+            <iyz>0</iyz>
+            <izz>4.2604100000000001e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='X3/rotor_3_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.0050000000000000001</length>
+              <radius>0.10000000000000001</radius>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='X3/rotor_3_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.10000000000000001 0.10000000000000001 0.10000000000000001</scale>
+              <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav/meshes/propeller_cw.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Red</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>true</gravity>
+        <velocity_decay/>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='X3/rotor_3_joint' type='revolute'>
+        <child>X3/rotor_3</child>
+        <parent>X3/base_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-10000000000000000</lower>
+            <upper>10000000000000000</upper>
+            <effort>inf</effort>
+            <velocity>inf</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+        <pose>0 0 0 0 0 0</pose>
+      </joint>
+      <link name='X3/camera_link'>
+        <pose>-4.4408920985006262e-16 0 -0.049999999999999822 0 1.0000000000000002 0</pose>
+        <inertial>
+          <mass>1e-10</mass>
+          <inertia>
+            <ixx>1e-10</ixx>
+            <iyy>1e-10</iyy>
+            <izz>1e-10</izz>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='X3/camera_collision'>
+          <geometry>
+            <box>
+              <size>0.02 0.02 0.02</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='X3/camera_visual'>
+          <geometry>
+            <box>
+              <size>0.02 0.02 0.02</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0 1 0 1</ambient>
+            <diffuse>0 1 0 1</diffuse>
+            <specular>0 1 0 1</specular>
+          </material>
+        </visual>
+        <sensor name='X3/camera' type='camera'>
+          <pose>0 0 -6.9388939039072284e-18 0 0 0</pose>
+          <topic>/X3/camera</topic>
+          <update_rate>30</update_rate>
+          <enable_metrics>false</enable_metrics>
+          <camera name='__default__'>
+            <pose>0 0 0 0 0 0</pose>
+            <horizontal_fov>1.0469999999999999</horizontal_fov>
+            <image>
+              <width>320</width>
+              <height>240</height>
+              <format>RGB_INT8</format>
+              <anti_aliasing>4</anti_aliasing>
+            </image>
+            <camera_info_topic>__default__</camera_info_topic>
+            <trigger_topic></trigger_topic>
+            <triggered>false</triggered>
+            <clip>
+              <near>0.10000000000000001</near>
+              <far>100</far>
+            </clip>
+            <save enabled='false'>
+              <path>__default__</path>
+            </save>
+            <visibility_mask>4294967295</visibility_mask>
+            <noise>
+              <type>none</type>
+              <mean>0</mean>
+              <stddev>0</stddev>
+            </noise>
+            <distortion>
+              <k1>0</k1>
+              <k2>0</k2>
+              <k3>0</k3>
+              <p1>0</p1>
+              <p2>0</p2>
+              <center>0.5 0.5</center>
+            </distortion>
+            <lens>
+              <type>stereographic</type>
+              <scale_to_hfov>true</scale_to_hfov>
+              <cutoff_angle>1.5707963267948966</cutoff_angle>
+              <env_texture_size>256</env_texture_size>
+            </lens>
+            <optical_frame_id></optical_frame_id>
+          </camera>
+        </sensor>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='X3/camera_joint' type='fixed'>
+        <parent>X3/base_link</parent>
+        <child>X3/camera_link</child>
+        <pose>0.20000000000000004 0 0.10000000000000002 0 0 0</pose>
+      </joint>
+      <plugin name='gz::sim::systems::MulticopterMotorModel' filename='gz-sim-multicopter-motor-model-system'>
+        <robotNamespace>X3</robotNamespace>
+        <jointName>X3/rotor_0_joint</jointName>
+        <linkName>X3/rotor_0</linkName>
+        <turningDirection>ccw</turningDirection>
+        <timeConstantUp>0.0125</timeConstantUp>
+        <timeConstantDown>0.025</timeConstantDown>
+        <maxRotVelocity>800.0</maxRotVelocity>
+        <motorConstant>8.54858e-06</motorConstant>
+        <momentConstant>0.016</momentConstant>
+        <commandSubTopic>gazebo/command/motor_speed</commandSubTopic>
+        <actuator_number>0</actuator_number>
+        <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+        <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+        <motorSpeedPubTopic>motor_speed/0</motorSpeedPubTopic>
+        <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+        <motorType>velocity</motorType>
+      </plugin>
+      <plugin name='gz::sim::systems::MulticopterMotorModel' filename='gz-sim-multicopter-motor-model-system'>
+        <robotNamespace>X3</robotNamespace>
+        <jointName>X3/rotor_1_joint</jointName>
+        <linkName>X3/rotor_1</linkName>
+        <turningDirection>ccw</turningDirection>
+        <timeConstantUp>0.0125</timeConstantUp>
+        <timeConstantDown>0.025</timeConstantDown>
+        <maxRotVelocity>800.0</maxRotVelocity>
+        <motorConstant>8.54858e-06</motorConstant>
+        <momentConstant>0.016</momentConstant>
+        <commandSubTopic>gazebo/command/motor_speed</commandSubTopic>
+        <actuator_number>1</actuator_number>
+        <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+        <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+        <motorSpeedPubTopic>motor_speed/1</motorSpeedPubTopic>
+        <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+        <motorType>velocity</motorType>
+      </plugin>
+      <plugin name='gz::sim::systems::MulticopterMotorModel' filename='gz-sim-multicopter-motor-model-system'>
+        <robotNamespace>X3</robotNamespace>
+        <jointName>X3/rotor_2_joint</jointName>
+        <linkName>X3/rotor_2</linkName>
+        <turningDirection>cw</turningDirection>
+        <timeConstantUp>0.0125</timeConstantUp>
+        <timeConstantDown>0.025</timeConstantDown>
+        <maxRotVelocity>800.0</maxRotVelocity>
+        <motorConstant>8.54858e-06</motorConstant>
+        <momentConstant>0.016</momentConstant>
+        <commandSubTopic>gazebo/command/motor_speed</commandSubTopic>
+        <actuator_number>2</actuator_number>
+        <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+        <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+        <motorSpeedPubTopic>motor_speed/2</motorSpeedPubTopic>
+        <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+        <motorType>velocity</motorType>
+      </plugin>
+      <plugin name='gz::sim::systems::MulticopterMotorModel' filename='gz-sim-multicopter-motor-model-system'>
+        <robotNamespace>X3</robotNamespace>
+        <jointName>X3/rotor_3_joint</jointName>
+        <linkName>X3/rotor_3</linkName>
+        <turningDirection>cw</turningDirection>
+        <timeConstantUp>0.0125</timeConstantUp>
+        <timeConstantDown>0.025</timeConstantDown>
+        <maxRotVelocity>800.0</maxRotVelocity>
+        <motorConstant>8.54858e-06</motorConstant>
+        <momentConstant>0.016</momentConstant>
+        <commandSubTopic>gazebo/command/motor_speed</commandSubTopic>
+        <actuator_number>3</actuator_number>
+        <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+        <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+        <motorSpeedPubTopic>motor_speed/3</motorSpeedPubTopic>
+        <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+        <motorType>velocity</motorType>
+      </plugin>
+      <plugin name='gz::sim::systems::MulticopterVelocityControl' filename='gz-sim-multicopter-control-system'>
+        <robotNamespace>X3</robotNamespace>
+        <commandSubTopic>cmd_vel</commandSubTopic>
+        <enableSubTopic>enable</enableSubTopic>
+        <comLinkName>X3/base_link</comLinkName>
+        <velocityGain>2.7 2.7 2.7</velocityGain>
+        <attitudeGain>2 3 0.15</attitudeGain>
+        <angularRateGain>0.4 0.52 0.18</angularRateGain>
+        <maximumLinearAcceleration>2 2 2</maximumLinearAcceleration>
+        <rotorConfiguration>
+          <rotor>
+            <jointName>X3/rotor_0_joint</jointName>
+            <forceConstant>8.54858e-06</forceConstant>
+            <momentConstant>0.016</momentConstant>
+            <direction>1</direction>
+          </rotor>
+          <rotor>
+            <jointName>X3/rotor_1_joint</jointName>
+            <forceConstant>8.54858e-06</forceConstant>
+            <momentConstant>0.016</momentConstant>
+            <direction>1</direction>
+          </rotor>
+          <rotor>
+            <jointName>X3/rotor_2_joint</jointName>
+            <forceConstant>8.54858e-06</forceConstant>
+            <momentConstant>0.016</momentConstant>
+            <direction>-1</direction>
+          </rotor>
+          <rotor>
+            <jointName>X3/rotor_3_joint</jointName>
+            <forceConstant>8.54858e-06</forceConstant>
+            <momentConstant>0.016</momentConstant>
+            <direction>-1</direction>
+          </rotor>
+        </rotorConfiguration>
+      </plugin>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aruco_marker_101'>
+      <pose>-3 -3 0.014999999999999999 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='block_0_0'>
+          <pose>-0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_1'>
+          <pose>-0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_2'>
+          <pose>-0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_3'>
+          <pose>0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_4'>
+          <pose>0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_5'>
+          <pose>0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_0'>
+          <pose>-0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_1'>
+          <pose>-0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_2'>
+          <pose>-0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_3'>
+          <pose>0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_4'>
+          <pose>0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_5'>
+          <pose>0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_0'>
+          <pose>-0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_1'>
+          <pose>-0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_2'>
+          <pose>-0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_3'>
+          <pose>0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_4'>
+          <pose>0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_5'>
+          <pose>0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_0'>
+          <pose>-0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_1'>
+          <pose>-0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_2'>
+          <pose>-0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_3'>
+          <pose>0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_4'>
+          <pose>0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_5'>
+          <pose>0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_0'>
+          <pose>-0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_1'>
+          <pose>-0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_2'>
+          <pose>-0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_3'>
+          <pose>0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_4'>
+          <pose>0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_5'>
+          <pose>0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_0'>
+          <pose>-0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_1'>
+          <pose>-0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_2'>
+          <pose>-0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_3'>
+          <pose>0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_4'>
+          <pose>0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_5'>
+          <pose>0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aruco_marker_102'>
+      <pose>-2.2000000000000002 -3 0.014999999999999999 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='block_0_0'>
+          <pose>-0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_1'>
+          <pose>-0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_2'>
+          <pose>-0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_3'>
+          <pose>0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_4'>
+          <pose>0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_5'>
+          <pose>0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_0'>
+          <pose>-0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_1'>
+          <pose>-0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_2'>
+          <pose>-0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_3'>
+          <pose>0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_4'>
+          <pose>0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_5'>
+          <pose>0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_0'>
+          <pose>-0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_1'>
+          <pose>-0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_2'>
+          <pose>-0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_3'>
+          <pose>0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_4'>
+          <pose>0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_5'>
+          <pose>0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_0'>
+          <pose>-0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_1'>
+          <pose>-0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_2'>
+          <pose>-0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_3'>
+          <pose>0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_4'>
+          <pose>0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_5'>
+          <pose>0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_0'>
+          <pose>-0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_1'>
+          <pose>-0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_2'>
+          <pose>-0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_3'>
+          <pose>0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_4'>
+          <pose>0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_5'>
+          <pose>0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_0'>
+          <pose>-0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_1'>
+          <pose>-0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_2'>
+          <pose>-0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_3'>
+          <pose>0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_4'>
+          <pose>0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_5'>
+          <pose>0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aruco_marker_103'>
+      <pose>-1.3999999999999999 -3 0.014999999999999999 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='block_0_0'>
+          <pose>-0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_1'>
+          <pose>-0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_2'>
+          <pose>-0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_3'>
+          <pose>0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_4'>
+          <pose>0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_5'>
+          <pose>0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_0'>
+          <pose>-0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_1'>
+          <pose>-0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_2'>
+          <pose>-0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_3'>
+          <pose>0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_4'>
+          <pose>0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_5'>
+          <pose>0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_0'>
+          <pose>-0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_1'>
+          <pose>-0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_2'>
+          <pose>-0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_3'>
+          <pose>0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_4'>
+          <pose>0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_5'>
+          <pose>0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_0'>
+          <pose>-0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_1'>
+          <pose>-0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_2'>
+          <pose>-0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_3'>
+          <pose>0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_4'>
+          <pose>0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_5'>
+          <pose>0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_0'>
+          <pose>-0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_1'>
+          <pose>-0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_2'>
+          <pose>-0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_3'>
+          <pose>0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_4'>
+          <pose>0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_5'>
+          <pose>0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_0'>
+          <pose>-0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_1'>
+          <pose>-0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_2'>
+          <pose>-0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_3'>
+          <pose>0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_4'>
+          <pose>0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_5'>
+          <pose>0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aruco_marker_104'>
+      <pose>-3 -2.2000000000000002 0.014999999999999999 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='block_0_0'>
+          <pose>-0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_1'>
+          <pose>-0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_2'>
+          <pose>-0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_3'>
+          <pose>0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_4'>
+          <pose>0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_5'>
+          <pose>0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_0'>
+          <pose>-0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_1'>
+          <pose>-0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_2'>
+          <pose>-0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_3'>
+          <pose>0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_4'>
+          <pose>0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_5'>
+          <pose>0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_0'>
+          <pose>-0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_1'>
+          <pose>-0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_2'>
+          <pose>-0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_3'>
+          <pose>0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_4'>
+          <pose>0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_5'>
+          <pose>0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_0'>
+          <pose>-0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_1'>
+          <pose>-0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_2'>
+          <pose>-0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_3'>
+          <pose>0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_4'>
+          <pose>0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_5'>
+          <pose>0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_0'>
+          <pose>-0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_1'>
+          <pose>-0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_2'>
+          <pose>-0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_3'>
+          <pose>0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_4'>
+          <pose>0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_5'>
+          <pose>0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_0'>
+          <pose>-0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_1'>
+          <pose>-0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_2'>
+          <pose>-0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_3'>
+          <pose>0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_4'>
+          <pose>0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_5'>
+          <pose>0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aruco_marker_105'>
+      <pose>-2.2000000000000002 -2.2000000000000002 0.014999999999999999 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='block_0_0'>
+          <pose>-0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_1'>
+          <pose>-0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_2'>
+          <pose>-0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_3'>
+          <pose>0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_4'>
+          <pose>0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_5'>
+          <pose>0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_0'>
+          <pose>-0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_1'>
+          <pose>-0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_2'>
+          <pose>-0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_3'>
+          <pose>0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_4'>
+          <pose>0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_5'>
+          <pose>0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_0'>
+          <pose>-0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_1'>
+          <pose>-0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_2'>
+          <pose>-0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_3'>
+          <pose>0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_4'>
+          <pose>0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_5'>
+          <pose>0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_0'>
+          <pose>-0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_1'>
+          <pose>-0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_2'>
+          <pose>-0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_3'>
+          <pose>0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_4'>
+          <pose>0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_5'>
+          <pose>0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_0'>
+          <pose>-0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_1'>
+          <pose>-0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_2'>
+          <pose>-0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_3'>
+          <pose>0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_4'>
+          <pose>0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_5'>
+          <pose>0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_0'>
+          <pose>-0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_1'>
+          <pose>-0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_2'>
+          <pose>-0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_3'>
+          <pose>0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_4'>
+          <pose>0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_5'>
+          <pose>0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aruco_marker_106'>
+      <pose>-1.3999999999999999 -2.2000000000000002 0.014999999999999999 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='block_0_0'>
+          <pose>-0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_1'>
+          <pose>-0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_2'>
+          <pose>-0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_3'>
+          <pose>0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_4'>
+          <pose>0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_5'>
+          <pose>0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_0'>
+          <pose>-0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_1'>
+          <pose>-0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_2'>
+          <pose>-0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_3'>
+          <pose>0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_4'>
+          <pose>0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_5'>
+          <pose>0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_0'>
+          <pose>-0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_1'>
+          <pose>-0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_2'>
+          <pose>-0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_3'>
+          <pose>0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_4'>
+          <pose>0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_5'>
+          <pose>0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_0'>
+          <pose>-0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_1'>
+          <pose>-0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_2'>
+          <pose>-0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_3'>
+          <pose>0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_4'>
+          <pose>0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_5'>
+          <pose>0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_0'>
+          <pose>-0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_1'>
+          <pose>-0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_2'>
+          <pose>-0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_3'>
+          <pose>0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_4'>
+          <pose>0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_5'>
+          <pose>0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_0'>
+          <pose>-0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_1'>
+          <pose>-0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_2'>
+          <pose>-0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_3'>
+          <pose>0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_4'>
+          <pose>0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_5'>
+          <pose>0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aruco_marker_107'>
+      <pose>-3 -1.3999999999999999 0.014999999999999999 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='block_0_0'>
+          <pose>-0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_1'>
+          <pose>-0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_2'>
+          <pose>-0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_3'>
+          <pose>0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_4'>
+          <pose>0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_5'>
+          <pose>0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_0'>
+          <pose>-0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_1'>
+          <pose>-0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_2'>
+          <pose>-0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_3'>
+          <pose>0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_4'>
+          <pose>0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_5'>
+          <pose>0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_0'>
+          <pose>-0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_1'>
+          <pose>-0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_2'>
+          <pose>-0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_3'>
+          <pose>0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_4'>
+          <pose>0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_5'>
+          <pose>0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_0'>
+          <pose>-0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_1'>
+          <pose>-0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_2'>
+          <pose>-0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_3'>
+          <pose>0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_4'>
+          <pose>0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_5'>
+          <pose>0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_0'>
+          <pose>-0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_1'>
+          <pose>-0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_2'>
+          <pose>-0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_3'>
+          <pose>0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_4'>
+          <pose>0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_5'>
+          <pose>0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_0'>
+          <pose>-0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_1'>
+          <pose>-0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_2'>
+          <pose>-0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_3'>
+          <pose>0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_4'>
+          <pose>0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_5'>
+          <pose>0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aruco_marker_108'>
+      <pose>-2.2000000000000002 -1.3999999999999999 0.014999999999999999 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='block_0_0'>
+          <pose>-0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_1'>
+          <pose>-0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_2'>
+          <pose>-0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_3'>
+          <pose>0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_4'>
+          <pose>0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_5'>
+          <pose>0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_0'>
+          <pose>-0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_1'>
+          <pose>-0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_2'>
+          <pose>-0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_3'>
+          <pose>0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_4'>
+          <pose>0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_5'>
+          <pose>0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_0'>
+          <pose>-0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_1'>
+          <pose>-0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_2'>
+          <pose>-0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_3'>
+          <pose>0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_4'>
+          <pose>0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_5'>
+          <pose>0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_0'>
+          <pose>-0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_1'>
+          <pose>-0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_2'>
+          <pose>-0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_3'>
+          <pose>0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_4'>
+          <pose>0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_5'>
+          <pose>0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_0'>
+          <pose>-0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_1'>
+          <pose>-0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_2'>
+          <pose>-0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_3'>
+          <pose>0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_4'>
+          <pose>0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_5'>
+          <pose>0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_0'>
+          <pose>-0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_1'>
+          <pose>-0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_2'>
+          <pose>-0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_3'>
+          <pose>0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_4'>
+          <pose>0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_5'>
+          <pose>0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aruco_marker_109'>
+      <pose>-1.3999999999999999 -1.3999999999999999 0.014999999999999999 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='block_0_0'>
+          <pose>-0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_1'>
+          <pose>-0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_2'>
+          <pose>-0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_3'>
+          <pose>0.050000000000000003 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_4'>
+          <pose>0.15000000000000002 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_0_5'>
+          <pose>0.25 -0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_0'>
+          <pose>-0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_1'>
+          <pose>-0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_2'>
+          <pose>-0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_3'>
+          <pose>0.050000000000000003 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_4'>
+          <pose>0.15000000000000002 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_1_5'>
+          <pose>0.25 -0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_0'>
+          <pose>-0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_1'>
+          <pose>-0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_2'>
+          <pose>-0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_3'>
+          <pose>0.050000000000000003 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_4'>
+          <pose>0.15000000000000002 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_2_5'>
+          <pose>0.25 -0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_0'>
+          <pose>-0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_1'>
+          <pose>-0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_2'>
+          <pose>-0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_3'>
+          <pose>0.050000000000000003 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_4'>
+          <pose>0.15000000000000002 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_3_5'>
+          <pose>0.25 0.050000000000000003 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_0'>
+          <pose>-0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_1'>
+          <pose>-0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_2'>
+          <pose>-0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_3'>
+          <pose>0.050000000000000003 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.899999976 0.899999976 0.899999976 1</ambient>
+            <diffuse>0.899999976 0.899999976 0.899999976 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_4'>
+          <pose>0.15000000000000002 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_4_5'>
+          <pose>0.25 0.15000000000000002 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_0'>
+          <pose>-0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_1'>
+          <pose>-0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_2'>
+          <pose>-0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_3'>
+          <pose>0.050000000000000003 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_4'>
+          <pose>0.15000000000000002 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <visual name='block_5_5'>
+          <pose>0.25 0.25 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.10000000000000001 0.10000000000000001 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.0500000007 0.0500000007 0.0500000007 1</ambient>
+            <diffuse>0.0500000007 0.0500000007 0.0500000007 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='grasspatch'>
+      <static>true</static>
+      <link name='link'>
+        <collision name='collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>15 15</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.5</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='visual_s10'>
+          <pose>0 0 0 0 0 0</pose>
+          <cast_shadows>false</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>15 15</size>
+            </plane>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>1 1 1 1</specular>
+            <pbr>
+              <metal>
+                <albedo_map>materials/textures/grass_dry.png</albedo_map>
+                <normal_map>materials/textures/grass_dry.png</normal_map>
+              </metal>
+            </pbr>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-7.463510318490302 6.4927389108726921 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='grasspatch_0'>
+      <static>true</static>
+      <link name='link'>
+        <collision name='collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>15 15</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.5</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='visual_s10'>
+          <pose>0 0 0 0 0 0</pose>
+          <cast_shadows>false</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>15 15</size>
+            </plane>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>1 1 1 1</specular>
+            <pbr>
+              <metal>
+                <albedo_map>materials/textures/grass_dry.png</albedo_map>
+                <normal_map>materials/textures/grass_dry.png</normal_map>
+              </metal>
+            </pbr>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>7.4455161405687189 6.4735388272228835 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='grasspatch_1'>
+      <static>true</static>
+      <link name='link'>
+        <collision name='collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>15 15</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.5</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='visual_s10'>
+          <pose>0 0 0 0 0 0</pose>
+          <cast_shadows>false</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>15 15</size>
+            </plane>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>1 1 1 1</specular>
+            <pbr>
+              <metal>
+                <albedo_map>materials/textures/grass_dry.png</albedo_map>
+                <normal_map>materials/textures/grass_dry.png</normal_map>
+              </metal>
+            </pbr>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>7.4478121033486575 -8.5030483978841769 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='grasspatch_2'>
+      <static>true</static>
+      <link name='link'>
+        <collision name='collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>15 15</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.5</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='visual_s10'>
+          <pose>0 0 0 0 0 0</pose>
+          <cast_shadows>false</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>15 15</size>
+            </plane>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>1 1 1 1</specular>
+            <pbr>
+              <metal>
+                <albedo_map>materials/textures/grass_dry.png</albedo_map>
+                <normal_map>materials/textures/grass_dry.png</normal_map>
+              </metal>
+            </pbr>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-7.4728967760713649 -8.4907517052927783 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <light name='sun' type='directional'>
+      <pose>0 0 10 0 0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <intensity>1</intensity>
+      <direction>-0.5 0.10000000000000001 -0.90000000000000002</direction>
+      <diffuse>0.800000012 0.800000012 0.800000012 1</diffuse>
+      <specular>0.200000003 0.200000003 0.200000003 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <linear>0.01</linear>
+        <constant>0.90000000000000002</constant>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+  </world>
+</sdf>
