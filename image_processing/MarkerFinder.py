@@ -4,13 +4,15 @@ import os
 import time
 from datetime import datetime
 
-OUTPUT_DIR = "image_processing/IMAGES_OUTPUT"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(SCRIPT_DIR, "IMAGES_OUTPUT")
 
-class PoseEstimator:
+class MarkerFinder:
     def __init__(self):
         # self.frame contains coordinates of opposite diagonal points: ((x1, y1), (x2, y2))
         # By default (0, 0) and (0, 0), will be updated to image size in process if not set
         self.frame = ((0, 0), (0, 0))
+        # self.frame = ((1280 // 4, 720 // 3), (1280 * 4 // 5, 720))
         self.log = {}
         self.iteration_count = 0
 
@@ -81,35 +83,32 @@ class PoseEstimator:
         # 1. Binarization (Otsu)
         # THRESH_OTSU finds optimal threshold value
         _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-
-        # 2. Edge Detection (Canny on binary or gray, using binary for strict boundaries)
-        edges = cv2.Canny(gray, 100, 200)
-
-        # 3. Detect Quadrilaterals
-        # Find contours on binary image
+        
+        # 2. Find Corners
         contours, _ = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         
+        # 3. Detect Quadrilaterals
         found_quads = []
         
-        for cnt in contours:
+        for contour in contours:
             # Approximate contour using Ramer-Douglas-Peucker
-            epsilon = 0.02 * cv2.arcLength(cnt, True)
-            approx = cv2.approxPolyDP(cnt, epsilon, True)
+            epsilon = 0.02 * cv2.arcLength(contour, True)
+            approx = cv2.approxPolyDP(contour, epsilon, True)
             
-            # Check if quadrilateral (4 vertices)
-            if len(approx) == 4:
-                # Check convexity (markers are usually convex)
-                if cv2.isContourConvex(approx):
-                    area = cv2.contourArea(approx)
-                    if area > 100: # Filter tiny noise
-                        found_quads.append({
-                            'contour': approx,
-                            'area': area,
-                            'original_contour': cnt
-                        })
+            # Check if quadrilateral (4 vertices) & convex
+            if not (len(approx) == 4 and cv2.isContourConvex(approx)):
+                continue
+            # Filter tiny noise
+            area = cv2.contourArea(approx)
+            if area > 100:
+                found_quads.append({
+                    'contour': approx,
+                    'area': area,
+                    'original_contour': contour
+                })
 
         end_time = time.perf_counter()
-        return binary, edges, found_quads, end_time - start_time
+        return binary, contours, found_quads, end_time - start_time
 
     def _step3_filter_quads(self, image, quads):
         """
@@ -181,8 +180,9 @@ class PoseEstimator:
         self._save_image(output_dir, "2_binarization.jpg", binary_bgr)
         
         # Save 3) Edges
-        edges_bgr = cv2.cvtColor(edges_img, cv2.COLOR_GRAY2BGR)
-        self._save_image(output_dir, "3_edges.jpg", edges_bgr)
+        edges_viz = np.zeros_like(binary_bgr)
+        cv2.drawContours(edges_viz, edges_img, -1, (0, 255, 0), 1)
+        self._save_image(output_dir, "3_edges.jpg", edges_viz)
 
         # Save 4.1) Found Quadrilaterals (before filtering)
         img_found = img_step1.copy()
@@ -205,35 +205,9 @@ class PoseEstimator:
 
 # Example Usage (Commented out for script execution safety)
 if __name__ == "__main__":
-    finder = PoseEstimator()
-    image = cv2.imread("IMAGES_TEST/medium.jpg")
-    if False:
-        import cv2.aruco as aruco
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-        # Настройка словаря и параметров детектора
-        dictionary = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
-        parameters = aruco.DetectorParameters()
-
-        # Детектирование маркеров
-        corners, ids, _ = aruco.detectMarkers(gray, dictionary, parameters=parameters)
-
-        # Отрисовка результатов
-        if ids is not None:
-            aruco.drawDetectedMarkers(image, corners, ids)
-
-        # Отображение результата
-        cv2.imshow('ArUco Markers', image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-
-        # Вывод информации о найденных маркерах
-        if ids is not None:
-            print(f'Найдено маркеров: {len(ids)}')
-            print(f'ID маркеров: {ids.flatten()}')
-        else:
-            print('Маркеры не найдены')
-    elif image is not None:
+    finder = MarkerFinder()
+    image = cv2.imread("../IMAGES_TEST/medium.jpg")
+    
+    if image is not None:
         results = finder.process(image)
         print(finder.log)
-    pass
