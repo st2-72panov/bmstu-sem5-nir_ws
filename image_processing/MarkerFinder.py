@@ -29,10 +29,10 @@ class MarkerFinder:
         path = os.path.join(dir_path, filename)
         cv2.imwrite(path, image)
 
-    def _step1_crop_and_noise(self, photo):
+    def _step1_prepare_images(self, photo):
         """
-        Step 1: Crop by frame, add Gaussian noise, draw frame.
-        Returns: processed_image, log_time
+        Step 1: Add noise, create framed original AND cropped version.
+        Returns: framed_original_img, cropped_img, log_time
         """
         start_time = time.perf_counter()
         
@@ -51,25 +51,28 @@ class MarkerFinder:
         x1, x2 = sorted([max(0, min(x1, w)), max(0, min(x2, w))])
         y1, y2 = sorted([max(0, min(y1, h)), max(0, min(y2, h))])
 
-        # Crop
-        cropped = photo[y1:y2, x1:x2].copy()
+        # Add Gaussian Noise to original image
+        noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
+        noisy = np.clip(photo + noise, 0, 255).astype(np.uint8)
 
-        # Add Gaussian Noise
-        noise = np.random.normal(0, 10, cropped.shape).astype(np.int16)
-        noisy = np.clip(cropped + noise, 0, 255).astype(np.uint8)
+        # Create Framed Original (for saving step 1)
+        # Draw rectangle on the FULL noisy image to show crop area
+        framed_original = noisy.copy()
+        cv2.rectangle(framed_original, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
-        # Draw Frame (Green edges)
-        framed = cv2.rectangle(noisy, (0, 0), (noisy.shape[1]-1, noisy.shape[0]-1), (0, 255, 0), 2)
+        # Create Cropped Version (for further processing, NO frame)
+        cropped = noisy[y1:y2, x1:x2].copy()
 
         end_time = time.perf_counter()
-        return framed, end_time - start_time
+        return framed_original, cropped, end_time - start_time
 
     def _step2_detect_and_filter_quads(self, image):
         """
-        Step 2 (Merged): Binarization, Quad Detection, Filtering.
-        Returns: binary_img, contours, found_quads, selected_quads, log_time
+        Step 2: Binarization, Edges, Quad Detection, and Filtering (Merged Step 2 & 3).
+        Returns: binary_img, contours, found_quads, selected_quads, time_step2, time_step3
         """
-        start_time = time.perf_counter()
+        # --- Part 1: Detection (Original Step 2) ---
+        start_time_step = time.perf_counter()
 
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -78,16 +81,19 @@ class MarkerFinder:
         
         # 2. Find Contours
         contours, _ = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        
+         
         # 3. Detect Quadrilaterals
         found_quads = []
         
         for contour in contours:
+            # Approximate contour using Ramer-Douglas-Peucker
             epsilon = 0.02 * cv2.arcLength(contour, True)
             approx = cv2.approxPolyDP(contour, epsilon, True)
             
+            # Check if quadrilateral (4 vertices) & convex
             if not (len(approx) == 4 and cv2.isContourConvex(approx)):
                 continue
+            # Filter tiny noise
             area = cv2.contourArea(approx)
             if area > 100:
                 found_quads.append({
@@ -96,22 +102,28 @@ class MarkerFinder:
                     'original_contour': contour
                 })
 
-        # 4. Filter quads (Area < 0.5 img, Not inside another)
-        # OPTIMIZATION: Calculate img_area ONCE
+
+        # --- Part 2: Filtering ---
+
         img_area = image.shape[0] * image.shape[1]
         max_area = img_area * 0.5
         
-        # OPTIMIZATION: Filter by area in one pass (no extra copy)
+        # Filter by area first
         valid_quads = [q for q in found_quads if q['area'] < max_area]
+        
+        # Sort by area descending to help with containment check (larger first)
         valid_quads.sort(key=lambda k: k['area'], reverse=True)
         
         selected_quads = []
         
-        # OPTIMIZATION: Early exit in containment check
+        # Check containment
         for i, q1 in enumerate(valid_quads):
             is_inside = False
             for j, q2 in enumerate(valid_quads):
-                if i == j or q2['area'] <= q1['area']:
+                if i == j:
+                    continue
+                # q2 cannot contain q1 if it's smaller or equal
+                if q2['area'] <= q1['area']:
                     continue
                 
                 all_points_inside = True
@@ -125,46 +137,54 @@ class MarkerFinder:
                 if all_points_inside:
                     is_inside = True
                     break
-        
+          
             if not is_inside:
                 selected_quads.append(q1)
 
-        end_time = time.perf_counter()
-        return binary, contours, found_quads, selected_quads, end_time - start_time
+        end_time_step = time.perf_counter()
+        time_step = end_time_step - start_time_step
+
+        return binary, contours, found_quads, selected_quads, time_step
 
     def process(self, photo):
         """
         Main processing function.
         """
+        # Reset log for this iteration
         self.log = {}
         output_dir = self._create_output_dir()
 
-        # --- Step 1: Crop + Noise + Frame ---
-        img_step1, time_step1 = self._step1_crop_and_noise(photo)
+        # --- Step 1: Noise + Frame (Original) + Crop (for processing) ---
+        framed_original, cropped_img, time_step1 = self._step1_prepare_images(photo)
         self.log['1_crop_noise_frame'] = time_step1
-        self._save_image(output_dir, "1_crop_noise_frame.jpg", img_step1)
+        # Save 1) Original with noise and green frame (UNCROPPED) 
+        self._save_image(output_dir, "1_crop_noise_frame.jpg", framed_original)
 
-        # --- Step 2: Detection + Filtering (Merged) ---
-        binary_img, edges_img, found_quads, selected_quads, time_step2 = self._step2_detect_and_filter_quads(img_step1)
-        self.log['2_detection_and_filter'] = time_step2
+        # Use cropped_img for all subsequent steps (NO frame visible)
         
-        # Save 2) Binarization
+        # --- Step 2: Detection + Filtering (Merged) ---
+        binary_img, edges_img, found_quads, selected_quads, time_step2 = self._step2_detect_and_filter_quads(cropped_img)
+        
+        # Preserve log keys for functional compatibility
+        self.log['2_detection_bin_edges'] = time_step2
+        
+        # Save 2) Binarization (CROPPED, no frame)
         binary_bgr = cv2.cvtColor(binary_img, cv2.COLOR_GRAY2BGR)
         self._save_image(output_dir, "2_binarization.jpg", binary_bgr)
         
-        # Save 3) Edges/Contours
+        # Save 3) Edges/Contours (CROPPED, no frame)
         edges_viz = np.zeros_like(binary_bgr)
         cv2.drawContours(edges_viz, edges_img, -1, (0, 255, 0), 1)
         self._save_image(output_dir, "3_edges.jpg", edges_viz)
 
-        # Save 4.1) Found Quadrilaterals (before filtering)
-        img_found = img_step1.copy()
+        # Save 4.1) Found Quadrilaterals (CROPPED, no frame)
+        img_found = cropped_img.copy()
         for q in found_quads:
             cv2.drawContours(img_found, [q['contour']], -1, (0, 255, 0), 2)
         self._save_image(output_dir, "4.1_found_quads.jpg", img_found)
 
-        # Save 4.2) Selected Quadrilaterals (after filtering)
-        img_selected = img_step1.copy()
+        # Save 4.2) Selected Quadrilaterals (CROPPED, no frame)
+        img_selected = cropped_img.copy()
         for q in selected_quads:
             cv2.drawContours(img_selected, [q['contour']], -1, (0, 255, 0), 2)
         self._save_image(output_dir, "4.2_selected_quads.jpg", img_selected)
