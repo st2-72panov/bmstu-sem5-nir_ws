@@ -6,14 +6,14 @@ import cv2
 import os
 
 OUTPUT_DIR = "IMAGES_RAW"
+ONLY_IMAGE = True
 
 class ImageSaver(Node):
     def __init__(self):
         super().__init__('image_saver')
-        # Подписка на топик, который создал мост
         self.subscription = self.create_subscription(
             Image,
-            '/X3/camera',  # Убедитесь, что имя совпадает с тем, что в мосту
+            '/X3/camera',
             self.listener_callback,
             10)
         
@@ -26,20 +26,19 @@ class ImageSaver(Node):
         self.get_logger().info('Node started. Waiting for images...')
 
     def listener_callback(self, msg):
-        try:
-            # Конвертация ROS сообщения в изображение OpenCV
-            cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        if self.count == 1:
+            return
             
-            # Формирование имени файла
-            filename = os.path.join(OUTPUT_DIR, f'image_{self.count:04d}.jpg')
+        cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        filename = os.path.join(OUTPUT_DIR, f'image_{self.count:04d}.jpg')
+        cv2.imwrite(filename, cv_image)
+        self.get_logger().info(f'Saved: {filename}')
+        self.image_saved = True
+        
+        if ONLY_IMAGE:    
+            self.get_logger().info('First image saved. Shutting down...')
+            rclpy.shutdown()
             
-            # Сохранение
-            cv2.imwrite(filename, cv_image)
-            self.get_logger().info(f'Saved: {filename}')
-            
-            self.count += 1
-        except Exception as e:
-            self.get_logger().error(f'Failed to save image: {str(e)}')
 
 def main(args=None):
     rclpy.init(args=args)
@@ -50,7 +49,6 @@ def main(args=None):
         pass
     finally:
         node.destroy_node()
-        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
