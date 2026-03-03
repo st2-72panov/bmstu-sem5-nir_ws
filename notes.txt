@@ -1,2 +1,7 @@
-worlds:
+    worlds:
 /opt/ros/jazzy/opt/gz_sim_vendor/share/gz/gz-sim8/worlds
+
+    bridge algorithm:
+gz sim ./gazebo_world/uav_world.sdf
+ros2 run ros_gz_bridge parameter_bridge /X3/camera@sensor_msgs/msg/Image@gz.msgs.Image
+python3 save_image_node.py
