@@ -10,6 +10,7 @@ SDR_START = """<?xml version='1.0'?>
 <sdf version='1.6'>
   <model name='marker_pad'>
     <pose>0 0 0.0001 0 0 0</pose>
+    <static>true</static>
     
     <!-- Asphalt patch -->
     <link name='marker_pad/base_link'>
