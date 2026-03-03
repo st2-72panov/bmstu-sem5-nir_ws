@@ -22,9 +22,9 @@ BLOCK_HEIGHT = 0.01   # Высота блоков (1 см - низко)
 MARKER_GAP = 2        # Расстояние между маркерами в блоках
 
 # Позиция первого маркера в мире
-START_X = -3.0
-START_Y = -3.0
-START_Z = 0.015       # Чуть выше земли
+START_X = 5.0
+START_Y = -5.0
+START_Z = 0.01       # Чуть выше земли
 
 # Файлы
 WORLD_FILE = "gazebo_world/uav_world_0.sdf"

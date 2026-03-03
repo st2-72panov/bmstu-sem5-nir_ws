@@ -53,6 +53,24 @@
         </gz-gui>
         <topic>/X3/cmd_vel</topic>
       </plugin>
+      <plugin filename="ImageDisplay" name="Image Display">
+        <gz-gui>
+          <property key="state" type="string">docked</property>
+        </gz-gui>
+        <topic>camera</topic>
+      </plugin>
+      <plugin filename="Screenshot" name="Screenshot">
+        <gz-gui>
+          <property key="resizable" type="bool">false</property>
+          <property key="x" type="double">250</property>
+          <property key="y" type="double">50</property>
+          <property key="width" type="double">50</property>
+          <property key="height" type="double">50</property>
+          <property key="state" type="string">floating</property>
+          <property key="showTitleBar" type="bool">false</property>
+          <property key="cardBackground" type="string">#777777</property>
+        </gz-gui>
+      </plugin>
     </gui>
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
@@ -121,7 +139,7 @@
     <include>
       <name>X3</name>
       <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav</uri>
-      <pose>2 4 5 0 0 0</pose>
+      <pose>2 4 5 0 0 -0.5</pose>
       <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
         <robotNamespace>X3</robotNamespace>
         <jointName>X3/rotor_0_joint</jointName>
@@ -232,7 +250,7 @@
       </plugin>
     </include>
     <model name="aruco_marker_101">
-      <pose>-3.0 -3.0 0.015 0 0 0</pose>
+      <pose>5.0 -5.0 0.01 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <visual name="block_0_0">
@@ -670,7 +688,7 @@
       </link>
     </model>
     <model name="aruco_marker_102">
-      <pose>-2.2 -3.0 0.015 0 0 0</pose>
+      <pose>5.8 -5.0 0.01 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <visual name="block_0_0">
@@ -1108,7 +1126,7 @@
       </link>
     </model>
     <model name="aruco_marker_103">
-      <pose>-1.4 -3.0 0.015 0 0 0</pose>
+      <pose>6.6 -5.0 0.01 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <visual name="block_0_0">
@@ -1546,7 +1564,7 @@
       </link>
     </model>
     <model name="aruco_marker_104">
-      <pose>-3.0 -2.2 0.015 0 0 0</pose>
+      <pose>5.0 -4.2 0.01 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <visual name="block_0_0">
@@ -1984,7 +2002,7 @@
       </link>
     </model>
     <model name="aruco_marker_105">
-      <pose>-2.2 -2.2 0.015 0 0 0</pose>
+      <pose>5.8 -4.2 0.01 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <visual name="block_0_0">
@@ -2422,7 +2440,7 @@
       </link>
     </model>
     <model name="aruco_marker_106">
-      <pose>-1.4 -2.2 0.015 0 0 0</pose>
+      <pose>6.6 -4.2 0.01 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <visual name="block_0_0">
@@ -2860,7 +2878,7 @@
       </link>
     </model>
     <model name="aruco_marker_107">
-      <pose>-3.0 -1.4 0.015 0 0 0</pose>
+      <pose>5.0 -3.4 0.01 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <visual name="block_0_0">
@@ -3298,7 +3316,7 @@
       </link>
     </model>
     <model name="aruco_marker_108">
-      <pose>-2.2 -1.4 0.015 0 0 0</pose>
+      <pose>5.8 -3.4 0.01 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <visual name="block_0_0">
@@ -3736,7 +3754,7 @@
       </link>
     </model>
     <model name="aruco_marker_109">
-      <pose>-1.4 -1.4 0.015 0 0 0</pose>
+      <pose>6.6 -3.4 0.01 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <visual name="block_0_0">
