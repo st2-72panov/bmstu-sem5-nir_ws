@@ -188,7 +188,7 @@
     
     <include>
       <name>X3</name>
-      <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav</uri>
+      <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/X3_with_camera</uri>
       <pose>2 4 5 0 0 -0.5</pose>
       <plugin
         filename="gz-sim-multicopter-motor-model-system"

@@ -29,7 +29,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav/meshes/x3.dae</uri>
+            <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/X3_with_camera/meshes/x3.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -70,7 +70,7 @@
         <geometry>
           <mesh>
             <scale>0.1 0.1 0.1</scale>
-            <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav/meshes/propeller_ccw.dae</uri>
+            <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/X3_with_camera/meshes/propeller_ccw.dae</uri>
           </mesh>
         </geometry>
         <material>
@@ -135,7 +135,7 @@
         <geometry>
           <mesh>
             <scale>0.1 0.1 0.1</scale>
-            <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav/meshes/propeller_ccw.dae</uri>
+            <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/X3_with_camera/meshes/propeller_ccw.dae</uri>
           </mesh>
         </geometry>
         <material>
@@ -200,7 +200,7 @@
         <geometry>
           <mesh>
             <scale>0.1 0.1 0.1</scale>
-            <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav/meshes/propeller_cw.dae</uri>
+            <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/X3_with_camera/meshes/propeller_cw.dae</uri>
           </mesh>
         </geometry>
         <material>
@@ -265,7 +265,7 @@
         <geometry>
           <mesh>
             <scale>0.1 0.1 0.1</scale>
-            <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/uav/meshes/propeller_cw.dae</uri>
+            <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/X3_with_camera/meshes/propeller_cw.dae</uri>
           </mesh>
         </geometry>
         <material>
@@ -328,8 +328,8 @@
         <camera>
           <horizontal_fov>1.047</horizontal_fov>
           <image>
-            <width>320</width>
-            <height>240</height>
+            <width>1280</width>
+            <height>720</height>
           </image>
           <clip>
             <near>0.1</near>

@@ -205,9 +205,9 @@ class PoseEstimator:
 
 # Example Usage (Commented out for script execution safety)
 if __name__ == "__main__":
-    # finder = PoseEstimator()
-    image = cv2.imread("./IMAGES_TEST/medium.jpg")
-    if True:
+    finder = PoseEstimator()
+    image = cv2.imread("IMAGES_TEST/medium.jpg")
+    if False:
         import cv2.aruco as aruco
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -233,7 +233,7 @@ if __name__ == "__main__":
             print(f'ID маркеров: {ids.flatten()}')
         else:
             print('Маркеры не найдены')
-    elif img is not None:
-        results = finder.process(img)
+    elif image is not None:
+        results = finder.process(image)
         print(finder.log)
     pass
