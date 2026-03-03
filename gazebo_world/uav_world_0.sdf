@@ -31,11 +31,11 @@
     <gui fullscreen="0">
       <!-- 3D scene -->
       <plugin filename="GzScene3D" name="3D View">
-        <ignition-gui>
+        <gz-gui>
           <title>3D View</title>
           <!-- <property type="bool" key="showTitleBar">false</property> -->
           <property type="string" key="state">docked</property>
-        </ignition-gui>
+        </gz-gui>
 
         <engine>ogre2</engine>
         <scene>scene</scene>
@@ -55,7 +55,6 @@
           <property type="bool" key="showTitleBar">false</property>
           <property type="bool" key="resizable">false</property>
           <property type="double" key="height">72</property>
-          <property type="double" key="width">121</property>
           <property type="double" key="z">1</property>
 
           <property type="string" key="state">floating</property>
