@@ -83,7 +83,7 @@ class PoseEstimator:
         _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
         # 2. Edge Detection (Canny on binary or gray, using binary for strict boundaries)
-        edges = cv2.Canny(binary, 100, 200)
+        edges = cv2.Canny(gray, 100, 200)
 
         # 3. Detect Quadrilaterals
         # Find contours on binary image
@@ -205,9 +205,35 @@ class PoseEstimator:
 
 # Example Usage (Commented out for script execution safety)
 if __name__ == "__main__":
-    finder = PoseEstimator()
-    img = cv2.imread("./saved_images/3.png")
-    if img is not None:
+    # finder = PoseEstimator()
+    image = cv2.imread("./IMAGES_TEST/medium.jpg")
+    if True:
+        import cv2.aruco as aruco
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+        # Настройка словаря и параметров детектора
+        dictionary = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
+        parameters = aruco.DetectorParameters()
+
+        # Детектирование маркеров
+        corners, ids, _ = aruco.detectMarkers(gray, dictionary, parameters=parameters)
+
+        # Отрисовка результатов
+        if ids is not None:
+            aruco.drawDetectedMarkers(image, corners, ids)
+
+        # Отображение результата
+        cv2.imshow('ArUco Markers', image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+        # Вывод информации о найденных маркерах
+        if ids is not None:
+            print(f'Найдено маркеров: {len(ids)}')
+            print(f'ID маркеров: {ids.flatten()}')
+        else:
+            print('Маркеры не найдены')
+    elif img is not None:
         results = finder.process(img)
         print(finder.log)
     pass
