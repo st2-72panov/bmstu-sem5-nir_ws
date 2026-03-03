@@ -4,6 +4,8 @@ import os
 import time
 from datetime import datetime
 
+OUTPUT_DIR = "image_processing/IMAGES_OUTPUT"
+
 class PoseEstimator:
     def __init__(self):
         # self.frame contains coordinates of opposite diagonal points: ((x1, y1), (x2, y2))
@@ -18,7 +20,7 @@ class PoseEstimator:
         now = datetime.now()
         # Replacing ':' with '-' for filesystem compatibility (Windows does not allow ':' in paths)
         timestamp = now.strftime("%d.%m_%H-%M-%S")
-        dir_name = f"output/{timestamp}_{self.iteration_count}"
+        dir_name = f"{OUTPUT_DIR}/{timestamp}_{self.iteration_count}"
         os.makedirs(dir_name, exist_ok=True)
         return dir_name
 

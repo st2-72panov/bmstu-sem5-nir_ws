@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="uav_world">
+  <world name="uav_world13">
     <physics name="1ms" type="ignored">
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1.0</real_time_factor>
@@ -85,6 +85,38 @@
       </attenuation>
       <direction>-0.5 0.1 -0.9</direction>
     </light>
+    <model name="asphalt_patch">
+      <static>true</static>
+      <pose>5.5 -4 0.002 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>5 5</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>5 5</size>
+            </plane>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>1 1 1 1</specular>
+            <pbr>
+              <metal>
+                <albedo_map>models/textures/tarmac.png</albedo_map>
+                <normal_map>models/textures/tarmac.png</normal_map>
+              </metal>
+            </pbr>
+          </material>
+        </visual>
+      </link>
+    </model>
     <include>
       <name>grasspatch_1</name>
       <pose>7.5 7.5 0.001 0 0 0</pose>
@@ -261,8 +293,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_1">
@@ -273,8 +305,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_2">
@@ -285,8 +317,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_3">
@@ -297,8 +329,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_4">
@@ -309,8 +341,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_5">
@@ -321,8 +353,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_0">
@@ -333,8 +365,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_1">
@@ -345,8 +377,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_2">
@@ -357,8 +389,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_3">
@@ -369,8 +401,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_4">
@@ -381,8 +413,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_5">
@@ -393,8 +425,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_0">
@@ -405,8 +437,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_1">
@@ -417,8 +449,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_2">
@@ -429,8 +461,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_3">
@@ -441,8 +473,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_4">
@@ -453,8 +485,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_5">
@@ -465,8 +497,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_0">
@@ -477,8 +509,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_1">
@@ -489,8 +521,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_2">
@@ -501,8 +533,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_3">
@@ -513,8 +545,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_4">
@@ -525,8 +557,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_5">
@@ -537,8 +569,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_0">
@@ -549,8 +581,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_1">
@@ -561,8 +593,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_2">
@@ -573,8 +605,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_3">
@@ -585,8 +617,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_4">
@@ -597,8 +629,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_5">
@@ -609,8 +641,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_0">
@@ -621,8 +653,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_1">
@@ -633,8 +665,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_2">
@@ -645,8 +677,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_3">
@@ -657,8 +689,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_4">
@@ -669,8 +701,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_5">
@@ -681,8 +713,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
       </link>
@@ -699,8 +731,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_1">
@@ -711,8 +743,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_2">
@@ -723,8 +755,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_3">
@@ -735,8 +767,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_4">
@@ -747,8 +779,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_5">
@@ -759,8 +791,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_0">
@@ -771,8 +803,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_1">
@@ -783,8 +815,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_2">
@@ -795,8 +827,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_3">
@@ -807,8 +839,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_4">
@@ -819,8 +851,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_5">
@@ -831,8 +863,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_0">
@@ -843,8 +875,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_1">
@@ -855,8 +887,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_2">
@@ -867,8 +899,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_3">
@@ -879,8 +911,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_4">
@@ -891,8 +923,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_5">
@@ -903,8 +935,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_0">
@@ -915,8 +947,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_1">
@@ -927,8 +959,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_2">
@@ -939,8 +971,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_3">
@@ -951,8 +983,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_4">
@@ -963,8 +995,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_5">
@@ -975,8 +1007,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_0">
@@ -987,8 +1019,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_1">
@@ -999,8 +1031,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_2">
@@ -1011,8 +1043,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_3">
@@ -1023,8 +1055,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_4">
@@ -1035,8 +1067,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_5">
@@ -1047,8 +1079,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_0">
@@ -1059,8 +1091,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_1">
@@ -1071,8 +1103,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_2">
@@ -1083,8 +1115,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_3">
@@ -1095,8 +1127,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_4">
@@ -1107,8 +1139,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_5">
@@ -1119,8 +1151,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
       </link>
@@ -1137,8 +1169,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_1">
@@ -1149,8 +1181,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_2">
@@ -1161,8 +1193,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_3">
@@ -1173,8 +1205,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_4">
@@ -1185,8 +1217,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_5">
@@ -1197,8 +1229,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_0">
@@ -1209,8 +1241,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_1">
@@ -1221,8 +1253,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_2">
@@ -1233,8 +1265,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_3">
@@ -1245,8 +1277,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_4">
@@ -1257,8 +1289,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_5">
@@ -1269,8 +1301,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_0">
@@ -1281,8 +1313,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_1">
@@ -1293,8 +1325,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_2">
@@ -1305,8 +1337,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_3">
@@ -1317,8 +1349,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_4">
@@ -1329,8 +1361,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_5">
@@ -1341,8 +1373,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_0">
@@ -1353,8 +1385,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_1">
@@ -1365,8 +1397,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_2">
@@ -1377,8 +1409,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_3">
@@ -1389,8 +1421,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_4">
@@ -1401,8 +1433,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_5">
@@ -1413,8 +1445,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_0">
@@ -1425,8 +1457,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_1">
@@ -1437,8 +1469,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_2">
@@ -1449,8 +1481,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_3">
@@ -1461,8 +1493,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_4">
@@ -1473,8 +1505,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_5">
@@ -1485,8 +1517,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_0">
@@ -1497,8 +1529,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_1">
@@ -1509,8 +1541,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_2">
@@ -1521,8 +1553,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_3">
@@ -1533,8 +1565,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_4">
@@ -1545,8 +1577,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_5">
@@ -1557,8 +1589,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
       </link>
@@ -1575,8 +1607,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_1">
@@ -1587,8 +1619,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_2">
@@ -1599,8 +1631,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_3">
@@ -1611,8 +1643,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_4">
@@ -1623,8 +1655,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_5">
@@ -1635,8 +1667,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_0">
@@ -1647,8 +1679,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_1">
@@ -1659,8 +1691,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_2">
@@ -1671,8 +1703,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_3">
@@ -1683,8 +1715,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_4">
@@ -1695,8 +1727,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_5">
@@ -1707,8 +1739,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_0">
@@ -1719,8 +1751,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_1">
@@ -1731,8 +1763,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_2">
@@ -1743,8 +1775,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_3">
@@ -1755,8 +1787,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_4">
@@ -1767,8 +1799,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_5">
@@ -1779,8 +1811,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_0">
@@ -1791,8 +1823,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_1">
@@ -1803,8 +1835,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_2">
@@ -1815,8 +1847,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_3">
@@ -1827,8 +1859,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_4">
@@ -1839,8 +1871,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_5">
@@ -1851,8 +1883,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_0">
@@ -1863,8 +1895,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_1">
@@ -1875,8 +1907,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_2">
@@ -1887,8 +1919,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_3">
@@ -1899,8 +1931,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_4">
@@ -1911,8 +1943,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_5">
@@ -1923,8 +1955,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_0">
@@ -1935,8 +1967,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_1">
@@ -1947,8 +1979,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_2">
@@ -1959,8 +1991,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_3">
@@ -1971,8 +2003,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_4">
@@ -1983,8 +2015,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_5">
@@ -1995,8 +2027,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
       </link>
@@ -2013,8 +2045,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_1">
@@ -2025,8 +2057,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_2">
@@ -2037,8 +2069,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_3">
@@ -2049,8 +2081,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_4">
@@ -2061,8 +2093,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_5">
@@ -2073,8 +2105,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_0">
@@ -2085,8 +2117,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_1">
@@ -2097,8 +2129,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_2">
@@ -2109,8 +2141,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_3">
@@ -2121,8 +2153,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_4">
@@ -2133,8 +2165,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_5">
@@ -2145,8 +2177,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_0">
@@ -2157,8 +2189,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_1">
@@ -2169,8 +2201,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_2">
@@ -2181,8 +2213,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_3">
@@ -2193,8 +2225,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_4">
@@ -2205,8 +2237,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_5">
@@ -2217,8 +2249,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_0">
@@ -2229,8 +2261,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_1">
@@ -2241,8 +2273,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_2">
@@ -2253,8 +2285,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_3">
@@ -2265,8 +2297,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_4">
@@ -2277,8 +2309,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_5">
@@ -2289,8 +2321,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_0">
@@ -2301,8 +2333,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_1">
@@ -2313,8 +2345,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_2">
@@ -2325,8 +2357,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_3">
@@ -2337,8 +2369,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_4">
@@ -2349,8 +2381,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_5">
@@ -2361,8 +2393,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_0">
@@ -2373,8 +2405,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_1">
@@ -2385,8 +2417,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_2">
@@ -2397,8 +2429,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_3">
@@ -2409,8 +2441,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_4">
@@ -2421,8 +2453,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_5">
@@ -2433,8 +2465,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
       </link>
@@ -2451,8 +2483,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_1">
@@ -2463,8 +2495,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_2">
@@ -2475,8 +2507,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_3">
@@ -2487,8 +2519,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_4">
@@ -2499,8 +2531,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_5">
@@ -2511,8 +2543,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_0">
@@ -2523,8 +2555,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_1">
@@ -2535,8 +2567,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_2">
@@ -2547,8 +2579,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_3">
@@ -2559,8 +2591,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_4">
@@ -2571,8 +2603,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_5">
@@ -2583,8 +2615,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_0">
@@ -2595,8 +2627,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_1">
@@ -2607,8 +2639,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_2">
@@ -2619,8 +2651,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_3">
@@ -2631,8 +2663,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_4">
@@ -2643,8 +2675,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_5">
@@ -2655,8 +2687,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_0">
@@ -2667,8 +2699,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_1">
@@ -2679,8 +2711,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_2">
@@ -2691,8 +2723,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_3">
@@ -2703,8 +2735,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_4">
@@ -2715,8 +2747,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_5">
@@ -2727,8 +2759,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_0">
@@ -2739,8 +2771,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_1">
@@ -2751,8 +2783,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_2">
@@ -2763,8 +2795,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_3">
@@ -2775,8 +2807,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_4">
@@ -2787,8 +2819,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_5">
@@ -2799,8 +2831,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_0">
@@ -2811,8 +2843,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_1">
@@ -2823,8 +2855,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_2">
@@ -2835,8 +2867,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_3">
@@ -2847,8 +2879,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_4">
@@ -2859,8 +2891,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_5">
@@ -2871,8 +2903,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
       </link>
@@ -2889,8 +2921,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_1">
@@ -2901,8 +2933,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_2">
@@ -2913,8 +2945,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_3">
@@ -2925,8 +2957,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_4">
@@ -2937,8 +2969,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_5">
@@ -2949,8 +2981,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_0">
@@ -2961,8 +2993,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_1">
@@ -2973,8 +3005,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_2">
@@ -2985,8 +3017,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_3">
@@ -2997,8 +3029,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_4">
@@ -3009,8 +3041,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_5">
@@ -3021,8 +3053,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_0">
@@ -3033,8 +3065,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_1">
@@ -3045,8 +3077,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_2">
@@ -3057,8 +3089,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_3">
@@ -3069,8 +3101,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_4">
@@ -3081,8 +3113,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_5">
@@ -3093,8 +3125,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_0">
@@ -3105,8 +3137,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_1">
@@ -3117,8 +3149,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_2">
@@ -3129,8 +3161,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_3">
@@ -3141,8 +3173,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_4">
@@ -3153,8 +3185,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_5">
@@ -3165,8 +3197,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_0">
@@ -3177,8 +3209,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_1">
@@ -3189,8 +3221,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_2">
@@ -3201,8 +3233,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_3">
@@ -3213,8 +3245,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_4">
@@ -3225,8 +3257,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_5">
@@ -3237,8 +3269,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_0">
@@ -3249,8 +3281,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_1">
@@ -3261,8 +3293,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_2">
@@ -3273,8 +3305,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_3">
@@ -3285,8 +3317,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_4">
@@ -3297,8 +3329,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_5">
@@ -3309,8 +3341,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
       </link>
@@ -3327,8 +3359,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_1">
@@ -3339,8 +3371,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_2">
@@ -3351,8 +3383,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_3">
@@ -3363,8 +3395,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_4">
@@ -3375,8 +3407,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_5">
@@ -3387,8 +3419,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_0">
@@ -3399,8 +3431,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_1">
@@ -3411,8 +3443,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_2">
@@ -3423,8 +3455,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_3">
@@ -3435,8 +3467,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_4">
@@ -3447,8 +3479,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_5">
@@ -3459,8 +3491,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_0">
@@ -3471,8 +3503,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_1">
@@ -3483,8 +3515,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_2">
@@ -3495,8 +3527,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_3">
@@ -3507,8 +3539,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_4">
@@ -3519,8 +3551,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_5">
@@ -3531,8 +3563,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_0">
@@ -3543,8 +3575,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_1">
@@ -3555,8 +3587,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_2">
@@ -3567,8 +3599,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_3">
@@ -3579,8 +3611,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_4">
@@ -3591,8 +3623,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_5">
@@ -3603,8 +3635,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_0">
@@ -3615,8 +3647,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_1">
@@ -3627,8 +3659,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_2">
@@ -3639,8 +3671,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_3">
@@ -3651,8 +3683,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_4">
@@ -3663,8 +3695,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_5">
@@ -3675,8 +3707,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_0">
@@ -3687,8 +3719,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_1">
@@ -3699,8 +3731,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_2">
@@ -3711,8 +3743,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_3">
@@ -3723,8 +3755,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_4">
@@ -3735,8 +3767,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_5">
@@ -3747,8 +3779,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
       </link>
@@ -3765,8 +3797,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_1">
@@ -3777,8 +3809,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_2">
@@ -3789,8 +3821,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_3">
@@ -3801,8 +3833,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_4">
@@ -3813,8 +3845,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_0_5">
@@ -3825,8 +3857,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_0">
@@ -3837,8 +3869,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_1">
@@ -3849,8 +3881,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_2">
@@ -3861,8 +3893,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_3">
@@ -3873,8 +3905,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_4">
@@ -3885,8 +3917,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_1_5">
@@ -3897,8 +3929,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_0">
@@ -3909,8 +3941,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_1">
@@ -3921,8 +3953,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_2">
@@ -3933,8 +3965,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_3">
@@ -3945,8 +3977,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_4">
@@ -3957,8 +3989,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_2_5">
@@ -3969,8 +4001,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_0">
@@ -3981,8 +4013,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_1">
@@ -3993,8 +4025,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_2">
@@ -4005,8 +4037,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_3">
@@ -4017,8 +4049,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_4">
@@ -4029,8 +4061,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_3_5">
@@ -4041,8 +4073,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_0">
@@ -4053,8 +4085,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_1">
@@ -4065,8 +4097,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_2">
@@ -4077,8 +4109,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_3">
@@ -4089,8 +4121,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.9 0.9 0.9 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_4">
@@ -4101,8 +4133,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_4_5">
@@ -4113,8 +4145,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_0">
@@ -4125,8 +4157,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_1">
@@ -4137,8 +4169,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_2">
@@ -4149,8 +4181,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_3">
@@ -4161,8 +4193,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_4">
@@ -4173,8 +4205,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
         <visual name="block_5_5">
@@ -4185,8 +4217,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>0.05 0.05 0.05 1</ambient>
-            <diffuse>0.05 0.05 0.05 1</diffuse>
+            <ambient>0.01 0.01 0.01 1</ambient>
+            <diffuse>0.01 0.01 0.01 1</diffuse>
           </material>
         </visual>
       </link>

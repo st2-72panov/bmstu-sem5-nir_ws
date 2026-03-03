@@ -28,7 +28,7 @@ START_Z = 0.01       # Чуть выше земли
 
 # Файлы
 WORLD_FILE = "gazebo_world/uav_world_0.sdf"
-MARKERS_DIR = "gazebo_world/markers"
+MARKERS_DIR = "gazebo_world/MARKERS"
 OUTPUT_FILE = "gazebo_world/uav_world.sdf"
 
 # ================= ГЕНЕРАЦИЯ МАРКЕРОВ =================
@@ -114,11 +114,11 @@ def create_marker_sdf(marker_id, grid_data, marker_index):
             diffuse = ET.SubElement(material, "diffuse")
             
             if color == "black":
-                ambient.text = "0.05 0.05 0.05 1"
-                diffuse.text = "0.05 0.05 0.05 1"
+                ambient.text = "0.01 0.01 0.01 1"
+                diffuse.text = "0.01 0.01 0.01 1"
             else:
-                ambient.text = "0.9 0.9 0.9 1"
-                diffuse.text = "0.9 0.9 0.9 1"
+                ambient.text = "0.95 0.95 0.95 1"
+                diffuse.text = "0.95 0.95 0.95 1"
     
     return model
 

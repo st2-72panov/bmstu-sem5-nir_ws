@@ -5,6 +5,8 @@ from cv_bridge import CvBridge
 import cv2
 import os
 
+OUTPUT_DIR = "IMAGES_RAW"
+
 class ImageSaver(Node):
     def __init__(self):
         super().__init__('image_saver')
@@ -17,10 +19,9 @@ class ImageSaver(Node):
         
         self.bridge = CvBridge()
         self.count = 0
-        self.save_dir = './saved_images'
         
-        if not os.path.exists(self.save_dir):
-            os.makedirs(self.save_dir)
+        if not os.path.exists(OUTPUT_DIR):
+            os.makedirs(OUTPUT_DIR)
             
         self.get_logger().info('Node started. Waiting for images...')
 
@@ -30,7 +31,7 @@ class ImageSaver(Node):
             cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
             
             # Формирование имени файла
-            filename = os.path.join(self.save_dir, f'image_{self.count:04d}.jpg')
+            filename = os.path.join(OUTPUT_DIR, f'image_{self.count:04d}.jpg')
             
             # Сохранение
             cv2.imwrite(filename, cv_image)
