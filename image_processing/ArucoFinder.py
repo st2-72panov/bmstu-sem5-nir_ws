@@ -4,116 +4,59 @@ import os
 import time
 from datetime import datetime
 
+from Aruco import Aruco
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR = os.path.join(SCRIPT_DIR, "IMAGES_OUTPUT")
+OUTPUT_DIR_FOLDER = os.path.join(SCRIPT_DIR, "IMAGES_OUTPUT")
 FRAME_FACTOR = 2.0  # Коэффициент размера фрейма
 
-class MarkerFinder:
-    def __init__(self, marker_id=101, marker_dictionary=cv2.aruco.DICT_6X6_250):
-        # self.frame содержит координаты противоположных диагональных точек: ((x1, y1), (x2, y2))
-        self.frame = None
+
+class ArucoFinder:
+    def __init__(self):
+        # self.frame содержит координаты противоположных диагональных точек фрейма: ((x1, y1), (x2, y2))
+        self.frame = None  # Frame - весь экран
         self.log = {}
         self.iteration_count = 0
-        self.marker_id = marker_id
-        self.marker_dictionary = marker_dictionary
-        # Вычисляем размер маркера (внутренняя часть + рамка)
-        self.marker_size = self._get_marker_size()
-        # Получаем эталонную бинарную матрицу для маркера
-        self.marker_pattern = self._get_marker_pattern()
     
-    def _get_marker_size(self):
-        """
-        Получает размер маркера из словаря.
-        Для DICT_NxN_250 размер внутренней части = N, с рамкой = N+2
-        """
-        dict_name = cv2.aruco.getPredefinedDictionary(self.marker_dictionary)
-        # Извлекаем размер из названия словаря (например, 6x6)
-        # Для DICT_6X6_250 внутренняя часть 6x6, с рамкой 8x8
-        if "6X6" in str(self.marker_dictionary):
-            return 6 + 2  # 8x8 с рамкой
-        elif "5X5" in str(self.marker_dictionary):
-            return 5 + 2  # 7x7 с рамкой
-        elif "7X7" in str(self.marker_dictionary):
-            return 7 + 2  # 9x9 с рамкой
-        elif "4X4" in str(self.marker_dictionary):
-            return 4 + 2  # 6x6 с рамкой
-        else:
-            return 8  # По умолчанию
-    
-    def _get_marker_pattern(self):
-        """
-        Получает эталонную бинарную матрицу для конкретного marker_id.
-        Возвращает матрицу размера marker_size x marker_size.
-        """
-        dictionary = cv2.aruco.getPredefinedDictionary(self.marker_dictionary)
         
-        # generateImageMarker возвращает grayscale изображение (1 канал)
-        marker_img = cv2.aruco.generateImageMarker(dictionary, self.marker_id, self.marker_size * 10)
-        
-        # Не конвертируем, т.к. изображение уже grayscale
-        gray = marker_img if len(marker_img.shape) == 2 else cv2.cvtColor(marker_img, cv2.COLOR_BGR2GRAY)
-        _, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
-        
-        # Разделяем на ячейки
-        cell_size = binary.shape[0] // self.marker_size
-        pattern = np.zeros((self.marker_size, self.marker_size), dtype=np.uint8)
-        
-        for i in range(self.marker_size):
-            for j in range(self.marker_size):
-                y1, y2 = i * cell_size, (i + 1) * cell_size
-                x1, x2 = j * cell_size, (j + 1) * cell_size
-                cell = binary[y1:y2, x1:x2]
-                # Если больше половины пикселей белые - ячейка белая (1)
-                pattern[i, j] = 1 if np.mean(cell) > 127 else 0
-        
-        return pattern
-    
-    def _create_output_dir(self):
-        """Создаёт выходную директорию на основе временной метки и счётчика итераций."""
-        self.iteration_count += 1
+    def _create_output_dir(self) -> str:
+        """Создаёт выходную директорию на основе временной метки и счётчика итераций"""
         now = datetime.now()
         timestamp = now.strftime("%d.%m_%H-%M-%S")
-        dir_name = f"{OUTPUT_DIR}/{timestamp}_{self.iteration_count}"
+        dir_name = f"{OUTPUT_DIR_FOLDER}/{timestamp}_{self.iteration_count}"
         os.makedirs(dir_name, exist_ok=True)
-        return dir_name
+        self.output_dir = dir_name
 
-    def _save_image(self, dir_path, filename, image):
-        """Вспомогательная функция для сохранения изображения."""
-        path = os.path.join(dir_path, filename)
+
+    def _save_image(self, filename, image):
+        path = os.path.join(self.output_dir, filename)
         cv2.imwrite(path, image)
 
-    def _step1_prepare_images(self, photo):
+
+    def _step0_prepare_images(self, photo):
         """
-        Шаг 1: Добавление шума, создание оригинала в рамке И обрезанной версии.
+        Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии.
         Возвращает: framed_original_img, cropped_img, log_time
         """
         start_time = time.perf_counter()
         
-        h, w = photo.shape[:2]
-        
-        if self.frame is None:
-            x1, y1 = 0, 0
-            x2, y2 = w, h
-            self.frame = ((x1, y1), (x2, y2))
-        else:
+        noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
+        photo = np.clip(photo + noise, 0, 255).astype(np.uint8)
+
+        framed_original = photo.copy()
+        if self.frame is not None:
             x1, y1 = self.frame[0]
             x2, y2 = self.frame[1]
-
-        x1, x2 = sorted([max(0, min(x1, w)), max(0, min(x2, w))])
-        y1, y2 = sorted([max(0, min(y1, h)), max(0, min(y2, h))])
-
-        noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
-        noisy = np.clip(photo + noise, 0, 255).astype(np.uint8)
-
-        framed_original = noisy.copy()
-        cv2.rectangle(framed_original, (x1, y1), (x2, y2), (0, 255, 0), 2)
-
-        cropped = noisy[y1:y2, x1:x2]
+            cv2.rectangle(framed_original, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cropped = photo[y1:y2, x1:x2]
+        else:
+            cropped = photo.copy()
 
         end_time = time.perf_counter()
         return framed_original, cropped, end_time - start_time
 
-    def _step2_detect_and_filter_quads(self, image):
+
+    def _step1_detect_and_filter_quads(self, image):
         """
         Шаг 2: Бинаризация, обнаружение четырёхугольников и фильтрация (объединено).
         Возвращает: binary_img, contours, selected_quads, log_time
@@ -148,7 +91,8 @@ class MarkerFinder:
         end_time = time.perf_counter()
         return binary, contours, found_quads, end_time - start_time
 
-    def _step3_detect_marker(self, cropped_img, selected_quads):
+
+    def _step2_detect_marker(self, cropped_img, selected_quads):
         """
         Шаг 3: Детекция нужного маркера ArUco.
         
@@ -163,7 +107,7 @@ class MarkerFinder:
         start_time = time.perf_counter()
         
         detected_marker = None
-        best_score = 0
+        best_match = 0
         
         for quad in selected_quads:
             contour = quad['contour']
@@ -175,9 +119,9 @@ class MarkerFinder:
             # Целевые точки для нормализации (размер marker_size x marker_size)
             dst_points = np.array([
                 [0, 0],
-                [self.marker_size - 1, 0],
-                [self.marker_size - 1, self.marker_size - 1],
-                [0, self.marker_size - 1]
+                [self.marker.size - 1, 0],
+                [self.marker.size - 1, self.marker.size - 1],
+                [0, self.marker.size - 1]
             ], dtype=np.float32)
             
             # Вычисляем гомографию
@@ -199,11 +143,11 @@ class MarkerFinder:
             _, binary_norm = cv2.threshold(gray_norm, 127, 255, cv2.THRESH_BINARY)
             
             # Разделяем на ячейки и сравниваем с паттерном
-            cell_size = normalized_size // self.marker_size
-            detected_pattern = np.zeros((self.marker_size, self.marker_size), dtype=np.uint8)
+            cell_size = normalized_size // self.marker.size
+            detected_pattern = np.zeros((self.marker.size, self.marker.size), dtype=np.uint8)
             
-            for i in range(self.marker_size):
-                for j in range(self.marker_size):
+            for i in range(self.marker.size):
+                for j in range(self.marker.size):
                     y1, y2 = i * cell_size, (i + 1) * cell_size
                     x1, x2 = j * cell_size, (j + 1) * cell_size
                     
@@ -213,17 +157,17 @@ class MarkerFinder:
             
             # Проверяем рамку (должна быть чёрной)
             border_valid = True
-            for i in range(self.marker_size):
+            for i in range(self.marker.size):
                 if detected_pattern[0, i] != 0:  # Верхняя рамка
                     border_valid = False
                     break
-                if detected_pattern[self.marker_size-1, i] != 0:  # Нижняя рамка
+                if detected_pattern[self.marker.size-1, i] != 0:  # Нижняя рамка
                     border_valid = False
                     break
                 if detected_pattern[i, 0] != 0:  # Левая рамка
                     border_valid = False
                     break
-                if detected_pattern[i, self.marker_size-1] != 0:  # Правая рамка
+                if detected_pattern[i, self.marker.size-1] != 0:  # Правая рамка
                     border_valid = False
                     break
             
@@ -231,27 +175,28 @@ class MarkerFinder:
                 continue
             
             # Сравниваем внутреннюю часть с эталоном
-            inner_size = self.marker_size - 2
+            inner_size = self.marker.size - 2
             inner_detected = detected_pattern[1:-1, 1:-1]
-            inner_expected = self.marker_pattern[1:-1, 1:-1]
+            inner_expected = self.marker.pattern[1:-1, 1:-1]
             
             match_count = np.sum(inner_detected == inner_expected)
             total_inner = inner_size * inner_size
-            score = match_count / total_inner
+            match = match_count / total_inner
             
-            if score > best_score and score >= 0.8:  # Порог соответствия 80%
-                best_score = score
+            if match > best_match and match >= 0.9:  # Порог соответствия 90%
+                best_match = match
                 detected_marker = {
                     'quad': quad,
                     'homography': homography,
                     'normalized_img': normalized_img,
                     'corners': ordered_points,
-                    'score': score,
+                    'match': match,
                     'detected_pattern': detected_pattern
                 }
         
         end_time = time.perf_counter()
         return detected_marker, end_time - start_time
+
 
     def _order_points(self, points):
         """
@@ -275,7 +220,8 @@ class MarkerFinder:
         
         return np.array([top_left, top_right, bottom_right, bottom_left], dtype=np.float32)
 
-    def _step4_subpixel_corners(self, cropped_img, detected_marker, image_shape):
+
+    def _step3_subpixel_corners(self, cropped_img, detected_marker, image_shape):
         """
         Шаг 4: Субпиксельное вычисление углов маркера.
         
@@ -360,6 +306,7 @@ class MarkerFinder:
         end_time = time.perf_counter()
         return subpixel_corners, frame_coords, framed_image, end_time - start_time
 
+
     def _split_contour_to_sides(self, contour, corners):
         """
         Разделяет контур на 4 стороны на основе 4 углов.
@@ -387,6 +334,7 @@ class MarkerFinder:
         
         return [np.array(side) for side in sides]
 
+
     def _point_to_line_distance(self, point, line_start, line_end):
         """Вычисляет расстояние от точки до отрезка."""
         x0, y0 = point
@@ -407,6 +355,7 @@ class MarkerFinder:
         proj_y = y1 + t * dy
         
         return np.sqrt((x0 - proj_x)**2 + (y0 - proj_y)**2)
+
 
     def _fit_line_least_squares(self, points):
         """
@@ -449,6 +398,7 @@ class MarkerFinder:
         
         return (a, b, c)
 
+
     def _line_intersection(self, line1, line2):
         """
         Вычисляет точку пересечения двух прямых.
@@ -469,83 +419,77 @@ class MarkerFinder:
         
         return np.array([x, y], dtype=np.float32)
 
-    def process(self, photo, marker_id=None, marker_dictionary=None):
+
+    def process(self, photo, marker: Aruco, isRepeatedAttempt=False):
         """Основная функция обработки."""
-        # Обновляем параметры маркера если переданы
-        if marker_id is not None:
-            self.marker_id = marker_id
-            self.marker_pattern = self._get_marker_pattern()
-        if marker_dictionary is not None:
-            self.marker_dictionary = marker_dictionary
-            self.marker_size = self._get_marker_size()
-            self.marker_pattern = self._get_marker_pattern()
-        
+        if not isRepeatedAttempt:
+            self.iteration_count += 1
+        self._create_output_dir()
+        self.marker = marker
         self.log = {}
-        output_dir = self._create_output_dir()
+
+        # Шаг 0
+        framed_original, cropped_img, time_step0 = self._step0_prepare_images(photo)
+        self.log['0_crop_noise_frame'] = time_step0
+        self._save_image("0_crop_noise_frame.jpg", framed_original)
 
         # Шаг 1
-        framed_original, cropped_img, time_step1 = self._step1_prepare_images(photo)
-        self.log['1_crop_noise_frame'] = time_step1
-        self._save_image(output_dir, "1_crop_noise_frame.jpg", framed_original)
-
-        # Шаг 2
-        binary_img, edges_img, selected_quads, time_step2 = self._step2_detect_and_filter_quads(cropped_img)
-        self.log['2_detection_filter'] = time_step2
+        binary_img, edges_img, selected_quads, time_step1 = self._step1_detect_and_filter_quads(cropped_img)
+        self.log['1_detection_filter'] = time_step1
         
         binary_bgr = cv2.cvtColor(binary_img, cv2.COLOR_GRAY2BGR)
-        self._save_image(output_dir, "2_binarization.jpg", binary_bgr)
+        self._save_image("1_binarization.jpg", binary_bgr)
         
         edges_viz = np.zeros_like(binary_bgr)
         cv2.drawContours(edges_viz, edges_img, -1, (0, 255, 0), 1)
-        self._save_image(output_dir, "3_edges.jpg", edges_viz)
+        self._save_image("2_edges.jpg", edges_viz)
 
         img_selected = cropped_img.copy()
         for q in selected_quads:
             cv2.drawContours(img_selected, [q['contour']], -1, (0, 255, 0), 2)
-        self._save_image(output_dir, "4_selected_quads.jpg", img_selected)
+        self._save_image("3_selected_quads.jpg", img_selected)
 
-        # Шаг 3: Детекция маркера
-        detected_marker, time_step3 = self._step3_detect_marker(cropped_img, selected_quads)
-        self.log['3_marker_detection'] = time_step3
+        # Шаг 2: Поиск нужного маркера
+        detected_marker, time_step2 = self._step2_detect_marker(cropped_img, selected_quads)
+        self.log['2_marker_detection'] = time_step2
         
+        # Шаг 3: Уточнение углов
         if detected_marker is not None:
             # Сохраняем нормализованное изображение маркера
-            self._save_image(output_dir, "5_normalized_marker.jpg", detected_marker['normalized_img'])
+            self._save_image("4_normalized_marker.jpg", detected_marker['normalized_img'])  # TODO: удалить за ненадобность; удалить связанные с этим ненужные переменные в коде выше
             
-            # Шаг 4: Субпиксельные углы
-            subpixel_corners, frame_coords, framed_with_corners, time_step4 = self._step4_subpixel_corners(
+            subpixel_corners, frame_coords, framed_with_corners, time_step3 = self._step3_subpixel_corners(
                 cropped_img, detected_marker, photo.shape
             )
-            self.log['4_subpixel_corners'] = time_step4
+            self.log['3_subpixel_corners'] = time_step3
             
             # Сохраняем изображение с углами
-            self._save_image(output_dir, "6_subpixel_corners.jpg", framed_with_corners)
+            self._save_image("5_subpixel_corners.jpg", framed_with_corners)
             
             # Обновляем фрейм для следующей итерации
             self.frame = frame_coords
             
             detected_marker['subpixel_corners'] = subpixel_corners
-            detected_marker['frame_coords'] = frame_coords
             
             return detected_marker
+        
+        elif self.frame is not None:
+            self.process(photo, marker, True)
+
         else:
-            self.log['3_marker_detection'] = time_step3
-            self.log['4_subpixel_corners'] = 0
             return None
 
 
 if __name__ == "__main__":
-    finder = MarkerFinder()
+    finder = ArucoFinder()
     image = cv2.imread("../IMAGES_TEST/medium.jpg")
-    marker_id = 101
-    marker_dictionary = cv2.aruco.DICT_6X6_250
+    if image is None:
+        raise RuntimeError("Ошибка: не удалось загрузить изображение")
     
-    if image is not None:
-        results = finder.process(image, marker_id, marker_dictionary)
-        print(finder.log)
-        if results is not None:
-            print(f"Маркер найден! Score: {results['score']:.2f}")
-            print(f"Субпиксельные углы: {results['subpixel_corners']}")
-    else:
-        print("Ошибка: не удалось загрузить изображение")
+    marker = Aruco(101, cv2.aruco.DICT_6X6_250)
+    results = finder.process(image, marker)
+    print(finder.log)
+    if results is not None:
+        print(f"Маркер найден! Score: {results['match']:.2f}")
+        print(f"Углы субпиксельной точности: {results['subpixel_corners']}")
     
