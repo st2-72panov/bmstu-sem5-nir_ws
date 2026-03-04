@@ -8,10 +8,14 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(SCRIPT_DIR, "IMAGES_OUTPUT")
 
 class MarkerFinder:
-    def __init__(self):
-        self.frame = ((1280 // 4, 0), (1280 * 4 // 5, 720 * 2 // 3))
+    def __init__(self, marker_id, marker_dictionary):
+        # self.frame contains coordinates of opposite diagonal points: ((x1, y1), (x2, y2))
+        # By default (0, 0) and (0, 0), will be updated to image size in process if not set
+        self.frame = None
         self.log = {}
         self.iteration_count = 0
+        # TODO: calculate valid binary matrix for given marker
+        
 
     def _create_output_dir(self):
         """Creates the output directory based on timestamp and iteration count."""
@@ -36,13 +40,13 @@ class MarkerFinder:
         
         h, w = photo.shape[:2]
         
-        x1, y1 = self.frame[0]
-        x2, y2 = self.frame[1]
-        
-        if x1 == 0 and y1 == 0 and x2 == 0 and y2 == 0:
+        if self.frame == None:
             x1, y1 = 0, 0
             x2, y2 = w, h
             self.frame = ((x1, y1), (x2, y2))
+        else:
+            x1, y1 = self.frame[0]
+            x2, y2 = self.frame[1]
 
         x1, x2 = sorted([max(0, min(x1, w)), max(0, min(x2, w))])
         y1, y2 = sorted([max(0, min(y1, h)), max(0, min(y2, h))])
@@ -90,39 +94,8 @@ class MarkerFinder:
                 'original_contour': contour
             })
 
-        img_area = image.shape[0] * image.shape[1]
-        max_area = img_area * 0.5
-        
-        valid_quads = [q for q in found_quads if q['area'] < max_area]
-        valid_quads.sort(key=lambda k: k['area'], reverse=True)
-        
-        selected_quads = []
-        
-        for i, q1 in enumerate(valid_quads):
-            is_inside = False
-            for j, q2 in enumerate(valid_quads):
-                if i == j:
-                    continue
-                if q2['area'] <= q1['area']:
-                    continue
-                
-                all_points_inside = True
-                for point in q1['contour']:
-                    pt = (int(point[0][0]), int(point[0][1]))
-                    dist = cv2.pointPolygonTest(q2['contour'], pt, False)
-                    if dist < 0:
-                        all_points_inside = False
-                        break
-                
-                if all_points_inside:
-                    is_inside = True
-                    break
-          
-            if not is_inside:
-                selected_quads.append(q1)
-
         end_time = time.perf_counter()
-        return binary, contours, selected_quads, end_time - start_time
+        return binary, contours, found_quads, end_time - start_time
 
     def process(self, photo):
         """Main processing function."""
@@ -153,6 +126,8 @@ class MarkerFinder:
 if __name__ == "__main__":
     finder = MarkerFinder()
     image = cv2.imread("../IMAGES_TEST/medium.jpg")
+    marker_id = 101
+    marker_dictionary = cv2.aruco.DICT_6X6_250
     if image is not None:
-        results = finder.process(image)
+        results = finder.process(image, marker_id, marker_dictionary)
         print(finder.log)
