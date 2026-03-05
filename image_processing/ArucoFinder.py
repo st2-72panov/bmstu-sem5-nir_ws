@@ -3,13 +3,13 @@ import numpy as np
 import os
 import time
 from datetime import datetime
+from random import randint
 
 from Aruco import Aruco
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR_FOLDER = os.path.join(SCRIPT_DIR, "IMAGES_OUTPUT")
-FRAME_FACTOR = 2.0  # Коэффициент размера фрейма
-
+FRAME_FACTOR = 2.0
 
 class ArucoFinder:
     def __init__(self):
@@ -58,13 +58,11 @@ class ArucoFinder:
 
     def _step1_detect_and_filter_quads(self, image):
         """
-        Шаг 2: Бинаризация, обнаружение четырёхугольников и фильтрация (объединено).
-        Возвращает: binary_img, contours, selected_quads, log_time
+        Шаг 2: Бинаризация, обнаружение четырёхугольников и фильтрация.
         """
         start_time = time.perf_counter()
 
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
         _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         
         contours, _ = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -82,10 +80,15 @@ class ArucoFinder:
             if not (len(approx) == 4 and cv2.isContourConvex(approx)):
                 continue
             
+            # Упорядочиваем точки для гомографии
+            points = approx.reshape(4, 2)
+            ordered = self._order_points(points)
+            
             found_quads.append({
-                'contour': approx,
+                'contour': approx,              # Оригинал для отрисовки (4, 1, 2)
                 'area': area,
-                'original_contour': contour
+                'original_contour': contour,
+                'corners': ordered              # Упорядоченные для гомографии (4, 2)
             })
 
         end_time = time.perf_counter()
@@ -104,19 +107,19 @@ class ArucoFinder:
         Возвращает: detected_marker, log_time
         detected_marker содержит: 'quad', 'homography', 'normalized_img', 'corners'
         """
+        """
+        Шаг 3: Детекция нужного маркера ArUco.
+        """
         start_time = time.perf_counter()
         
         detected_marker = None
         best_match = 0
         
         for quad in selected_quads:
-            contour = quad['contour']
+            # Используем сохранённые упорядоченные углы
+            ordered_points = quad['corners']  # (4, 2)
             
-            # Упорядочиваем точки: верхний-левый, верхний-правый, нижний-правый, нижний-левый
-            points = contour.reshape(4, 2)
-            ordered_points = self._order_points(points)
-            
-            # Целевые точки для нормализации (размер marker_size x marker_size)
+            # Целевые точки для нормализации
             dst_points = np.array([
                 [0, 0],
                 [self.marker.size - 1, 0],
@@ -125,18 +128,26 @@ class ArucoFinder:
             ], dtype=np.float32)
             
             # Вычисляем гомографию
-            homography, _ = cv2.findHomography(ordered_points.astype(np.float32), dst_points)
+            homography, _ = cv2.findHomography(
+                ordered_points.astype(np.float32), 
+                dst_points
+            )
             
             if homography is None:
                 continue
             
+            # Проверка на вырожденную гомографию
+            if abs(np.linalg.det(homography)) < 1e-10:
+                continue
+            
             # Нормализуем изображение маркера
-            normalized_size = 200  # Размер для детального анализа
+            normalized_size = 200
             normalized_img = cv2.warpPerspective(
                 cropped_img, 
                 homography, 
                 (normalized_size, normalized_size)
             )
+            self._save_image(f'normalized_img_{randint(0, 10000)}.jpg', normalized_img)
             
             # Преобразуем в бинарное изображение
             gray_norm = cv2.cvtColor(normalized_img, cv2.COLOR_BGR2GRAY)
@@ -183,7 +194,7 @@ class ArucoFinder:
             total_inner = inner_size * inner_size
             match = match_count / total_inner
             
-            if match > best_match and match >= 0.9:  # Порог соответствия 90%
+            if match > best_match and match >= 0.9:
                 best_match = match
                 detected_marker = {
                     'quad': quad,
@@ -200,25 +211,23 @@ class ArucoFinder:
 
     def _order_points(self, points):
         """
-        Упорядочивает 4 точки в порядке: верхний-левый, верхний-правый, 
-        нижний-правый, нижний-левый.
+        Упорядочивает 4 точки в порядке: TL, TR, BR, BL
+        Использует сумму и разность координат (работает при любом повороте)
         """
-        # Сортируем по y-координате
-        y_sorted = points[np.argsort(points[:, 1])]
+        if len(points) != 4:
+            return points
         
-        # Первые две - верхние, последние две - нижние
-        top = y_sorted[:2]
-        bottom = y_sorted[2:]
+        # Сумма координат: TL минимальная, BR максимальная
+        s = points.sum(axis=1)
+        tl = points[np.argmin(s)]
+        br = points[np.argmax(s)]
         
-        # Сортируем верхние по x
-        top_left = top[np.argsort(top[:, 0])[0]]
-        top_right = top[np.argsort(top[:, 0])[1]]
+        # Разность координат: TR минимальная, BL максимальная
+        diff = np.diff(points, axis=1).flatten()
+        tr = points[np.argmin(diff)]
+        bl = points[np.argmax(diff)]
         
-        # Сортируем нижние по x
-        bottom_left = bottom[np.argsort(bottom[:, 0])[0]]
-        bottom_right = bottom[np.argsort(bottom[:, 0])[1]]
-        
-        return np.array([top_left, top_right, bottom_right, bottom_left], dtype=np.float32)
+        return np.array([tl, tr, br, bl], dtype=np.float32)
 
 
     def _step3_subpixel_corners(self, cropped_img, detected_marker, image_shape):
@@ -275,10 +284,9 @@ class ArucoFinder:
         diag2 = np.linalg.norm(subpixel_corners[1] - subpixel_corners[3])
         max_diag = max(diag1, diag2)
         
-        # Размер фрейма
+        # Вычисляем координаты фрейма (не выходя за границы)
         frame_size = int(max_diag * FRAME_FACTOR)
         
-        # Вычисляем координаты фрейма (не выходя за границы)
         h, w = image_shape[:2]
         x1 = max(0, int(center[0] - frame_size / 2))
         y1 = max(0, int(center[1] - frame_size / 2))
@@ -455,9 +463,6 @@ class ArucoFinder:
         
         # Шаг 3: Уточнение углов
         if detected_marker is not None:
-            # Сохраняем нормализованное изображение маркера
-            self._save_image("4_normalized_marker.jpg", detected_marker['normalized_img'])  # TODO: удалить за ненадобность; удалить связанные с этим ненужные переменные в коде выше
-            
             subpixel_corners, frame_coords, framed_with_corners, time_step3 = self._step3_subpixel_corners(
                 cropped_img, detected_marker, photo.shape
             )
@@ -473,10 +478,11 @@ class ArucoFinder:
             
             return detected_marker
         
-        elif self.frame is not None:
+        elif self.frame is not None:  # Неудача при неполном фрейме -- попытка поиска в полном
+            self.frame = None
             self.process(photo, marker, True)
 
-        else:
+        else:  # Неудача при полном фрейме
             return None
 
 
