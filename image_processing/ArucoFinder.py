@@ -108,11 +108,17 @@ class ArucoFinder:
         
         for quad in selected_quads:
             points = np.array(quad['corners'])
+            
+            # Обрезка (для ускорения гомографии)
             mins = points.min(axis=0).astype(int)
             maxs = points.max(axis=0).astype(int)
 
             binary_img_cropped = binary_img[mins[1]:maxs[1]+1, mins[0]:maxs[0]+1]
-            points = points - mins
+            points -= mins
+            
+            # Сжатие (для больших ближних макреров)
+            binary_img_compressed = cv2.resize(binary_img_cropped, (64, 64), interpolation=cv2.INTER_LINEAR)
+            points *= 64.0 / np.array(binary_img_cropped.shape[::-1])
             
             # Нормализация
             cell_size = 10
@@ -129,20 +135,17 @@ class ArucoFinder:
             )
             if homography is None or abs(np.linalg.det(homography)) < 1e-10:
                 continue
-            matrix = cv2.warpPerspective(binary_img_cropped, homography, (w, w))
+            matrix = cv2.warpPerspective(binary_img_compressed, homography, (w, w))
             
+            # Сжатие
             matrix_resized = cv2.resize(
                 matrix, 
                 (self.marker.size, self.marker.size), 
-                interpolation=cv2.INTER_LINEAR  # лучший метод для уменьшения
+                interpolation=cv2.INTER_LINEAR
             )
             detected_pattern = (matrix_resized > 127).astype(np.uint8)
-            
-            # DEBUG
-            debug_img = cv2.resize(detected_pattern * 255, (0, 0), fx=100, fy=100, interpolation=cv2.INTER_NEAREST)
-            self._save_image(f'normalized_img_{randint(0, 10000)}.jpg', debug_img)  # DEBUG
-            
-            # rotation = self.marker.is_valid(detected_pattern)
+
+            rotation = self.marker.is_valid(detected_pattern)
             detected_marker = ...
 
         end_time = time.perf_counter()
