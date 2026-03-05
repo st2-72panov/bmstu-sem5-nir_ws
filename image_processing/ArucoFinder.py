@@ -4,7 +4,6 @@ import os
 import time
 from datetime import datetime
 from random import randint
-
 from Aruco import Aruco
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -17,8 +16,7 @@ class ArucoFinder:
         self.frame = None  # Frame - весь экран
         self.log = {}
         self.iteration_count = 0
-    
-        
+
     def _create_output_dir(self) -> str:
         """Создаёт выходную директорию на основе временной метки и счётчика итераций"""
         now = datetime.now()
@@ -27,11 +25,9 @@ class ArucoFinder:
         os.makedirs(dir_name, exist_ok=True)
         self.output_dir = dir_name
 
-
     def _save_image(self, filename, image):
         path = os.path.join(self.output_dir, filename)
         cv2.imwrite(path, image)
-
 
     def _step0_prepare_images(self, photo):
         """
@@ -54,7 +50,6 @@ class ArucoFinder:
 
         end_time = time.perf_counter()
         return framed_original, cropped, end_time - start_time
-
 
     def _step1_detect_and_filter_quads(self, image):
         """
@@ -90,13 +85,11 @@ class ArucoFinder:
                 'original_contour': contour,
                 'corners': ordered              # Упорядоченные для гомографии (4, 2)
             })
-            
-
+        
         end_time = time.perf_counter()
         return binary, contours, found_quads, end_time - start_time
 
-
-    def _step2_detect_marker(self, cropped_img, selected_quads):
+    def _step2_detect_marker(self, binary_img, selected_quads):
         """
         Шаг 3: Детекция нужного маркера ArUco.
         
@@ -108,108 +101,55 @@ class ArucoFinder:
         Возвращает: detected_marker, log_time
         detected_marker содержит: 'quad', 'homography', 'normalized_img', 'corners'
         """
-        """
-        Шаг 3: Детекция нужного маркера ArUco.
-        """
         start_time = time.perf_counter()
         
         detected_marker = None
         best_match = 0
         
         for quad in selected_quads:
-            # Используем сохранённые упорядоченные углы
-            ordered_points = quad['corners']  # (4, 2)
+            ordered_points = quad['corners']
             
-            # Целевые точки для нормализации
-            w = self.marker.size
+            # Нормализация
+            cell_size = 10
+            w = cell_size * self.marker.size
             dst_points = np.array([
-                [0, 0],
+                [0, 0], 
                 [w-1, 0],
                 [w-1, w-1],
                 [0, w-1]
             ], dtype=np.float32)
-            
-            # Вычисляем гомографию
             homography = cv2.getPerspectiveTransform(
                 ordered_points.astype(np.float32), 
                 dst_points
             )
-            
-            if homography is None:
+            if homography is None or abs(np.linalg.det(homography)) < 1e-10:
                 continue
+            matrix = cv2.warpPerspective(binary_img, homography, (w, w))
             
-            # Проверка на вырожденную гомографию
-            if abs(np.linalg.det(homography)) < 1e-10:
-                continue
+            # DEBUG
+            c = randint(0, 1000)
+            debug_img = cv2.resize(matrix, (0, 0), fx=100, fy=100, interpolation=cv2.INTER_NEAREST)
+            self._save_image(f'normalized_img_{c}_1.jpg', debug_img)  # DEBUG
             
-            # Нормализуем изображение маркера
-            normalized_img = cv2.warpPerspective(
-                cropped_img, 
-                homography, 
-                (w, w)
+            # matrix: исходное изображение (размер: size * cell_size)
+            # cell_size: размер одной клетки в пикселях
+
+            matrix_resized = cv2.resize(
+                matrix, 
+                (self.marker.size, self.marker.size), 
+                interpolation=cv2.INTER_LINEAR  # лучший метод для уменьшения
             )
-            self._save_image(f'normalized_img_{randint(0, 1000)}.jpg', normalized_img)  # DEBUG
+            detected_pattern = (matrix_resized > 127).astype(np.uint8)
             
-            # Преобразуем в бинарное изображение  # TODO: убрать
-            gray_norm = cv2.cvtColor(normalized_img, cv2.COLOR_BGR2GRAY)
-            _, binary_norm = cv2.threshold(gray_norm, 127, 255, cv2.THRESH_BINARY)
+            # DEBUG
+            debug_img = cv2.resize(detected_pattern * 255, (0, 0), fx=100, fy=100, interpolation=cv2.INTER_NEAREST)
+            self._save_image(f'normalized_img_{c}.jpg', debug_img)  # DEBUG
             
-            # Разделяем на ячейки и сравниваем с паттерном
-            # TODO: убрать
-            cell_size = w // self.marker.size
-            detected_pattern = np.zeros((self.marker.size, self.marker.size), dtype=np.uint8)
-            
-            for i in range(self.marker.size):
-                for j in range(self.marker.size):
-                    y1, y2 = i * cell_size, (i + 1) * cell_size
-                    x1, x2 = j * cell_size, (j + 1) * cell_size
-                    
-                    # Берём центр ячейки для определения цвета
-                    cy, cx = (y1 + y2) // 2, (x1 + x2) // 2
-                    detected_pattern[i, j] = 1 if binary_norm[cy, cx] > 127 else 0
-            
-            # Проверяем рамку (должна быть чёрной)
-            border_valid = True
-            for i in range(self.marker.size):
-                if detected_pattern[0, i] != 0:  # Верхняя рамка
-                    border_valid = False
-                    break
-                if detected_pattern[self.marker.size-1, i] != 0:  # Нижняя рамка
-                    border_valid = False
-                    break
-                if detected_pattern[i, 0] != 0:  # Левая рамка
-                    border_valid = False
-                    break
-                if detected_pattern[i, self.marker.size-1] != 0:  # Правая рамка
-                    border_valid = False
-                    break
-            
-            if not border_valid:
-                continue
-            
-            # Сравниваем внутреннюю часть с эталоном
-            inner_size = self.marker.size - 2
-            inner_detected = detected_pattern[1:-1, 1:-1]
-            inner_expected = self.marker.pattern[1:-1, 1:-1]
-            
-            match_count = np.sum(inner_detected == inner_expected)
-            total_inner = inner_size * inner_size
-            match = match_count / total_inner
-            
-            if match > best_match and match >= 0.9:
-                best_match = match
-                detected_marker = {
-                    'quad': quad,
-                    'homography': homography,
-                    'normalized_img': normalized_img,
-                    'corners': ordered_points,
-                    'match': match,
-                    'detected_pattern': detected_pattern
-                }
-        
+            rotation = self.marker.is_valid(detected_pattern)
+            detected_marker = ...
+
         end_time = time.perf_counter()
         return detected_marker, end_time - start_time
-
 
     def _order_points(self, points):
         """
@@ -230,7 +170,6 @@ class ArucoFinder:
         bl = points[np.argmax(diff)]
         
         return np.array([tl, tr, br, bl], dtype=np.float32)
-
 
     def _step3_subpixel_corners(self, cropped_img, detected_marker, image_shape):
         """
@@ -265,7 +204,7 @@ class ArucoFinder:
         subpixel_corners = []
         for i in range(4):
             line1 = lines[i]
-            line2 = lines[(i + 1) % 4]
+            line2 = lines[(i + 1) % 4] 
             
             if line1 is not None and line2 is not None:
                 intersection = self._line_intersection(line1, line2)
@@ -316,7 +255,6 @@ class ArucoFinder:
         end_time = time.perf_counter()
         return subpixel_corners, frame_coords, framed_image, end_time - start_time
 
-
     def _split_contour_to_sides(self, contour, corners):
         """
         Разделяет контур на 4 стороны на основе 4 углов.
@@ -344,7 +282,6 @@ class ArucoFinder:
         
         return [np.array(side) for side in sides]
 
-
     def _point_to_line_distance(self, point, line_start, line_end):
         """Вычисляет расстояние от точки до отрезка."""
         x0, y0 = point
@@ -365,7 +302,6 @@ class ArucoFinder:
         proj_y = y1 + t * dy
         
         return np.sqrt((x0 - proj_x)**2 + (y0 - proj_y)**2)
-
 
     def _fit_line_least_squares(self, points):
         """
@@ -408,7 +344,6 @@ class ArucoFinder:
         
         return (a, b, c)
 
-
     def _line_intersection(self, line1, line2):
         """
         Вычисляет точку пересечения двух прямых.
@@ -428,7 +363,6 @@ class ArucoFinder:
         y = (c1 * a2 - c2 * a1) / det
         
         return np.array([x, y], dtype=np.float32)
-
 
     def _debug_draw_ordered_corners(self, binary_bgr, selected_quads):
         """
@@ -475,7 +409,6 @@ class ArucoFinder:
         
         return debug_img
 
-
     def process(self, photo, marker: Aruco, isRepeatedAttempt=False):
         """Основная функция обработки."""
         if not isRepeatedAttempt:
@@ -509,8 +442,8 @@ class ArucoFinder:
         self._save_image("1.4.debug_ordered_corners.jpg", debug_corners_img)
         # =================================================
 
-        # Шаг 2: Поиск нужного маркера
-        detected_marker, time_step2 = self._step2_detect_marker(cropped_img, selected_quads)
+        # Шаг 2: Поиск нужного маркера (теперь передаём binary_img)
+        detected_marker, time_step2 = self._step2_detect_marker(binary_img, selected_quads)
         self.log['2_marker_detection'] = time_step2
         
         # Шаг 3: Уточнение углов
@@ -518,7 +451,7 @@ class ArucoFinder:
             subpixel_corners, frame_coords, framed_with_corners, time_step3 = self._step3_subpixel_corners(
                 cropped_img, detected_marker, photo.shape
             )
-            self.log['3_subpixel_corners'] = time_step3
+            self.log['3_subpixel_corners'] = time_step3 
             
             # Сохраняем изображение с углами
             self._save_image("3.subpixel_corners.jpg", framed_with_corners)
@@ -537,17 +470,15 @@ class ArucoFinder:
         else:  # Неудача при полном фрейме
             return None
 
-
 if __name__ == "__main__":
     finder = ArucoFinder()
     image = cv2.imread("../IMAGES_TEST/medium.jpg")
     if image is None:
         raise RuntimeError("Ошибка: не удалось загрузить изображение")
-    
-    marker = Aruco(101, cv2.aruco.DICT_6X6_250)
+    marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
     results = finder.process(image, marker)
     print(finder.log)
     if results is not None:
         print(f"Маркер найден! Score: {results['match']:.2f}")
         print(f"Углы субпиксельной точности: {results['subpixel_corners']}")
-    
+        
