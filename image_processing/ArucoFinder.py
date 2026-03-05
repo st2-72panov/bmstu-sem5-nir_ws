@@ -121,12 +121,12 @@ class ArucoFinder:
             ordered_points = quad['corners']  # (4, 2)
             
             # Целевые точки для нормализации
-            w = (self.marker.size + 1)
+            w = self.marker.size
             dst_points = np.array([
                 [0, 0],
-                [w, 0],
-                [w, w],
-                [0, w]
+                [w-1, 0],
+                [w-1, w-1],
+                [0, w-1]
             ], dtype=np.float32)
             
             # Вычисляем гомографию
