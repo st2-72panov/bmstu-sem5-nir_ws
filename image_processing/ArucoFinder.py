@@ -126,14 +126,6 @@ class ArucoFinder:
                 continue
             matrix = cv2.warpPerspective(binary_img, homography, (w, w))
             
-            # DEBUG
-            c = randint(0, 1000)
-            debug_img = cv2.resize(matrix, (0, 0), fx=100, fy=100, interpolation=cv2.INTER_NEAREST)
-            self._save_image(f'normalized_img_{c}_1.jpg', debug_img)  # DEBUG
-            
-            # matrix: исходное изображение (размер: size * cell_size)
-            # cell_size: размер одной клетки в пикселях
-
             matrix_resized = cv2.resize(
                 matrix, 
                 (self.marker.size, self.marker.size), 
@@ -143,9 +135,9 @@ class ArucoFinder:
             
             # DEBUG
             debug_img = cv2.resize(detected_pattern * 255, (0, 0), fx=100, fy=100, interpolation=cv2.INTER_NEAREST)
-            self._save_image(f'normalized_img_{c}.jpg', debug_img)  # DEBUG
+            self._save_image(f'normalized_img_{randint(0, 10000)}.jpg', debug_img)  # DEBUG
             
-            rotation = self.marker.is_valid(detected_pattern)
+            # rotation = self.marker.is_valid(detected_pattern)
             detected_marker = ...
 
         end_time = time.perf_counter()
@@ -446,29 +438,29 @@ class ArucoFinder:
         detected_marker, time_step2 = self._step2_detect_marker(binary_img, selected_quads)
         self.log['2_marker_detection'] = time_step2
         
-        # Шаг 3: Уточнение углов
-        if detected_marker is not None:
-            subpixel_corners, frame_coords, framed_with_corners, time_step3 = self._step3_subpixel_corners(
-                cropped_img, detected_marker, photo.shape
-            )
-            self.log['3_subpixel_corners'] = time_step3 
+        # # Шаг 3: Уточнение углов
+        # if detected_marker is not None:
+        #     subpixel_corners, frame_coords, framed_with_corners, time_step3 = self._step3_subpixel_corners(
+        #         cropped_img, detected_marker, photo.shape
+        #     )
+        #     self.log['3_subpixel_corners'] = time_step3 
             
-            # Сохраняем изображение с углами
-            self._save_image("3.subpixel_corners.jpg", framed_with_corners)
+        #     # Сохраняем изображение с углами
+        #     self._save_image("3.subpixel_corners.jpg", framed_with_corners)
             
-            # Обновляем фрейм для следующей итерации
-            self.frame = frame_coords
+        #     # Обновляем фрейм для следующей итерации
+        #     self.frame = frame_coords
             
-            detected_marker['subpixel_corners'] = subpixel_corners
+        #     detected_marker['subpixel_corners'] = subpixel_corners
             
-            return detected_marker
+        #     return detected_marker
         
-        elif self.frame is not None:  # Неудача при неполном фрейме -- попытка поиска в полном
-            self.frame = None
-            self.process(photo, marker, True)
+        # elif self.frame is not None:  # Неудача при неполном фрейме -- попытка поиска в полном
+        #     self.frame = None
+        #     self.process(photo, marker, True)
 
-        else:  # Неудача при полном фрейме
-            return None
+        # else:  # Неудача при полном фрейме
+        #     return None
 
 if __name__ == "__main__":
     finder = ArucoFinder()
