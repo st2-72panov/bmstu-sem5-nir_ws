@@ -97,19 +97,12 @@ class ArucoFinder:
         2. Нормализует изображение маркера
         3. Сравнивает с эталонной матрицей
         4. Возвращает найденный маркер с данными
-        
-        Возвращает: detected_marker, log_time
-        detected_marker содержит: 'quad', 'homography', 'normalized_img', 'corners'
         """
-        start_time = time.perf_counter()
-        
-        detected_marker = None
-        best_match = 0
         
         for quad in selected_quads:
             points = np.array(quad['corners'])
             
-            # Обрезка (для ускорения гомографии)
+            # Обрезка (для ускорения обратнойгомографии)
             mins = points.min(axis=0).astype(int)
             maxs = points.max(axis=0).astype(int)
 
@@ -135,22 +128,20 @@ class ArucoFinder:
             )
             if homography is None or abs(np.linalg.det(homography)) < 1e-10:
                 continue
-            matrix = cv2.warpPerspective(binary_img_compressed, homography, (w, w))
+            pattern_normalized = cv2.warpPerspective(binary_img_compressed, homography, (w, w))
             
             # Сжатие
-            matrix_resized = cv2.resize(
-                matrix, 
+            pattern_adjusted = cv2.resize(
+                pattern_normalized, 
                 (self.marker.size, self.marker.size), 
                 interpolation=cv2.INTER_LINEAR
             )
-            detected_pattern = (matrix_resized > 127).astype(np.uint8)
+            pattern = (pattern_adjusted > 127).astype(np.uint8)
 
-            rotation = self.marker.is_valid(detected_pattern)
-            detected_marker = ...
-
-        end_time = time.perf_counter()
-        return detected_marker, end_time - start_time
-
+            if self.marker.is_valid(pattern):
+                return quad
+        return None
+    
     def _order_points(self, points):
         """
         Упорядочивает 4 точки в порядке: TL, TR, BR, BL
@@ -184,7 +175,7 @@ class ArucoFinder:
         start_time = time.perf_counter()
         
         # Получаем оригинальный контур для более точной аппроксимации
-        original_contour = detected_marker['quad']['original_contour']
+        original_contour = detected_marker['original_contour']
         corners_approx = detected_marker['corners']
         
         # Разделяем контур на 4 стороны
@@ -417,11 +408,13 @@ class ArucoFinder:
         self.marker = marker
         self.log = {}
 
+        # =================================================
         # Шаг 0
         framed_original, cropped_img, time_step0 = self._step0_prepare_images(photo)
         self.log['0_crop_noise_frame'] = time_step0
         self._save_image("0.crop_noise_frame.jpg", framed_original)
 
+        # =================================================
         # Шаг 1
         binary_img, edges_img, selected_quads, time_step1 = self._step1_detect_and_filter_quads(cropped_img)
         self.log['1_detection_filter'] = time_step1
@@ -440,28 +433,30 @@ class ArucoFinder:
         
         debug_corners_img = self._debug_draw_ordered_corners(binary_bgr, selected_quads)
         self._save_image("1.4.debug_ordered_corners.jpg", debug_corners_img)
-        # =================================================
-
-        # Шаг 2: Поиск нужного маркера (теперь передаём binary_img)
-        detected_marker, time_step2 = self._step2_detect_marker(binary_img, selected_quads)
-        self.log['2_marker_detection'] = time_step2
         
-        # # Шаг 3: Уточнение углов
-        # if detected_marker is not None:
-        #     subpixel_corners, frame_coords, framed_with_corners, time_step3 = self._step3_subpixel_corners(
-        #         cropped_img, detected_marker, photo.shape
-        #     )
-        #     self.log['3_subpixel_corners'] = time_step3 
+        # =================================================
+        # Шаг 2: Поиск нужного маркера (теперь передаём binary_img)
+        start_time = time.perf_counter()
+        detected_marker = self._step2_detect_marker(binary_img, selected_quads)
+        end_time = time.perf_counter()
+        self.log['2_marker_detection'] = end_time - start_time
+        
+        # Шаг 3: Уточнение углов
+        if detected_marker is not None:
+            subpixel_corners, frame_coords, framed_with_corners, time_step3 = self._step3_subpixel_corners(
+                cropped_img, detected_marker, photo.shape
+            )
+            self.log['3_subpixel_corners'] = time_step3 
             
-        #     # Сохраняем изображение с углами
-        #     self._save_image("3.subpixel_corners.jpg", framed_with_corners)
+            # Сохраняем изображение с углами
+            self._save_image("3.subpixel_corners.jpg", framed_with_corners)
             
-        #     # Обновляем фрейм для следующей итерации
-        #     self.frame = frame_coords
+            # Обновляем фрейм для следующей итерации
+            self.frame = frame_coords
             
-        #     detected_marker['subpixel_corners'] = subpixel_corners
+            detected_marker['subpixel_corners'] = subpixel_corners
             
-        #     return detected_marker
+            return detected_marker
         
         # elif self.frame is not None:  # Неудача при неполном фрейме -- попытка поиска в полном
         #     self.frame = None
@@ -471,14 +466,12 @@ class ArucoFinder:
         #     return None
 
 if __name__ == "__main__":
+    from pprint import pprint
+    
     finder = ArucoFinder()
     image = cv2.imread("../IMAGES_TEST/medium.jpg")
     if image is None:
         raise RuntimeError("Ошибка: не удалось загрузить изображение")
     marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
     results = finder.process(image, marker)
-    print(finder.log)
-    if results is not None:
-        print(f"Маркер найден! Score: {results['match']:.2f}")
-        print(f"Углы субпиксельной точности: {results['subpixel_corners']}")
-        
+    pprint(finder.log)
