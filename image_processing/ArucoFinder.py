@@ -90,6 +90,7 @@ class ArucoFinder:
                 'original_contour': contour,
                 'corners': ordered              # Упорядоченные для гомографии (4, 2)
             })
+            
 
         end_time = time.perf_counter()
         return binary, contours, found_quads, end_time - start_time
@@ -147,7 +148,7 @@ class ArucoFinder:
                 homography, 
                 (normalized_size, normalized_size)
             )
-            self._save_image(f'normalized_img_{randint(0, 10000)}.jpg', normalized_img)
+            # self._save_image(f'normalized_img_{randint(0, 10000)}.jpg', normalized_img)  # DEBUG
             
             # Преобразуем в бинарное изображение
             gray_norm = cv2.cvtColor(normalized_img, cv2.COLOR_BGR2GRAY)
@@ -428,6 +429,52 @@ class ArucoFinder:
         return np.array([x, y], dtype=np.float32)
 
 
+    def _debug_draw_ordered_corners(self, binary_bgr, selected_quads):
+        """
+        Отладочная функция: рисует упорядоченные угловые точки для каждого квада.
+        
+        Цвета точек:
+        1 (TL) - Красный (0, 0, 255)
+        2 (TR) - Оранжевый (0, 140, 255)
+        3 (BR) - Жёлтый (0, 255, 255)
+        4 (BL) - Белый (255, 255, 255)
+        
+        Возвращает: изображение с нарисованными точками
+        """
+        debug_img = binary_bgr.copy()
+        
+        colors = [
+            (0, 0, 255),      # 1: Красный (TL)
+            (0, 140, 255),    # 2: Оранжевый (TR)
+            (0, 255, 255),    # 3: Жёлтый (BR)
+            (100, 100, 100)   # 4: Серый (BL)
+        ]
+        
+        for idx, quad in enumerate(selected_quads):
+            # Получаем точки контура и упорядочиваем их
+            contour = quad['contour']
+            points = contour.reshape(4, 2)
+            ordered_points = self._order_points(points)
+            
+            # Рисуем 4 упорядоченные точки разными цветами
+            for i, pt in enumerate(ordered_points):
+                color = colors[i]
+                cv2.circle(debug_img, (int(pt[0]), int(pt[1])), 6, color, -1)
+                
+                # Добавляем номер точки для наглядности
+                cv2.putText(debug_img, str(i+1), 
+                        (int(pt[0]) - 8, int(pt[1]) - 8),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+            
+            # Опционально: рисуем номер квада рядом с первой точкой
+            first_pt = ordered_points[0]
+            cv2.putText(debug_img, f"Q{idx}", 
+                    (int(first_pt[0]) + 15, int(first_pt[1])),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        
+        return debug_img
+
+
     def process(self, photo, marker: Aruco, isRepeatedAttempt=False):
         """Основная функция обработки."""
         if not isRepeatedAttempt:
@@ -456,6 +503,11 @@ class ArucoFinder:
         for q in selected_quads:
             cv2.drawContours(img_selected, [q['contour']], -1, (0, 255, 0), 2)
         self._save_image("3_selected_quads.jpg", img_selected)
+        
+        # === НОВАЯ СТРОКА: Отладка упорядоченных углов ===
+        debug_corners_img = self._debug_draw_ordered_corners(binary_bgr, selected_quads)
+        self._save_image("4_debug_ordered_corners.jpg", debug_corners_img)
+        # =================================================
 
         # Шаг 2: Поиск нужного маркера
         detected_marker, time_step2 = self._step2_detect_marker(cropped_img, selected_quads)
