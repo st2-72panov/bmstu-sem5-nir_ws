@@ -108,30 +108,45 @@ class ArucoFinder:
         
         for quad in selected_quads:
             ordered_points = quad['corners']
-            
-            # Нормализация
-            cell_size = 10
-            w = cell_size * self.marker.size
-            dst_points = np.array([
-                [0, 0], 
-                [w-1, 0],
-                [w-1, w-1],
-                [0, w-1]
-            ], dtype=np.float32)
-            homography = cv2.getPerspectiveTransform(
-                ordered_points.astype(np.float32), 
-                dst_points
-            )
-            if homography is None or abs(np.linalg.det(homography)) < 1e-10:
-                continue
-            matrix = cv2.warpPerspective(binary_img, homography, (w, w))
-            
-            matrix_resized = cv2.resize(
-                matrix, 
-                (self.marker.size, self.marker.size), 
-                interpolation=cv2.INTER_LINEAR  # лучший метод для уменьшения
-            )
-            detected_pattern = (matrix_resized > 127).astype(np.uint8)
+
+            # Преобразуем в float для точности
+            pts = ordered_points.astype(np.float32)
+            top_left, top_right, bottom_right, bottom_left = pts
+
+            # Параметры для центров ячеек (i+0.5)/size
+            t = (np.arange(self.marker.size) + 0.5) / self.marker.size
+
+            # Точки на верхней и нижней сторонах
+            top_pts = top_left + t[:, np.newaxis] * (top_right - top_left)        # shape (size, 2)
+            bottom_pts = bottom_left + t[:, np.newaxis] * (bottom_right - bottom_left)
+
+            # Точки на левой и правой сторонах
+            left_pts = top_left + t[:, np.newaxis] * (bottom_left - top_left)
+            right_pts = top_right + t[:, np.newaxis] * (bottom_right - top_right)
+
+            # Результирующая матрица
+            detected_pattern = np.zeros((self.marker.size, self.marker.size), dtype=np.uint8)
+
+            for i in range(self.marker.size):
+                for j in range(self.marker.size):
+                    # Вертикальная линия (через top_pts[i] и bottom_pts[i])
+                    a1 = bottom_pts[i, 1] - top_pts[i, 1]
+                    b1 = -(bottom_pts[i, 0] - top_pts[i, 0])
+                    c1 = bottom_pts[i, 0] * top_pts[i, 1] - top_pts[i, 0] * bottom_pts[i, 1]
+
+                    # Горизонтальная линия (через left_pts[j] и right_pts[j])
+                    a2 = right_pts[j, 1] - left_pts[j, 1]
+                    b2 = -(right_pts[j, 0] - left_pts[j, 0])
+                    c2 = right_pts[j, 0] * left_pts[j, 1] - left_pts[j, 0] * right_pts[j, 1]
+
+                    # Пересечение
+                    point = self._line_intersection((a1, b1, c1), (a2, b2, c2))
+                    if point is not None:
+                        x, y = point
+                        ix, iy = int(round(x)), int(round(y))
+                        if 0 <= ix < binary_img.shape[1] and 0 <= iy < binary_img.shape[0]:
+                            val = binary_img[iy, ix]
+                            detected_pattern[j, i] = 1 if val > 127 else 0
             
             # DEBUG
             debug_img = cv2.resize(detected_pattern * 255, (0, 0), fx=100, fy=100, interpolation=cv2.INTER_NEAREST)
