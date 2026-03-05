@@ -121,15 +121,16 @@ class ArucoFinder:
             ordered_points = quad['corners']  # (4, 2)
             
             # Целевые точки для нормализации
+            w = (self.marker.size + 1)
             dst_points = np.array([
                 [0, 0],
-                [self.marker.size - 1, 0],
-                [self.marker.size - 1, self.marker.size - 1],
-                [0, self.marker.size - 1]
+                [w, 0],
+                [w, w],
+                [0, w]
             ], dtype=np.float32)
             
             # Вычисляем гомографию
-            homography, _ = cv2.findHomography(
+            homography = cv2.getPerspectiveTransform(
                 ordered_points.astype(np.float32), 
                 dst_points
             )
@@ -142,20 +143,20 @@ class ArucoFinder:
                 continue
             
             # Нормализуем изображение маркера
-            normalized_size = 200
             normalized_img = cv2.warpPerspective(
                 cropped_img, 
                 homography, 
-                (normalized_size, normalized_size)
+                (w, w)
             )
-            # self._save_image(f'normalized_img_{randint(0, 10000)}.jpg', normalized_img)  # DEBUG
+            self._save_image(f'normalized_img_{randint(0, 1000)}.jpg', normalized_img)  # DEBUG
             
-            # Преобразуем в бинарное изображение
+            # Преобразуем в бинарное изображение  # TODO: убрать
             gray_norm = cv2.cvtColor(normalized_img, cv2.COLOR_BGR2GRAY)
             _, binary_norm = cv2.threshold(gray_norm, 127, 255, cv2.THRESH_BINARY)
             
             # Разделяем на ячейки и сравниваем с паттерном
-            cell_size = normalized_size // self.marker.size
+            # TODO: убрать
+            cell_size = w // self.marker.size
             detected_pattern = np.zeros((self.marker.size, self.marker.size), dtype=np.uint8)
             
             for i in range(self.marker.size):
@@ -486,27 +487,26 @@ class ArucoFinder:
         # Шаг 0
         framed_original, cropped_img, time_step0 = self._step0_prepare_images(photo)
         self.log['0_crop_noise_frame'] = time_step0
-        self._save_image("0_crop_noise_frame.jpg", framed_original)
+        self._save_image("0.crop_noise_frame.jpg", framed_original)
 
         # Шаг 1
         binary_img, edges_img, selected_quads, time_step1 = self._step1_detect_and_filter_quads(cropped_img)
         self.log['1_detection_filter'] = time_step1
         
         binary_bgr = cv2.cvtColor(binary_img, cv2.COLOR_GRAY2BGR)
-        self._save_image("1_binarization.jpg", binary_bgr)
+        self._save_image("1.1.binarization.jpg", binary_bgr)
         
         edges_viz = np.zeros_like(binary_bgr)
         cv2.drawContours(edges_viz, edges_img, -1, (0, 255, 0), 1)
-        self._save_image("2_edges.jpg", edges_viz)
+        self._save_image("1.2.edges.jpg", edges_viz)
 
         img_selected = cropped_img.copy()
         for q in selected_quads:
             cv2.drawContours(img_selected, [q['contour']], -1, (0, 255, 0), 2)
-        self._save_image("3_selected_quads.jpg", img_selected)
+        self._save_image("1.3.selected_quads.jpg", img_selected)
         
-        # === НОВАЯ СТРОКА: Отладка упорядоченных углов ===
         debug_corners_img = self._debug_draw_ordered_corners(binary_bgr, selected_quads)
-        self._save_image("4_debug_ordered_corners.jpg", debug_corners_img)
+        self._save_image("1.4.debug_ordered_corners.jpg", debug_corners_img)
         # =================================================
 
         # Шаг 2: Поиск нужного маркера
@@ -521,7 +521,7 @@ class ArucoFinder:
             self.log['3_subpixel_corners'] = time_step3
             
             # Сохраняем изображение с углами
-            self._save_image("5_subpixel_corners.jpg", framed_with_corners)
+            self._save_image("3.subpixel_corners.jpg", framed_with_corners)
             
             # Обновляем фрейм для следующей итерации
             self.frame = frame_coords
