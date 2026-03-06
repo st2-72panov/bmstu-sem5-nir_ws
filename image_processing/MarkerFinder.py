@@ -8,6 +8,15 @@ import numpy as np
 
 from Aruco import Aruco
 
+"""
+Именование изображений:
+photo - оригинальный снимок, переданный в MarkerFinder
+framed_... - (модифицированная) часть photo, находящаяся внутри frame*
+img_... - разные изображения (для сохранения)
+
+* frame - рабочая область photo; предполагается, что маркер лежит внутри неё 
+"""
+
 class MarkerFinder:  # TODO: заменить на Detector
 
     @dataclass
@@ -29,8 +38,8 @@ class MarkerFinder:  # TODO: заменить на Detector
         # self.frame = ((0, 0), (100, 100))
     
         self.photo = None
-        self.photo_cropped = None  # TODO: rename to photo_framed
-        self.photo_binary = None
+        self.framed_photo = None  # TODO: rename to framed_photo
+        self.framed_binary = None
     
         self.FRAME_FACTOR = 2.0  # TODO: сделать адаптивный frame_factor на основе предыдущих координат
         self.prev_quad = ...
@@ -70,26 +79,25 @@ class MarkerFinder:  # TODO: заменить на Detector
         next_frame = ((x1, y1), (x2, y2))
         
         # Изображение с фреймом и углами
-        photo_with_frames = self.photo_cropped.copy()
-        cv2.rectangle(photo_with_frames, (x1, y1), (x2, y2), (255, 0, 0), 2)
+        img_next_frame = self.framed_photo.copy()
+        cv2.rectangle(img_next_frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
         for corner in corners:
-            cv2.circle(photo_with_frames, (int(corner[0]), int(corner[1])), 8, (0, 0, 255), -1)
+            cv2.circle(img_next_frame, (int(corner[0]), int(corner[1])), 8, (0, 0, 255), -1)
         for i in range(4):
             pt1 = (int(corners[i][0]), int(corners[i][1]))
             pt2 = (int(corners[(i + 1) % 4][0]), int(corners[(i + 1) % 4][1]))
-            cv2.line(photo_with_frames, pt1, pt2, (0, 255, 255), 2)
+            cv2.line(img_next_frame, pt1, pt2, (0, 255, 255), 2)
         
-        return next_frame, photo_with_frames
+        return next_frame, img_next_frame
 
     def _estimate_pose(self, ordered_points):
         ...  # ?
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    def _prepare_images(self, photo):
+    def _prepare_image(self, photo):
         """
-        Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии.
-        Возвращает: framed_original_img, cropped_img
+        Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии
         """
         noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
         self.photo = np.clip(photo + noise, 0, 255).astype(np.uint8)
@@ -99,9 +107,9 @@ class MarkerFinder:  # TODO: заменить на Detector
             x1, y1 = self.frame[0]
             x2, y2 = self.frame[1]
             cv2.rectangle(photo_with_frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            self.photo_cropped = photo[y1:y2, x1:x2]
+            self.framed_photo = photo[y1:y2, x1:x2]
         else:
-            self.photo_cropped = photo.copy()
+            self.framed_photo = photo.copy()
     
         return photo_with_frame
     
@@ -127,7 +135,7 @@ class MarkerFinder:  # TODO: заменить на Detector
         # Step 0
         
         start_time = time.perf_counter()
-        photo_with_frame = self._prepare_images(photo)
+        photo_with_frame = self._prepare_image(photo)
         end_time = time.perf_counter()
         self.log[-1]['0_crop_noise_frame'] = end_time - start_time
         

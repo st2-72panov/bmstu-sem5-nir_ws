@@ -24,10 +24,10 @@ class ArucoFinder(MarkerFinder):
         Шаг 1: Бинаризация, обнаружение четырёхугольников и фильтрация.
         """
 
-        photo_gray = cv2.cvtColor(self.photo_cropped, cv2.COLOR_BGR2GRAY)
-        _, photo_binary = cv2.threshold(photo_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        framed_gray = cv2.cvtColor(self.framed_photo, cv2.COLOR_BGR2GRAY)
+        _, framed_binary = cv2.threshold(framed_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         
-        contours, _ = cv2.findContours(photo_binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(framed_binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         
         found_quads = []
         
@@ -53,7 +53,7 @@ class ArucoFinder(MarkerFinder):
                 'corners': ordered              # Упорядоченные для гомографии (4, 2)
             })
             
-        self.photo_binary = photo_binary
+        self.framed_binary = framed_binary
         self.found_quads = found_quads
         return contours
 
@@ -75,14 +75,14 @@ class ArucoFinder(MarkerFinder):
             mins = points.min(axis=0).astype(int)
             maxs = points.max(axis=0).astype(int)
 
-            binary_img_cropped = self.photo_binary[mins[1]:maxs[1]+1, mins[0]:maxs[0]+1]
+            framed_binary_cropped = self.framed_binary[mins[1]:maxs[1]+1, mins[0]:maxs[0]+1]
             points -= mins
             
             # Сжатие (для больших ближних макреров)
-            binary_img_compressed = cv2.resize(binary_img_cropped, (64, 64), interpolation=cv2.INTER_LINEAR)
-            points *= 64.0 / np.array(binary_img_cropped.shape[::-1])
+            framed_binary_compressed = cv2.resize(framed_binary_cropped, (64, 64), interpolation=cv2.INTER_LINEAR)
+            points *= 64.0 / np.array(framed_binary_cropped.shape[::-1])
             
-            # Нормализация
+            # Выпрямление
             cell_size = 10
             w = cell_size * self.marker.size
             dst_points = np.array([
@@ -97,11 +97,11 @@ class ArucoFinder(MarkerFinder):
             )
             if homography is None or abs(np.linalg.det(homography)) < 1e-10:
                 continue
-            pattern_normalized = cv2.warpPerspective(binary_img_compressed, homography, (w, w))
+            pattern_flat = cv2.warpPerspective(framed_binary_compressed, homography, (w, w))
             
             # Сжатие
             pattern_adjusted = cv2.resize(
-                pattern_normalized, 
+                pattern_flat, 
                 (self.marker.size, self.marker.size), 
                 interpolation=cv2.INTER_LINEAR
             )
@@ -290,7 +290,7 @@ class ArucoFinder(MarkerFinder):
         
         return np.array([x, y], dtype=np.float32)
 
-    def _debug_draw_ordered_corners(self, binary_bgr, selected_quads):
+    def _debug_draw_ordered_corners(self, framed_binary_bgr, selected_quads):
         """
         Отладочная функция: рисует упорядоченные угловые точки для каждого 4угольника.
         
@@ -302,7 +302,7 @@ class ArucoFinder(MarkerFinder):
         
         Возвращает: изображение с нарисованными точками
         """
-        debug_img = binary_bgr.copy()
+        img_candidates_corners = framed_binary_bgr.copy()
         
         colors = [
             (0, 0, 255),      # 1: Красный (TL)
@@ -320,43 +320,43 @@ class ArucoFinder(MarkerFinder):
             # Рисуем 4 упорядоченные точки разными цветами
             for i, pt in enumerate(ordered_points):
                 color = colors[i]
-                cv2.circle(debug_img, (int(pt[0]), int(pt[1])), 6, color, -1)
+                cv2.circle(img_candidates_corners, (int(pt[0]), int(pt[1])), 6, color, -1)
                 
                 # Добавляем номер точки для наглядности
-                cv2.putText(debug_img, str(i+1), 
+                cv2.putText(img_candidates_corners, str(i+1), 
                         (int(pt[0]) - 8, int(pt[1]) - 8),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
             
             # Опционально: рисуем номер квада рядом с первой точкой
             first_pt = ordered_points[0]
-            cv2.putText(debug_img, f"Q{idx}", 
+            cv2.putText(img_candidates_corners, f"Q{idx}", 
                     (int(first_pt[0]) + 15, int(first_pt[1])),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
         
-        return debug_img
+        return img_candidates_corners
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     def _detect_candidates(self):
         start_time = time.perf_counter()
-        img_edges = self._detect_and_filter_quads()
+        framed_contours = self._detect_and_filter_quads()
         end_time = time.perf_counter()
         self.log[-1]['1_detection_filter'] = end_time - start_time
         
-        binary_bgr = cv2.cvtColor(self.photo_binary, cv2.COLOR_GRAY2BGR)
-        self._save_image("1.1.binarization.jpg", binary_bgr)
+        framed_binary_bgr = cv2.cvtColor(self.framed_binary, cv2.COLOR_GRAY2BGR)
+        self._save_image("1.1.binarization.jpg", framed_binary_bgr)
         
-        img_edges_viz = np.zeros_like(binary_bgr)
-        cv2.drawContours(img_edges_viz, img_edges, -1, (0, 255, 0), 1)
-        self._save_image("1.2.edges.jpg", img_edges_viz)
+        img_framed_contours = np.zeros_like(framed_binary_bgr)
+        cv2.drawContours(img_framed_contours, framed_contours, -1, (0, 255, 0), 1)
+        self._save_image("1.2.contours.jpg", img_framed_contours)
 
-        img_selected_quads = self.photo_cropped.copy()
+        img_candidates = self.framed_photo.copy()
         for q in self.found_quads:
-            cv2.drawContours(img_selected_quads, [q['contour']], -1, (0, 255, 0), 2)
-        self._save_image("1.3.selected_quads.jpg", img_selected_quads)
+            cv2.drawContours(img_candidates, [q['contour']], -1, (0, 255, 0), 2)
+        self._save_image("1.3.selected_quads.jpg", img_candidates)
         
-        debug_corners_img = self._debug_draw_ordered_corners(binary_bgr, self.found_quads)
-        self._save_image("1.4.debug_ordered_corners.jpg", debug_corners_img)
+        img_candidates_corners = self._debug_draw_ordered_corners(framed_binary_bgr, self.found_quads)
+        self._save_image("1.4.debug_ordered_corners.jpg", img_candidates_corners)
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # =========================================================
