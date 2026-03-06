@@ -10,22 +10,22 @@ from Aruco import Aruco
 
 """
 Именование изображений:
-photo - оригинальный снимок, переданный в MarkerFinder
+photo - оригинальный снимок, переданный в MarkerDetector
 framed_... - (модифицированная) часть photo, находящаяся внутри frame*
 img_... - разные изображения (для сохранения)
 
 * frame - рабочая область photo; предполагается, что маркер лежит внутри неё 
 """
 
-class MarkerFinder:  # TODO: заменить на Detector
+class MarkerDetector:
 
     @dataclass
-    class MarkerFinderConfig:
+    class MarkerDetectorConfig:
         OUTPUT_DIR_FOLDER: str
         
     def __init__(self):
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        self.config = MarkerFinder.MarkerFinderConfig(
+        self.config = MarkerDetector.MarkerDetectorConfig(
             OUTPUT_DIR_FOLDER=os.path.join(script_dir, "IMAGES_OUTPUT")
         )
         

@@ -2,12 +2,12 @@ import copy
 
 import cv2
 
-from ArucoFinder import ArucoFinder
+from ArucoDetector import ArucoDetector
 
 class PhotoProcessor:
     def __init__(self):
         ...
-        self.marker_finder = ArucoFinder()
+        self.marker_finder = ArucoDetector()
         self.pending_photo = None
         self.is_new_photo_there = False
     

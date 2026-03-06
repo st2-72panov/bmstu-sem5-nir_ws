@@ -6,13 +6,13 @@ import cv2
 import numpy as np
 
 from Aruco import Aruco
-from MarkerFinder import MarkerFinder
+from MarkerDetector import MarkerDetector
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR_FOLDER = os.path.join(SCRIPT_DIR, "IMAGES_OUTPUT")
 FRAME_FACTOR = 2.0
 
-class ArucoFinder(MarkerFinder):
+class ArucoDetector(MarkerDetector):
     def __init__(self):
         super().__init__()
 
@@ -364,7 +364,7 @@ class ArucoFinder(MarkerFinder):
 if __name__ == "__main__":
     from pprint import pprint
     
-    finder = ArucoFinder()
+    finder = ArucoDetector()
     
     photo = cv2.imread("../IMAGES_TEST/medium.jpg")
     if photo is None:
