@@ -41,7 +41,7 @@ class MarkerFinder:  # TODO: заменить на Detector
     def _create_output_dir(self) -> str:
         now = datetime.now()
         timestamp = now.strftime("%d.%m_%H-%M-%S")
-        dir_name = f"{self.OUTPUT_DIR_FOLDER}/{timestamp}_{self.iteration_count}"
+        dir_name = f"{self.config.OUTPUT_DIR_FOLDER}/{timestamp}_{self.iteration_count}"
         os.makedirs(dir_name, exist_ok=True)
         self.output_dir = dir_name
 
@@ -127,7 +127,7 @@ class MarkerFinder:  # TODO: заменить на Detector
         # Step 0
         
         start_time = time.perf_counter()
-        photo, photo_with_frame, photo_cropped = self._step0_prepare_images(photo)
+        photo_with_frame = self._prepare_images(photo)
         end_time = time.perf_counter()
         self.log[-1]['0_crop_noise_frame'] = end_time - start_time
         
@@ -154,17 +154,21 @@ class MarkerFinder:  # TODO: заменить на Detector
                 self.frame = None
                 return self.process(photo, self.marker, True)
             return None
-            
+        
         # .................................................
         # Step 3: Уточнение углов
           
         start_time = time.perf_counter()
-        subpixel_corners = self._step3_refine_marker_corners(detected_marker)
+        subpixel_corners = self._refine_marker_corners(detected_marker)
         end_time = time.perf_counter()
         self.log[-1]['3_subpixel_corners'] = end_time - start_time
                 
-        frame_coords, framed_with_corners = self._calculate_next_frame(subpixel_corners, photo_cropped, photo.shape)
+        # .................................................
+        # Вычисление следующего фрейма
+        
+        frame_coords, framed_with_corners = self._calculate_next_frame(subpixel_corners)
         self.frame = frame_coords
         self._save_image("3.subpixel_corners.jpg", framed_with_corners)
         
-        return self._estimate_pose(subpixel_corners)
+        pose = self._estimate_pose(subpixel_corners)
+        return pose
