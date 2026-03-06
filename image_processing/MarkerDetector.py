@@ -59,6 +59,34 @@ class MarkerDetector:
         cv2.imwrite(path, image)
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Реализации шагов
+    
+    def _prepare_image(self, photo):
+        """
+        Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии
+        """
+        noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
+        self.photo = np.clip(photo + noise, 0, 255).astype(np.uint8)
+
+        photo_with_frame = photo.copy()
+        if self.frame is not None:
+            x1, y1 = self.frame[0]
+            x2, y2 = self.frame[1]
+            cv2.rectangle(photo_with_frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            self.framed_photo = photo[y1:y2, x1:x2]
+        else:
+            self.framed_photo = photo.copy()
+    
+        return photo_with_frame
+    
+    def _detect_candidates():
+        pass
+    
+    def _validate_candidates():
+        pass
+    
+    def _refine_marker_corners():
+        pass
     
     def _calculate_next_frame(self, corners):
         # Координаты следующего фрейма
@@ -95,35 +123,6 @@ class MarkerDetector:
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    def _prepare_image(self, photo):
-        """
-        Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии
-        """
-        noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
-        self.photo = np.clip(photo + noise, 0, 255).astype(np.uint8)
-
-        photo_with_frame = photo.copy()
-        if self.frame is not None:
-            x1, y1 = self.frame[0]
-            x2, y2 = self.frame[1]
-            cv2.rectangle(photo_with_frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            self.framed_photo = photo[y1:y2, x1:x2]
-        else:
-            self.framed_photo = photo.copy()
-    
-        return photo_with_frame
-    
-    def _detect_candidates():
-        pass
-    
-    def _validate_candidates():
-        pass
-    
-    def _refine_marker_corners():
-        pass
-    
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
     def process(self, photo, reference_marker: Aruco, isRepeatedAttempt=False):
         if not isRepeatedAttempt:
             self.iteration_count += 1
@@ -132,7 +131,7 @@ class MarkerDetector:
         self.marker = reference_marker
 
         # .................................................
-        # Step 0
+        # Шаг 0
         
         start_time = time.perf_counter()
         photo_with_frame = self._prepare_image(photo)
@@ -142,7 +141,7 @@ class MarkerDetector:
         self._save_image("0.crop_noise_frame.jpg", photo_with_frame)
 
         # .................................................
-        # Step 1: Поиск кандидатов
+        # Шаг 1: Поиск кандидатов
         
         start_time = time.perf_counter()
         self._detect_candidates()
@@ -150,7 +149,7 @@ class MarkerDetector:
         self.log[-1]['1_detection_filter'] = end_time - start_time
         
         # .................................................
-        # Step 2: Валидация кондидатов
+        # Шаг 2: Валидация кондидатов
         
         start_time = time.perf_counter()
         detected_marker = self._validate_candidates() 
@@ -164,7 +163,7 @@ class MarkerDetector:
             return None
         
         # .................................................
-        # Step 3: Уточнение углов
+        # Шаг 3: Уточнение углов
           
         start_time = time.perf_counter()
         subpixel_corners = self._refine_marker_corners(detected_marker)
