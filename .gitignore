@@ -1,5 +1,7 @@
 image_processing/IMAGES_OUTPUT
 image_processing/.venv
+image_processing/.cursor
+image_processing/__pycache__
 aruco_test
 IMAGES_RAW
 
