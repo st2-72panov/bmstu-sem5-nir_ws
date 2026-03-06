@@ -17,8 +17,33 @@ class ArucoDetector(MarkerDetector):
         super().__init__()
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Логирование и дебаг
 
-    # Step 1
+    def _detect_candidates(self):
+        start_time = time.perf_counter()
+        framed_contours = self._detect_and_filter_quads()
+        end_time = time.perf_counter()
+        self.log[-1]['1_detection_filter'] = end_time - start_time
+        
+        framed_binary_bgr = cv2.cvtColor(self.framed_binary, cv2.COLOR_GRAY2BGR)  # стран-
+        self._save_image("1.1.binarization.jpg", framed_binary_bgr)
+        
+        img_framed_contours = np.zeros_like(framed_binary_bgr)  # -ные-
+        cv2.drawContours(img_framed_contours, framed_contours, -1, (0, 255, 0), 1)
+        self._save_image("1.2.contours.jpg", img_framed_contours)
+
+        img_candidates = self.framed_photo.copy()  # -названия
+        for q in self.found_quads:
+            cv2.drawContours(img_candidates, [q['contour']], -1, (0, 255, 0), 2)
+        self._save_image("1.3.selected_quads.jpg", img_candidates)
+        
+        img_candidates_corners = self._debug_draw_ordered_corners(framed_binary_bgr, self.found_quads)
+        self._save_image("1.4.debug_ordered_corners.jpg", img_candidates_corners)
+
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Реализации шагов
+    
+    # Шаг 1 ...............................................
     def _detect_and_filter_quads(self):
         """
         Шаг 1: Бинаризация, обнаружение четырёхугольников и фильтрация.
@@ -57,7 +82,7 @@ class ArucoDetector(MarkerDetector):
         self.found_quads = found_quads
         return contours
 
-    # Step 2
+    # Шаг 2 ...............................................
     def _validate_candidates(self):
         """
         Шаг 2: Детекция нужного маркера ArUco.
@@ -111,7 +136,7 @@ class ArucoDetector(MarkerDetector):
                 return quad
         return None
     
-    # Step 3
+    # Шаг 3 ...............................................
     def _refine_marker_corners(self, detected_marker):
         """
         Шаг 3: Субпиксельное вычисление углов маркера.
@@ -155,12 +180,9 @@ class ArucoDetector(MarkerDetector):
         
         return subpixel_corners
 
-
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Auxiliary functions (TODO: выделить в класс-предок (или нет?))
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Вспомогательные функции
     
-       
     def _order_points(self, points):
         """
         Упорядочивает 4 точки в порядке: TL, TR, BR, BL
@@ -335,30 +357,6 @@ class ArucoDetector(MarkerDetector):
         
         return img_candidates_corners
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-    def _detect_candidates(self):
-        start_time = time.perf_counter()
-        framed_contours = self._detect_and_filter_quads()
-        end_time = time.perf_counter()
-        self.log[-1]['1_detection_filter'] = end_time - start_time
-        
-        framed_binary_bgr = cv2.cvtColor(self.framed_binary, cv2.COLOR_GRAY2BGR)
-        self._save_image("1.1.binarization.jpg", framed_binary_bgr)
-        
-        img_framed_contours = np.zeros_like(framed_binary_bgr)
-        cv2.drawContours(img_framed_contours, framed_contours, -1, (0, 255, 0), 1)
-        self._save_image("1.2.contours.jpg", img_framed_contours)
-
-        img_candidates = self.framed_photo.copy()
-        for q in self.found_quads:
-            cv2.drawContours(img_candidates, [q['contour']], -1, (0, 255, 0), 2)
-        self._save_image("1.3.selected_quads.jpg", img_candidates)
-        
-        img_candidates_corners = self._debug_draw_ordered_corners(framed_binary_bgr, self.found_quads)
-        self._save_image("1.4.debug_ordered_corners.jpg", img_candidates_corners)
-    
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # =========================================================
 
 if __name__ == "__main__":
