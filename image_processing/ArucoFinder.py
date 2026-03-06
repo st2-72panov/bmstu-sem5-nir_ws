@@ -13,12 +13,13 @@ FRAME_FACTOR = 2.0
 class ArucoFinder:
     def __init__(self):
         # self.frame содержит координаты противоположных диагональных точек фрейма: ((x1, y1), (x2, y2))
-        self.frame = None  # Frame - весь экран
-        self.log = {}
+        # self.frame = None  # Frame - весь экран
+        # self.frame = ((1280 // 4, 0), (1280 * 4 // 5, 720 * 2 // 3))
+        self.frame = ((0, 0), (100, 100))
+        self.log = []
         self.iteration_count = 0
 
     def _create_output_dir(self) -> str:
-        """Создаёт выходную директорию на основе временной метки и счётчика итераций"""
         now = datetime.now()
         timestamp = now.strftime("%d.%m_%H-%M-%S")
         dir_name = f"{OUTPUT_DIR_FOLDER}/{timestamp}_{self.iteration_count}"
@@ -32,30 +33,27 @@ class ArucoFinder:
     def _step0_prepare_images(self, photo):
         """
         Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии.
-        Возвращает: framed_original_img, cropped_img, log_time
+        Возвращает: framed_original_img, cropped_img
         """
-        start_time = time.perf_counter()
         
         noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
         photo = np.clip(photo + noise, 0, 255).astype(np.uint8)
 
-        framed_original = photo.copy()
+        photo_with_frame = photo.copy()
         if self.frame is not None:
             x1, y1 = self.frame[0]
             x2, y2 = self.frame[1]
-            cv2.rectangle(framed_original, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cv2.rectangle(photo_with_frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
             cropped = photo[y1:y2, x1:x2]
         else:
             cropped = photo.copy()
 
-        end_time = time.perf_counter()
-        return framed_original, cropped, end_time - start_time
+        return photo, photo_with_frame, cropped
 
     def _step1_detect_and_filter_quads(self, image):
         """
         Шаг 2: Бинаризация, обнаружение четырёхугольников и фильтрация.
         """
-        start_time = time.perf_counter()
 
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
@@ -87,7 +85,7 @@ class ArucoFinder:
             })
         
         end_time = time.perf_counter()
-        return binary, contours, found_quads, end_time - start_time
+        return binary, contours, found_quads
 
     def _step2_detect_marker(self, binary_img, selected_quads):
         """
@@ -162,26 +160,21 @@ class ArucoFinder:
         
         return np.array([tl, tr, br, bl], dtype=np.float32)
 
-    def _step3_subpixel_corners(self, cropped_img, detected_marker, image_shape):
+    def _step3_subpixel_corners(self, detected_marker, original_photo_shape):
         """
         Шаг 4: Субпиксельное вычисление углов маркера.
         
         1. Для каждой стороны находит уравнение прямой (метод наименьших квадратов)
         2. Вычисляет точки пересечения соседних сторон
         3. Создаёт фрейм вокруг маркера
-        
-        Возвращает: subpixel_corners, frame_coords, framed_image, log_time
         """
-        start_time = time.perf_counter()
         
-        # Получаем оригинальный контур для более точной аппроксимации
         original_contour = detected_marker['original_contour']
         corners_approx = detected_marker['corners']
         
-        # Разделяем контур на 4 стороны
         sides_points = self._split_contour_to_sides(original_contour, corners_approx)
         
-        # Для каждой стороны находим уравнение прямой
+        # Уравнения прямой для каждой стороны
         lines = []
         for side_points in sides_points:
             if len(side_points) >= 2:
@@ -191,7 +184,7 @@ class ArucoFinder:
                 # Если точек мало, используем линию между углами
                 lines.append(None)
         
-        # Вычисляем пересечения соседних линий
+        # Пересечения соседних линий
         subpixel_corners = []
         for i in range(4):
             line1 = lines[i]
@@ -208,43 +201,37 @@ class ArucoFinder:
         
         subpixel_corners = np.array(subpixel_corners, dtype=np.float32)
         
-        # Вычисляем центр четырёхугольника
-        center = np.mean(subpixel_corners, axis=0)
+        return subpixel_corners
+    
+    def _calculate_next_frame(self, corners, photo_cropped, original_photo_shape):
+        # Координаты следующего фрейма
+        center = np.mean(corners, axis=0)
         
-        # Вычисляем диагонали
-        diag1 = np.linalg.norm(subpixel_corners[0] - subpixel_corners[2])
-        diag2 = np.linalg.norm(subpixel_corners[1] - subpixel_corners[3])
+        diag1 = np.linalg.norm(corners[0] - corners[2])
+        diag2 = np.linalg.norm(corners[1] - corners[3])
         max_diag = max(diag1, diag2)
         
-        # Вычисляем координаты фрейма (не выходя за границы)
         frame_size = int(max_diag * FRAME_FACTOR)
         
-        h, w = image_shape[:2]
+        h, w = original_photo_shape[:2]
         x1 = max(0, int(center[0] - frame_size / 2))
         y1 = max(0, int(center[1] - frame_size / 2))
         x2 = min(w, int(center[0] + frame_size / 2))
         y2 = min(h, int(center[1] + frame_size / 2))
         
-        frame_coords = ((x1, y1), (x2, y2))
+        next_frame = ((x1, y1), (x2, y2))
         
-        # Создаём изображение с фреймом и углами
-        framed_image = cropped_img.copy()
-        
-        # Рисуем фрейм
-        cv2.rectangle(framed_image, (x1, y1), (x2, y2), (255, 0, 0), 2)
-        
-        # Рисуем субпиксельные углы (красные круги)
-        for corner in subpixel_corners:
-            cv2.circle(framed_image, (int(corner[0]), int(corner[1])), 8, (0, 0, 255), -1)
-        
-        # Рисуем линии сторон
+        # Изображение с фреймом и углами
+        photo_with_frames = photo_cropped.copy()
+        cv2.rectangle(photo_with_frames, (x1, y1), (x2, y2), (255, 0, 0), 2)
+        for corner in corners:
+            cv2.circle(photo_with_frames, (int(corner[0]), int(corner[1])), 8, (0, 0, 255), -1)
         for i in range(4):
-            pt1 = (int(subpixel_corners[i][0]), int(subpixel_corners[i][1]))
-            pt2 = (int(subpixel_corners[(i + 1) % 4][0]), int(subpixel_corners[(i + 1) % 4][1]))
-            cv2.line(framed_image, pt1, pt2, (0, 255, 255), 2)
+            pt1 = (int(corners[i][0]), int(corners[i][1]))
+            pt2 = (int(corners[(i + 1) % 4][0]), int(corners[(i + 1) % 4][1]))
+            cv2.line(photo_with_frames, pt1, pt2, (0, 255, 255), 2)
         
-        end_time = time.perf_counter()
-        return subpixel_corners, frame_coords, framed_image, end_time - start_time
+        return next_frame, photo_with_frames
 
     def _split_contour_to_sides(self, contour, corners):
         """
@@ -400,24 +387,32 @@ class ArucoFinder:
         
         return debug_img
 
+    # =====================================================
+    
     def process(self, photo, marker: Aruco, isRepeatedAttempt=False):
-        """Основная функция обработки."""
         if not isRepeatedAttempt:
             self.iteration_count += 1
         self._create_output_dir()
+        self.log.append(dict())
         self.marker = marker
-        self.log = {}
 
-        # =================================================
+        # . . . . . . . . . . . . . . . . . . . . . . . . .
         # Шаг 0
-        framed_original, cropped_img, time_step0 = self._step0_prepare_images(photo)
-        self.log['0_crop_noise_frame'] = time_step0
-        self._save_image("0.crop_noise_frame.jpg", framed_original)
+        
+        start_time = time.perf_counter()
+        photo, photo_with_frame, photo_cropped = self._step0_prepare_images(photo)
+        end_time = time.perf_counter()
+        self.log[-1]['0_crop_noise_frame'] = end_time - start_time
+        
+        self._save_image("0.crop_noise_frame.jpg", photo_with_frame)
 
-        # =================================================
+        # . . . . . . . . . . . . . . . . . . . . . . . . .
         # Шаг 1
-        binary_img, edges_img, selected_quads, time_step1 = self._step1_detect_and_filter_quads(cropped_img)
-        self.log['1_detection_filter'] = time_step1
+        
+        start_time = time.perf_counter()
+        binary_img, edges_img, selected_quads = self._step1_detect_and_filter_quads(photo_cropped)
+        end_time = time.perf_counter()
+        self.log[-1]['1_detection_filter'] = end_time - start_time
         
         binary_bgr = cv2.cvtColor(binary_img, cv2.COLOR_GRAY2BGR)
         self._save_image("1.1.binarization.jpg", binary_bgr)
@@ -426,52 +421,53 @@ class ArucoFinder:
         cv2.drawContours(edges_viz, edges_img, -1, (0, 255, 0), 1)
         self._save_image("1.2.edges.jpg", edges_viz)
 
-        img_selected = cropped_img.copy()
+        img_selected_quads = photo_cropped.copy()
         for q in selected_quads:
-            cv2.drawContours(img_selected, [q['contour']], -1, (0, 255, 0), 2)
-        self._save_image("1.3.selected_quads.jpg", img_selected)
+            cv2.drawContours(img_selected_quads, [q['contour']], -1, (0, 255, 0), 2)
+        self._save_image("1.3.selected_quads.jpg", img_selected_quads)
         
         debug_corners_img = self._debug_draw_ordered_corners(binary_bgr, selected_quads)
         self._save_image("1.4.debug_ordered_corners.jpg", debug_corners_img)
         
-        # =================================================
-        # Шаг 2: Поиск нужного маркера (теперь передаём binary_img)
+        # . . . . . . . . . . . . . . . . . . . . . . . . .
+        # Шаг 2: Поиск нужного маркера
+        
         start_time = time.perf_counter()
         detected_marker = self._step2_detect_marker(binary_img, selected_quads)
         end_time = time.perf_counter()
-        self.log['2_marker_detection'] = end_time - start_time
+        self.log[-1]['2_marker_detection'] = end_time - start_time
         
+        if detected_marker is None:
+            if self.frame is not None:  # Неудача при неполном фрейме -- попытка поиска в полном
+                self.frame = None
+                return self.process(photo, marker, True)
+            return None
+            
+        # . . . . . . . . . . . . . . . . . . . . . . . . .
         # Шаг 3: Уточнение углов
-        if detected_marker is not None:
-            subpixel_corners, frame_coords, framed_with_corners, time_step3 = self._step3_subpixel_corners(
-                cropped_img, detected_marker, photo.shape
-            )
-            self.log['3_subpixel_corners'] = time_step3 
-            
-            # Сохраняем изображение с углами
-            self._save_image("3.subpixel_corners.jpg", framed_with_corners)
-            
-            # Обновляем фрейм для следующей итерации
-            self.frame = frame_coords
-            
-            detected_marker['subpixel_corners'] = subpixel_corners
-            
-            return detected_marker
+          
+        start_time = time.perf_counter()
+        subpixel_corners = self._step3_subpixel_corners(detected_marker, photo.shape)
+        end_time = time.perf_counter()
+        self.log[-1]['3_subpixel_corners'] = end_time - start_time
         
-        # elif self.frame is not None:  # Неудача при неполном фрейме -- попытка поиска в полном
-        #     self.frame = None
-        #     self.process(photo, marker, True)
-
-        # else:  # Неудача при полном фрейме
-        #     return None
+        detected_marker['subpixel_corners'] = subpixel_corners
+                
+        frame_coords, framed_with_corners = self._calculate_next_frame(subpixel_corners, photo_cropped, photo.shape)
+        self.frame = frame_coords
+        self._save_image("3.subpixel_corners.jpg", framed_with_corners)
+                
+        return detected_marker
+    
 
 if __name__ == "__main__":
+    
     from pprint import pprint
     
     finder = ArucoFinder()
-    image = cv2.imread("../IMAGES_TEST/medium.jpg")
-    if image is None:
+    photo = cv2.imread("../IMAGES_TEST/medium.jpg")
+    if photo is None:
         raise RuntimeError("Ошибка: не удалось загрузить изображение")
     marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
-    results = finder.process(image, marker)
+    results = finder.process(photo, marker)
     pprint(finder.log)
