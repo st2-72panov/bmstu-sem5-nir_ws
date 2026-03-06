@@ -32,10 +32,11 @@ class ArucoFinder:
         cv2.imwrite(path, image)
 
 
-    # =====================================================
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Steps
-    # =====================================================
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    
     def _step1_detect_and_filter_quads(self, image):
         """
         Шаг 2: Бинаризация, обнаружение четырёхугольников и фильтрация.
@@ -170,9 +171,9 @@ class ArucoFinder:
         return subpixel_corners
 
 
-    # =====================================================
-    # Auxiliary functions (TODO: выделить в класс-предок)
-    # =====================================================
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Auxiliary functions (TODO: выделить в класс-предок (или нет?))
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
        
     def _order_points(self, points):
@@ -380,9 +381,9 @@ class ArucoFinder:
         return next_frame, photo_with_frames
 
 
-    # =====================================================
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Process
-    # =====================================================
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     
     def process(self, photo, marker: Aruco, isRepeatedAttempt=False):
@@ -392,7 +393,7 @@ class ArucoFinder:
         self.log.append(dict())
         self.marker = marker
 
-        # . . . . . . . . . . . . . . . . . . . . . . . . .
+        # .................................................
         # Шаг 0
         
         start_time = time.perf_counter()
@@ -402,8 +403,8 @@ class ArucoFinder:
         
         self._save_image("0.crop_noise_frame.jpg", photo_with_frame)
 
-        # . . . . . . . . . . . . . . . . . . . . . . . . .
-        # Шаг 1
+        # .................................................
+        # Шаг 1: Поиск кандидатов
         
         start_time = time.perf_counter()
         binary_img, edges_img, selected_quads = self._step1_detect_and_filter_quads(photo_cropped)
@@ -425,8 +426,8 @@ class ArucoFinder:
         debug_corners_img = self._debug_draw_ordered_corners(binary_bgr, selected_quads)
         self._save_image("1.4.debug_ordered_corners.jpg", debug_corners_img)
         
-        # . . . . . . . . . . . . . . . . . . . . . . . . .
-        # Шаг 2: Поиск нужного маркера
+        # .................................................
+        # Шаг 2: Валидация кандидатов
         
         start_time = time.perf_counter()
         detected_marker = self._step2_detect_marker(binary_img, selected_quads)
@@ -439,7 +440,7 @@ class ArucoFinder:
                 return self.process(photo, marker, True)
             return None
             
-        # . . . . . . . . . . . . . . . . . . . . . . . . .
+        # .................................................
         # Шаг 3: Уточнение углов
           
         start_time = time.perf_counter()

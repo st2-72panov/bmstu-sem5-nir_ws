@@ -36,7 +36,7 @@ class MarkerFinder:  # TODO: заменить на Detector
         self.prev_quad = ...
         # TODO: сделать поворот фрейма?
     
-    # =================================================
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     def _create_output_dir(self) -> str:
         now = datetime.now()
@@ -49,7 +49,7 @@ class MarkerFinder:  # TODO: заменить на Detector
         path = os.path.join(self.output_dir, filename)
         cv2.imwrite(path, image)
 
-    # =================================================
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     def _calculate_next_frame(self, corners):
         # Координаты следующего фрейма
@@ -84,15 +84,13 @@ class MarkerFinder:  # TODO: заменить на Detector
     def _estimate_pose(self, ordered_points):
         ...  # ?
     
-    # =================================================
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    def _step0_prepare_images(self, photo):
+    def _prepare_images(self, photo):
         """
         Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии.
         Возвращает: framed_original_img, cropped_img
         """
-        
-        # Add noise
         noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
         self.photo = np.clip(photo + noise, 0, 255).astype(np.uint8)
 
@@ -104,26 +102,29 @@ class MarkerFinder:  # TODO: заменить на Detector
             self.photo_cropped = photo[y1:y2, x1:x2]
         else:
             self.photo_cropped = photo.copy()
-
+    
         return photo_with_frame
     
-    def _step12_detect_marker():
+    def _detect_candidates():
         pass
     
-    def _step3_refine_marker_corners():
+    def _validate_candidates():
         pass
     
-    # =================================================
+    def _refine_marker_corners():
+        pass
     
-    def process(self, photo, marker: Aruco, isRepeatedAttempt=False):
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    def process(self, photo, reference_marker: Aruco, isRepeatedAttempt=False):
         if not isRepeatedAttempt:
             self.iteration_count += 1
         self._create_output_dir()
         self.log.append(dict())
-        self.marker = marker
+        self.marker = reference_marker
 
-        # . . . . . . . . . . . . . . . . . . . . . . . . .
-        # Шаг 0
+        # .................................................
+        # Step 0
         
         start_time = time.perf_counter()
         photo, photo_with_frame, photo_cropped = self._step0_prepare_images(photo)
@@ -132,19 +133,30 @@ class MarkerFinder:  # TODO: заменить на Detector
         
         self._save_image("0.crop_noise_frame.jpg", photo_with_frame)
 
-        # . . . . . . . . . . . . . . . . . . . . . . . . .
-        # Шаги 1-2: Поиск и проверка кандидатов
+        # .................................................
+        # Step 1: Поиск кандидатов
         
-        detected_marker = self._step12_detect_marker()
+        start_time = time.perf_counter()
+        self._detect_candidates()
+        end_time = time.perf_counter()
+        self.log[-1]['1_detection_filter'] = end_time - start_time
+        
+        # .................................................
+        # Step 2: Валидация кондидатов
+        
+        start_time = time.perf_counter()
+        detected_marker = self._validate_candidates() 
+        end_time = time.perf_counter()
+        self.log[-1]['2_marker_detection'] = end_time - start_time
         
         if detected_marker is None:
             if self.frame is not None:  # Неудача при неполном фрейме -- попытка поиска в полном
                 self.frame = None
-                return self.process(photo, marker, True)
+                return self.process(photo, self.marker, True)
             return None
             
-        # . . . . . . . . . . . . . . . . . . . . . . . . .
-        # Шаг 3: Уточнение углов
+        # .................................................
+        # Step 3: Уточнение углов
           
         start_time = time.perf_counter()
         subpixel_corners = self._step3_refine_marker_corners(detected_marker)
@@ -156,4 +168,3 @@ class MarkerFinder:  # TODO: заменить на Detector
         self._save_image("3.subpixel_corners.jpg", framed_with_corners)
         
         return self._estimate_pose(subpixel_corners)
-    
