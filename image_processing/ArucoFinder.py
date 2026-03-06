@@ -1,9 +1,10 @@
-import cv2
-import numpy as np
+from datetime import datetime
 import os
 import time
-from datetime import datetime
-from random import randint
+
+import cv2
+import numpy as np
+
 from Aruco import Aruco
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -34,27 +35,6 @@ class ArucoFinder:
     # =====================================================
     # Steps
     # =====================================================
-    
-    
-    def _step0_prepare_images(self, photo):
-        """
-        Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии.
-        Возвращает: framed_original_img, cropped_img
-        """
-        
-        noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
-        photo = np.clip(photo + noise, 0, 255).astype(np.uint8)
-
-        photo_with_frame = photo.copy()
-        if self.frame is not None:
-            x1, y1 = self.frame[0]
-            x2, y2 = self.frame[1]
-            cv2.rectangle(photo_with_frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cropped = photo[y1:y2, x1:x2]
-        else:
-            cropped = photo.copy()
-
-        return photo, photo_with_frame, cropped
 
     def _step1_detect_and_filter_quads(self, image):
         """
@@ -214,36 +194,6 @@ class ArucoFinder:
         bl = points[np.argmax(diff)]
         
         return np.array([tl, tr, br, bl], dtype=np.float32)
-    
-    def _calculate_next_frame(self, corners, photo_cropped, original_photo_shape):
-        # Координаты следующего фрейма
-        center = np.mean(corners, axis=0)
-        
-        diag1 = np.linalg.norm(corners[0] - corners[2])
-        diag2 = np.linalg.norm(corners[1] - corners[3])
-        max_diag = max(diag1, diag2)
-        
-        frame_size = int(max_diag * FRAME_FACTOR)
-        
-        h, w = original_photo_shape[:2]
-        x1 = max(0, int(center[0] - frame_size / 2))
-        y1 = max(0, int(center[1] - frame_size / 2))
-        x2 = min(w, int(center[0] + frame_size / 2))
-        y2 = min(h, int(center[1] + frame_size / 2))
-        
-        next_frame = ((x1, y1), (x2, y2))
-        
-        # Изображение с фреймом и углами
-        photo_with_frames = photo_cropped.copy()
-        cv2.rectangle(photo_with_frames, (x1, y1), (x2, y2), (255, 0, 0), 2)
-        for corner in corners:
-            cv2.circle(photo_with_frames, (int(corner[0]), int(corner[1])), 8, (0, 0, 255), -1)
-        for i in range(4):
-            pt1 = (int(corners[i][0]), int(corners[i][1]))
-            pt2 = (int(corners[(i + 1) % 4][0]), int(corners[(i + 1) % 4][1]))
-            cv2.line(photo_with_frames, pt1, pt2, (0, 255, 255), 2)
-        
-        return next_frame, photo_with_frames
 
     def _split_contour_to_sides(self, contour, corners):
         """
@@ -356,7 +306,7 @@ class ArucoFinder:
 
     def _debug_draw_ordered_corners(self, binary_bgr, selected_quads):
         """
-        Отладочная функция: рисует упорядоченные угловые точки для каждого квада.
+        Отладочная функция: рисует упорядоченные угловые точки для каждого 4угольника.
         
         Цвета точек:
         1 (TL) - Красный (0, 0, 255)
@@ -398,6 +348,36 @@ class ArucoFinder:
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
         
         return debug_img
+    
+    def _calculate_next_frame(self, corners, photo_cropped, original_photo_shape):
+        # Координаты следующего фрейма
+        center = np.mean(corners, axis=0)
+        
+        diag1 = np.linalg.norm(corners[0] - corners[2])
+        diag2 = np.linalg.norm(corners[1] - corners[3])
+        max_diag = max(diag1, diag2)
+        
+        frame_size = int(max_diag * FRAME_FACTOR)
+        
+        h, w = original_photo_shape[:2]
+        x1 = max(0, int(center[0] - frame_size / 2))
+        y1 = max(0, int(center[1] - frame_size / 2))
+        x2 = min(w, int(center[0] + frame_size / 2))
+        y2 = min(h, int(center[1] + frame_size / 2))
+        
+        next_frame = ((x1, y1), (x2, y2))
+        
+        # Изображение с фреймом и углами
+        photo_with_frames = photo_cropped.copy()
+        cv2.rectangle(photo_with_frames, (x1, y1), (x2, y2), (255, 0, 0), 2)
+        for corner in corners:
+            cv2.circle(photo_with_frames, (int(corner[0]), int(corner[1])), 8, (0, 0, 255), -1)
+        for i in range(4):
+            pt1 = (int(corners[i][0]), int(corners[i][1]))
+            pt2 = (int(corners[(i + 1) % 4][0]), int(corners[(i + 1) % 4][1]))
+            cv2.line(photo_with_frames, pt1, pt2, (0, 255, 255), 2)
+        
+        return next_frame, photo_with_frames
 
 
     # =====================================================
