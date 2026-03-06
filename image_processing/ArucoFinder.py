@@ -15,7 +15,7 @@ class ArucoFinder:
         # self.frame содержит координаты противоположных диагональных точек фрейма: ((x1, y1), (x2, y2))
         # self.frame = None  # Frame - весь экран
         # self.frame = ((1280 // 4, 0), (1280 * 4 // 5, 720 * 2 // 3))
-        self.frame = ((0, 0), (100, 100))
+        # self.frame = ((0, 0), (100, 100))
         self.log = []
         self.iteration_count = 0
 
@@ -30,6 +30,12 @@ class ArucoFinder:
         path = os.path.join(self.output_dir, filename)
         cv2.imwrite(path, image)
 
+
+    # =====================================================
+    # Steps
+    # =====================================================
+    
+    
     def _step0_prepare_images(self, photo):
         """
         Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии.
@@ -140,26 +146,6 @@ class ArucoFinder:
                 return quad
         return None
     
-    def _order_points(self, points):
-        """
-        Упорядочивает 4 точки в порядке: TL, TR, BR, BL
-        Использует сумму и разность координат (работает при любом повороте)
-        """
-        if len(points) != 4:
-            return points
-        
-        # Сумма координат: TL минимальная, BR максимальная
-        s = points.sum(axis=1)
-        tl = points[np.argmin(s)]
-        br = points[np.argmax(s)]
-        
-        # Разность координат: TR минимальная, BL максимальная
-        diff = np.diff(points, axis=1).flatten()
-        tr = points[np.argmin(diff)]
-        bl = points[np.argmax(diff)]
-        
-        return np.array([tl, tr, br, bl], dtype=np.float32)
-
     def _step3_subpixel_corners(self, detected_marker, original_photo_shape):
         """
         Шаг 4: Субпиксельное вычисление углов маркера.
@@ -202,6 +188,32 @@ class ArucoFinder:
         subpixel_corners = np.array(subpixel_corners, dtype=np.float32)
         
         return subpixel_corners
+
+
+    # =====================================================
+    # Auxiliary functions (TODO: выделить в класс-предок)
+    # =====================================================
+    
+       
+    def _order_points(self, points):
+        """
+        Упорядочивает 4 точки в порядке: TL, TR, BR, BL
+        Использует сумму и разность координат (работает при любом повороте)
+        """
+        if len(points) != 4:
+            return points
+        
+        # Сумма координат: TL минимальная, BR максимальная
+        s = points.sum(axis=1)
+        tl = points[np.argmin(s)]
+        br = points[np.argmax(s)]
+        
+        # Разность координат: TR минимальная, BL максимальная
+        diff = np.diff(points, axis=1).flatten()
+        tr = points[np.argmin(diff)]
+        bl = points[np.argmax(diff)]
+        
+        return np.array([tl, tr, br, bl], dtype=np.float32)
     
     def _calculate_next_frame(self, corners, photo_cropped, original_photo_shape):
         # Координаты следующего фрейма
@@ -387,7 +399,11 @@ class ArucoFinder:
         
         return debug_img
 
+
     # =====================================================
+    # Process
+    # =====================================================
+    
     
     def process(self, photo, marker: Aruco, isRepeatedAttempt=False):
         if not isRepeatedAttempt:
