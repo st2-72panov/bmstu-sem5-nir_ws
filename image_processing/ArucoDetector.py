@@ -13,8 +13,8 @@ OUTPUT_DIR_FOLDER = os.path.join(SCRIPT_DIR, "IMAGES_OUTPUT")
 FRAME_FACTOR = 2.0
 
 class ArucoDetector(MarkerDetector):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, reference_marker: Aruco):
+        super().__init__(reference_marker)
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Логирование и дебаг
@@ -25,7 +25,7 @@ class ArucoDetector(MarkerDetector):
         end_time = time.perf_counter()
         self.log[-1]['1_detection_filter'] = end_time - start_time
         
-        framed_binary_bgr = cv2.cvtColor(self.framed_binary, cv2.COLOR_GRAY2BGR)  # стран-
+        framed_binary_bgr = cv2.cvtColor(self.framed_binary, cv2.COLOR_GRAY2BGR)  # TODO: стран-
         self._save_image("1.1.binarization.jpg", framed_binary_bgr)
         
         img_framed_contours = np.zeros_like(framed_binary_bgr)  # -ные-
@@ -109,7 +109,7 @@ class ArucoDetector(MarkerDetector):
             
             # Выпрямление
             cell_size = 10
-            w = cell_size * self.marker.size
+            w = cell_size * self.reference_marker.size
             dst_points = np.array([
                 [0, 0], 
                 [w-1, 0],
@@ -127,12 +127,12 @@ class ArucoDetector(MarkerDetector):
             # Сжатие
             pattern_adjusted = cv2.resize(
                 pattern_flat, 
-                (self.marker.size, self.marker.size), 
+                (self.reference_marker.size, self.reference_marker.size), 
                 interpolation=cv2.INTER_LINEAR
             )
             pattern = (pattern_adjusted > 127).astype(np.uint8)
 
-            if self.marker.is_valid(pattern):
+            if self.reference_marker.is_valid(pattern):
                 return quad
         return None
     
@@ -362,12 +362,12 @@ class ArucoDetector(MarkerDetector):
 if __name__ == "__main__":
     from pprint import pprint
     
-    finder = ArucoDetector()
+    marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
+    finder = ArucoDetector(marker)
     
     photo = cv2.imread("../IMAGES_TEST/medium.jpg")
     if photo is None:
         raise RuntimeError("Ошибка: не удалось загрузить изображение")
-    marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
     
-    results = finder.process(photo, marker)
+    results = finder.process(photo)
     pprint(finder.log)

@@ -23,7 +23,7 @@ class MarkerDetector:
     class MarkerDetectorConfig:
         OUTPUT_DIR_FOLDER: str
         
-    def __init__(self):
+    def __init__(self, reference_marker: Aruco):
         script_dir = os.path.dirname(os.path.abspath(__file__))
         self.config = MarkerDetector.MarkerDetectorConfig(
             OUTPUT_DIR_FOLDER=os.path.join(script_dir, "IMAGES_OUTPUT")
@@ -31,7 +31,7 @@ class MarkerDetector:
         
         self.log = []
         self.iteration_count = 0
-        self.reference_marker = ...
+        self.reference_marker = reference_marker
         # self.frame содержит координаты противоположных диагональных точек фрейма: ((x1, y1), (x2, y2))
         self.frame = None  # Frame - весь экран
         # self.frame = ((1280 // 4, 0), (1280 * 4 // 5, 720 * 2 // 3))
@@ -47,7 +47,7 @@ class MarkerDetector:
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    def _create_output_dir(self) -> str:
+    def _create_output_dir(self):
         now = datetime.now()
         timestamp = now.strftime("%d.%m_%H-%M-%S")
         dir_name = f"{self.config.OUTPUT_DIR_FOLDER}/{timestamp}_{self.iteration_count}"
@@ -79,13 +79,13 @@ class MarkerDetector:
     
         return photo_with_frame
     
-    def _detect_candidates():
+    def _detect_candidates(self):
         pass
     
-    def _validate_candidates():
+    def _validate_candidates(self):
         pass
     
-    def _refine_marker_corners():
+    def _refine_marker_corners(self, detected_marker):
         pass
     
     def _calculate_next_frame(self, corners):
@@ -123,12 +123,11 @@ class MarkerDetector:
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    def process(self, photo, reference_marker: Aruco, isRepeatedAttempt=False):
+    def process(self, photo, isRepeatedAttempt=False):
         if not isRepeatedAttempt:
             self.iteration_count += 1
         self._create_output_dir()
         self.log.append(dict())
-        self.marker = reference_marker
 
         # .................................................
         # Шаг 0
@@ -159,7 +158,7 @@ class MarkerDetector:
         if detected_marker is None:
             if self.frame is not None:  # Неудача при неполном фрейме -- попытка поиска в полном
                 self.frame = None
-                return self.process(photo, self.marker, True)
+                return self.process(photo, True)
             return None
         
         # .................................................
