@@ -106,15 +106,23 @@ class MarkerDetector:
         
         next_frame = ((x1, y1), (x2, y2))
         
-        # Изображение с фреймом и углами
+        # Изображение
+        # Фрейм
         img_next_frame = self.framed_photo.copy()
         cv2.rectangle(img_next_frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
+
+        # # Границы маркера
+        # for i in range(4):
+        #     pt1 = (int(corners[i][0]), int(corners[i][1]))
+        #     pt2 = (int(corners[(i + 1) % 4][0]), int(corners[(i + 1) % 4][1]))
+        #     cv2.line(img_next_frame, pt1, pt2, (0, 255, 255), 2)
+            
+        # Окружность + точка в центре
         for corner in corners:
-            cv2.circle(img_next_frame, (int(corner[0]), int(corner[1])), 8, (0, 0, 255), -1)
-        for i in range(4):
-            pt1 = (int(corners[i][0]), int(corners[i][1]))
-            pt2 = (int(corners[(i + 1) % 4][0]), int(corners[(i + 1) % 4][1]))
-            cv2.line(img_next_frame, pt1, pt2, (0, 255, 255), 2)
+            x, y = int(corner[0]), int(corner[1])
+            cv2.circle(img_next_frame, (x, y), 8, (0, 0, 255), 1)
+            # cv2.rectangle(img_next_frame, (x-1, y-1), (x+2, y+2), (0, 0, 255), -1)
+            cv2.circle(img_next_frame, (x, y), 1, (0, 0, 255), -1)
         
         return next_frame, img_next_frame
 
@@ -170,7 +178,7 @@ class MarkerDetector:
         self.log[-1]['3_subpixel_corners'] = end_time - start_time
                 
         # .................................................
-        # Вычисление следующего фрейма
+        # Шаг 4.1 Вычисление следующего фрейма
         
         frame_coords, framed_with_corners = self._calculate_next_frame(subpixel_corners)
         self.frame = frame_coords
