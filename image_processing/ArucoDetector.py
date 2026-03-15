@@ -1,6 +1,4 @@
-from datetime import datetime
 import os
-import time
 
 import cv2
 import numpy as np
@@ -8,31 +6,26 @@ import numpy as np
 from Aruco import Aruco
 from MarkerDetector import MarkerDetector
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR_FOLDER = os.path.join(SCRIPT_DIR, "IMAGES_OUTPUT")
-FRAME_FACTOR = 2.0
-
 class ArucoDetector(MarkerDetector):
     def __init__(self, reference_marker: Aruco):
         super().__init__(reference_marker)
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Логирование и дебаг
+    # Реализации шагов
 
+    # Шаг 1 ...............................................
     def _detect_candidates(self):
-        start_time = time.perf_counter()
-        framed_contours = self._detect_and_filter_quads()
-        end_time = time.perf_counter()
-        self.log[-1]['1_detection_filter'] = end_time - start_time
+        with self.timer('1_detection_filter'):
+            framed_contours = self._detect_and_filter_quads()
         
-        framed_binary_bgr = cv2.cvtColor(self.framed_binary, cv2.COLOR_GRAY2BGR)  # TODO: стран-
+        framed_binary_bgr = cv2.cvtColor(self.framed_binary, cv2.COLOR_GRAY2BGR)  # TODO: странные названия
         self._save_image("1.1.binarization.jpg", framed_binary_bgr)
         
-        img_framed_contours = np.zeros_like(framed_binary_bgr)  # -ные-
+        img_framed_contours = np.zeros_like(framed_binary_bgr)
         cv2.drawContours(img_framed_contours, framed_contours, -1, (0, 255, 0), 1)
         self._save_image("1.2.contours.jpg", img_framed_contours)
 
-        img_candidates = self.framed_photo.copy()  # -названия
+        img_candidates = self.framed_photo.copy()
         for q in self.found_quads:
             cv2.drawContours(img_candidates, [q['contour']], -1, (0, 255, 0), 2)
         self._save_image("1.3.selected_quads.jpg", img_candidates)
@@ -40,10 +33,6 @@ class ArucoDetector(MarkerDetector):
         img_candidates_corners = self._debug_draw_ordered_corners(framed_binary_bgr, self.found_quads)
         self._save_image("1.4.debug_ordered_corners.jpg", img_candidates_corners)
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Реализации шагов
-    
-    # Шаг 1 ...............................................
     def _detect_and_filter_quads(self):
         """
         Шаг 1: Бинаризация, обнаружение четырёхугольников и фильтрация.
@@ -96,14 +85,14 @@ class ArucoDetector(MarkerDetector):
         for quad in self.found_quads:
             points = np.array(quad['corners'])
             
-            # Обрезка (для ускорения обратнойгомографии)
+            # Обрезка (для ускорения обратной гомографии)
             mins = points.min(axis=0).astype(int)
             maxs = points.max(axis=0).astype(int)
 
             framed_binary_cropped = self.framed_binary[mins[1]:maxs[1]+1, mins[0]:maxs[0]+1]
             points -= mins
             
-            # Сжатие (для больших ближних макреров)
+            # Сжатие (для больших ближних маркеров)
             framed_binary_compressed = cv2.resize(framed_binary_cropped, (64, 64), interpolation=cv2.INTER_LINEAR)
             points *= 64.0 / np.array(framed_binary_cropped.shape[::-1])
             
@@ -135,7 +124,7 @@ class ArucoDetector(MarkerDetector):
             if self.reference_marker.is_valid(pattern):
                 return quad
         return None
-    
+
     # Шаг 3 ...............................................
     def _refine_marker_corners(self, detected_marker):
         """
@@ -166,7 +155,7 @@ class ArucoDetector(MarkerDetector):
         for i in range(4):
             line1 = lines[i]
             line2 = lines[(i + 1) % 4] 
-            
+             
             if line1 is not None and line2 is not None:
                 intersection = self._line_intersection(line1, line2)
                 if intersection is not None:
@@ -175,14 +164,14 @@ class ArucoDetector(MarkerDetector):
                     subpixel_corners.append(corners_approx[i])
             else:
                 subpixel_corners.append(corners_approx[i])
-        
+     
         subpixel_corners = np.array(subpixel_corners, dtype=np.float32)
         
         return subpixel_corners
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Вспомогательные функции
-    
+
     def _order_points(self, points):
         """
         Упорядочивает 4 точки в порядке: TL, TR, BR, BL
@@ -218,7 +207,7 @@ class ArucoDetector(MarkerDetector):
             for i in range(4):
                 pt1 = corners[i]
                 pt2 = corners[(i + 1) % 4]
-                
+                 
                 # Расстояние от точки до отрезка
                 dist = self._point_to_line_distance(point, pt1, pt2)
                 
@@ -343,7 +332,7 @@ class ArucoDetector(MarkerDetector):
             for i, pt in enumerate(ordered_points):
                 color = colors[i]
                 cv2.circle(img_candidates_corners, (int(pt[0]), int(pt[1])), 6, color, -1)
-                
+                 
                 # Добавляем номер точки для наглядности
                 cv2.putText(img_candidates_corners, str(i+1), 
                         (int(pt[0]) - 8, int(pt[1]) - 8),
@@ -360,14 +349,11 @@ class ArucoDetector(MarkerDetector):
 # =========================================================
 
 if __name__ == "__main__":
-    from pprint import pprint
-    
     marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
     finder = ArucoDetector(marker)
-    
+
     photo = cv2.imread("../IMAGES_TEST/medium.jpg")
     if photo is None:
         raise RuntimeError("Ошибка: не удалось загрузить изображение")
-    
+
     results = finder.process(photo)
-    pprint(finder.log)
