@@ -1,5 +1,3 @@
-import os
-
 import cv2
 import numpy as np
 
@@ -125,10 +123,10 @@ class ArucoDetector(MarkerDetector):
                 return quad
         return None
 
-    # Шаг 3 ...............................................
+    # Шаг 2 ...............................................
     def _refine_marker_corners(self, detected_marker):
         """
-        Шаг 3: Субпиксельное вычисление углов маркера.
+        Субпиксельное вычисление углов маркера.
         
         1. Для каждой стороны находит уравнение прямой (метод наименьших квадратов)
         2. Вычисляет точки пересечения соседних сторон
@@ -165,9 +163,7 @@ class ArucoDetector(MarkerDetector):
             else:
                 subpixel_corners.append(corners_approx[i])
      
-        subpixel_corners = np.array(subpixel_corners, dtype=np.float32)
-        
-        return subpixel_corners
+        self.subpixel_corners = np.array(subpixel_corners, dtype=np.float32)
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Вспомогательные функции
@@ -348,12 +344,12 @@ class ArucoDetector(MarkerDetector):
 
 # =========================================================
 
-if __name__ == "__main__":
-    marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
-    finder = ArucoDetector(marker)
+# if __name__ == "__main__":
+#     marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
+#     finder = ArucoDetector(marker)
 
-    photo = cv2.imread("../IMAGES_TEST/medium.jpg")
-    if photo is None:
-        raise RuntimeError("Ошибка: не удалось загрузить изображение")
+#     photo = cv2.imread("../IMAGES_TEST/medium.jpg")
+#     if photo is None:
+#         raise RuntimeError("Ошибка: не удалось загрузить изображение")
 
-    results = finder.process(photo)
+#     results = finder.process(photo)
