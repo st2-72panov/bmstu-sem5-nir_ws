@@ -137,7 +137,8 @@ class MarkerDetector:
             self.logger.warning('Неудачная гомография [для примерного вычисления положения углов]')
             return None
         prev_corners = self.prev_corners.reshape(-1, 1, 2).astype(np.float32)
-        corners = cv2.perspectiveTransform(prev_corners, H)
+        corners = cv2.perspectiveTransform(prev_corners, H)  # TODO: понять, почему prev_corners в локальных координатах
+        corners = corners.reshape(-1, 2)
         return corners
 
     def _detect_candidates(self): pass
@@ -227,7 +228,7 @@ class MarkerDetector:
             # DEBUG
             img = self.framed_photo.copy()
             for corner in corners:
-                x, y = int(corner[0][0]), int(corner[0][1])
+                x, y = int(corner[0]), int(corner[1])
                 cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
                 cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
             self._save_image('1_calculated_corners.png', img)
