@@ -13,23 +13,23 @@ class ArucoDetector(MarkerDetector):
 
     # Шаг 1 ...............................................
     def _detect_candidates(self):
-        with self.timer('1_detection_filter'):
+        with self.timer('1B_search_for_candidates_real'):
             framed_contours = self._detect_and_filter_quads()
         
         framed_binary_bgr = cv2.cvtColor(self.framed_binary, cv2.COLOR_GRAY2BGR)  # TODO: странные названия
-        self._save_image("1.1.binarization.jpg", framed_binary_bgr)
+        self._save_image("1.1B.binarization.jpg", framed_binary_bgr)
         
         img_framed_contours = np.zeros_like(framed_binary_bgr)
         cv2.drawContours(img_framed_contours, framed_contours, -1, (0, 255, 0), 1)
-        self._save_image("1.2.contours.jpg", img_framed_contours)
+        self._save_image("1.2B.contours.jpg", img_framed_contours)
 
         img_candidates = self.framed_photo.copy()
         for q in self.found_quads:
             cv2.drawContours(img_candidates, [q['contour']], -1, (0, 255, 0), 2)
-        self._save_image("1.3.selected_quads.jpg", img_candidates)
+        self._save_image("1.3B.selected_quads.jpg", img_candidates)
         
         img_candidates_corners = self._debug_draw_ordered_corners(framed_binary_bgr, self.found_quads)
-        self._save_image("1.4.debug_ordered_corners.jpg", img_candidates_corners)
+        self._save_image("1.4B.debug_ordered_corners.jpg", img_candidates_corners)
 
     def _detect_and_filter_quads(self):
         """

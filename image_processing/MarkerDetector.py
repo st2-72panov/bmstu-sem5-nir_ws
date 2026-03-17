@@ -130,17 +130,34 @@ class MarkerDetector:
             return None
         
         # 3. Вычисление угловых точек
-        prev_pts = np.float32([self.prev_keypoints[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)
+        prev_pts = np.float32([self.prev_keypoints[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)  # TODO: может, заранее переводить их в такую форму?
         curr_pts = np.float32([self.current_keypoints[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
         H, _ = cv2.findHomography(prev_pts, curr_pts, cv2.RANSAC, 5.0)
         if H is None:
             self.logger.warning('Неудачная гомография [для примерного вычисления положения углов]')
             return None
-        prev_corners = self.prev_corners.reshape(-1, 1, 2).astype(np.float32)
-        corners = cv2.perspectiveTransform(prev_corners, H)  # TODO: понять, почему prev_corners в локальных координатах
+        # Это работает даже с учётом того, что prev_corners в локальных координатах, потому что pts тоже в них
+        prev_corners = self.prev_corners_local.reshape(-1, 1, 2).astype(np.float32)
+        corners = cv2.perspectiveTransform(prev_corners, H)
         corners = corners.reshape(-1, 2)
         return corners
 
+    def _subpix_corners_by_keypoints(self, corners): 
+        corners = np.float32(corners)
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+        winSize = (5, 5)
+        zeroZone = (-1, -1)
+        self.subpixel_corners = cv2.cornerSubPix(self.framed_gray, corners, winSize, zeroZone, criteria)
+        
+        # DEBUG
+        img = self.framed_photo.copy()
+        for corner in self.subpixel_corners:
+            x, y = int(corner[0]), int(corner[1])
+            cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
+            cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+        self._save_image('2A.subpix_corners.png', img)
+        # /DEBUG
+        
     def _detect_candidates(self): pass
     def _validate_candidates(self): pass
     def _refine_marker_corners(self, detected_marker): pass
@@ -155,10 +172,10 @@ class MarkerDetector:
 
     def _calculate_next_frame(self):
         # Координаты следующего фрейма
-        center = np.mean(self.subpixel_corners, axis=0)
+        center = np.mean(self.subpixel_corners_global, axis=0)
         
-        diag1 = np.linalg.norm(self.subpixel_corners[0] - self.subpixel_corners[2])
-        diag2 = np.linalg.norm(self.subpixel_corners[1] - self.subpixel_corners[3])
+        diag1 = np.linalg.norm(self.subpixel_corners_global[0] - self.subpixel_corners_global[2])
+        diag2 = np.linalg.norm(self.subpixel_corners_global[1] - self.subpixel_corners_global[3])
         max_diag = max(diag1, diag2)
         frame_size = int(max_diag * self.FRAME_FACTOR)
         
@@ -168,6 +185,10 @@ class MarkerDetector:
         x2 = min(w, int(center[0] + frame_size / 2))
         y2 = min(h, int(center[1] + frame_size / 2))
         
+        self.prev_frame = self.frame
+        if self.prev_frame is None:
+            height, width = self.photo.shape[:2]
+            self.prev_frame = ((0, 0), (width, height))
         self.frame = ((x1, y1), (x2, y2))
 
     def _save_keypoints_within_marker(self):
@@ -176,29 +197,32 @@ class MarkerDetector:
         mask = [cv2.pointPolygonTest(self.subpixel_corners, pt.pt, False) > 0 
                 for pt in self.current_keypoints]
         self.prev_keypoints = [pt for pt, m in zip(self.current_keypoints, mask) if m]
-        self.prev_descriptors = self.current_descriptors[mask]  # если descriptors — numpy массив
+        self.prev_descriptors = self.current_descriptors[mask]
     
     def _debug_result_photo(self):
-        # Фрейм
-        (x1, y1), (x2, y2) = self.frame
-        img = self.framed_photo.copy()
-        cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
-        
-        # Окружность + точка в центре
-        for corner in self.subpixel_corners:
-            x, y = int(corner[0]), int(corner[1])
-            cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
-            cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+        img = self.photo.copy()
         
         # Особые точки
-        img = cv2.drawKeypoints(
-            img,
-            self.prev_keypoints, 
+        (x1, y1), (x2, y2) = self.prev_frame
+        img[y1:y2, x1:x2] = cv2.drawKeypoints(
+            self.framed_photo.copy(),
+            self.prev_keypoints,
             None,
             color=(0, 255, 0), 
             flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS
         )
-        self._save_image("4.subpixel_corners.jpg", img)
+        
+        # Фрейм
+        (x1, y1), (x2, y2) = self.frame
+        cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
+        
+        # Окружность + точка в центре
+        for corner in self.subpixel_corners_global:
+            x, y = int(corner[0]), int(corner[1])
+            cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
+            cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+        
+        self._save_image("4.result.jpg", img)
         
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
@@ -231,7 +255,7 @@ class MarkerDetector:
                 x, y = int(corner[0]), int(corner[1])
                 cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
                 cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
-            self._save_image('1_calculated_corners.png', img)
+            self._save_image('1A.calculated_corners.png', img)
             # /DEBUG
             
             with self.timer('2.2A_subpixel_corners'):
@@ -256,8 +280,8 @@ class MarkerDetector:
             with self.timer('2B_subpixel_corners'):
                 self._refine_marker_corners(detected_marker)
                 
-        self.subpixel_corners = self._frame_to_photo_coordinates(self.subpixel_corners)
-        self.prev_corners = self.subpixel_corners
+        self.prev_corners_local = self.subpixel_corners
+        self.subpixel_corners_global = self._frame_to_photo_coordinates(self.subpixel_corners)
         
         # ...................................
         # with self.timer('3_estimate_pose'):
