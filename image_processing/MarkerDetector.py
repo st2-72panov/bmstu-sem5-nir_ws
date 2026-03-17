@@ -117,36 +117,27 @@ class MarkerDetector:
     
     def _find_and_match_keypoints(self):
         # 1. Поиск точек
-        orb = cv2.ORB_create(
-            # nfeatures=KEYPOINTS_TO_FIND,
-            # scaleFactor=1.2,
-            # nlevels=8,
-            # edgeThreshold=31,
-            # firstLevel=0,
-            # WTA_K=2,
-            # scoreType=cv2.ORB_FAST_SCORE,
-            # patchSize=31,
-            # fastThreshold=20
-        )
+        orb = cv2.ORB_create()  # TODO: рассмотреть варианты аргументов
         self.current_keypoints, self.current_descriptors = orb.detectAndCompute(self.framed_gray, None)
         
         # 2. Сравнение с точками предыдущего фото
-        if self.prev_keypoints is None:
+        if self.prev_keypoints is None or self.current_descriptors is None:
             return None
         bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-        matches = bf.match(self.current_descriptors, self.prev_descriptors)
+        matches = bf.match(self.prev_descriptors, self.current_descriptors)
         matches = [m for m in matches if m.distance <= KEYPOINT_DISTANCE_THRESHOLD]
         if len(matches) < MATCHING_KEYPOINTS_MINIMUM:
             return None
         
-        # TODO: проверить работу; 
-        #       рассмотреть возможность использования простого поворотно-масштабного преобразования
         # 3. Вычисление угловых точек
-        H, _ = cv2.findHomography(self.prev_keypoints, self.current_keypoints, cv2.RANSAC, 5.0)
+        prev_pts = np.float32([self.prev_keypoints[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)
+        curr_pts = np.float32([self.current_keypoints[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
+        H, _ = cv2.findHomography(prev_pts, curr_pts, cv2.RANSAC, 5.0)
         if H is None:
-            self.logger.warning('Неудачная гомография')
+            self.logger.warning('Неудачная гомография [для примерного вычисления положения углов]')
             return None
-        corners = cv2.perspectiveTransform(self.prev_corners, H)
+        prev_corners = self.prev_corners.reshape(-1, 1, 2).astype(np.float32)
+        corners = cv2.perspectiveTransform(prev_corners, H)
         return corners
 
     def _detect_candidates(self): pass
@@ -218,26 +209,34 @@ class MarkerDetector:
             self.iteration_count += 1
         self._create_output_dir()
         self.timing_data = {}
-        self.logger.info(f"Начало обработки итерации #{self.iteration_count}")
+        self.logger.info(f"ИТЕРАЦИЯ #{self.iteration_count}")
 
-        # .................................................
+        # ...................................
         with self.timer('0_prepare_image'):
             photo_with_frame = self._prepare_image(photo)
 
-        # .................................................
+        # ...................................
         # Шаг 1: поиск и сопоставление особых точек, вычисление положения углов маркера
         with self.timer('1_find_and_match_keypoints'):
             corners = self._find_and_match_keypoints()
         # TODO: проверить работоспособность; робастность
-        # TODO: визуализировать
-        # () А если на пути маркера встанет помеха? Если какая-либо новая точка отнесётся к помехе 
+        #       () А если на пути маркера встанет помеха? Если какая-либо новая точка отнесётся к помехе 
         
-        # .................................................
+        # ...................................
         if corners is not None:
+            # DEBUG
+            img = self.framed_photo.copy()
+            for corner in corners:
+                x, y = int(corner[0][0]), int(corner[0][1])
+                cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
+                cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+            self._save_image('1_calculated_corners.png', img)
+            # /DEBUG
+            
             with self.timer('2.2A_subpixel_corners'):
-                self._subpix_corners_by_keypoints(corners)  # TODO
+                self._subpix_corners_by_keypoints(corners)  # TODO: реализовать
         else:
-            # .............................................
+            # ...............................
             with self.timer('1.1B_search_for_candidates'):
                 self._detect_candidates()
 
@@ -252,20 +251,21 @@ class MarkerDetector:
                 self.logger.warning("Маркер не найден")
                 return None
             
-            # .............................................
+            # ...............................
             with self.timer('2B_subpixel_corners'):
                 self._refine_marker_corners(detected_marker)
                 
         self.subpixel_corners = self._frame_to_photo_coordinates(self.subpixel_corners)
-
-        # .................................................
+        self.prev_corners = self.subpixel_corners
+        
+        # ...................................
         # with self.timer('3_estimate_pose'):
         #     pose = self._estimate_pose()
 
-        # .................................................
+        # ...................................
         with self.timer('4_prepare_next_step'):
             self._save_keypoints_within_marker()
             self._calculate_next_frame()
         self._debug_result_photo()
-        self.logger.info(f"Обработка завершена. Всего шагов: {len(self.timing_data)}")
+        self.logger.info(f"———")
         # return pose
