@@ -30,7 +30,7 @@ class PhotoProcessor:
         self.callback(photo)
         pose1 = self.marker_finder.process(self.pending_photo)
         
-        photo = cv2.imread("../IMAGES_TEST/0.jpg")
+        photo = cv2.imread("../IMAGES_TEST/1.jpg")
         self.callback(photo)
         pose2 = self.marker_finder.process(self.pending_photo)
 
