@@ -142,21 +142,23 @@ class MarkerDetector:
         corners = corners.reshape(-1, 2)
         return corners
 
-    def _subpix_corners_by_keypoints(self, corners): 
+    def _subpix_corners_by_keypoints(self, corners):
+        # TODO: оптимизировать (работает слишком медленно)
+        #       учесть, что будет найден не тот угол?
         corners = np.float32(corners)
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
         winSize = (5, 5)
         zeroZone = (-1, -1)
         self.subpixel_corners = cv2.cornerSubPix(self.framed_gray, corners, winSize, zeroZone, criteria)
         
-        # DEBUG
-        img = self.framed_photo.copy()
-        for corner in self.subpixel_corners:
-            x, y = int(corner[0]), int(corner[1])
-            cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
-            cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
-        self._save_image('2A.subpix_corners.png', img)
-        # /DEBUG
+        # # DEBUG
+        # img = self.framed_photo.copy()
+        # for corner in self.subpixel_corners:
+        #     x, y = int(corner[0]), int(corner[1])
+        #     cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
+        #     cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+        # self._save_image('2A.subpix_corners.png', img)
+        # # /DEBUG
         
     def _detect_candidates(self): pass
     def _validate_candidates(self): pass
@@ -217,11 +219,13 @@ class MarkerDetector:
         cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
         
         # Окружность + точка в центре
-        for corner in self.subpixel_corners_global:
-            x, y = int(corner[0]), int(corner[1])
-            cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
-            cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
-        
+        for corners, color in ((self.subpixel_corners_global, (0, 0, 255)), (self.approx_corners_global, (255, 0, 0))):
+            if corners is None: continue
+            for corner in corners:
+                x, y = int(corner[0]), int(corner[1])
+                cv2.circle(img, (x, y), 8, color, 1)
+                cv2.circle(img, (x, y), 1, color, -1)
+
         self._save_image("4.result.jpg", img)
         
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -247,16 +251,21 @@ class MarkerDetector:
         # TODO: проверить работоспособность; робастность
         #       () А если на пути маркера встанет помеха? Если какая-либо новая точка отнесётся к помехе 
         
+        if corners is not None:
+            self.approx_corners_global = self._frame_to_photo_coordinates(corners)
+        else:
+            self.approx_corners_global = None
+        
         # ...................................
         if corners is not None:
-            # DEBUG
-            img = self.framed_photo.copy()
-            for corner in corners:
-                x, y = int(corner[0]), int(corner[1])
-                cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
-                cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
-            self._save_image('1A.calculated_corners.png', img)
-            # /DEBUG
+            # # DEBUG
+            # img = self.framed_photo.copy()
+            # for corner in corners:
+            #     x, y = int(corner[0]), int(corner[1])
+            #     cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
+            #     cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+            # self._save_image('1A.calculated_corners.png', img)
+            # # /DEBUG
             
             with self.timer('2.2A_subpixel_corners'):
                 self._subpix_corners_by_keypoints(corners)  # TODO: реализовать
