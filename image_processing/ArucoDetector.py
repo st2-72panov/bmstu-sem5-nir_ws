@@ -341,15 +341,4 @@ class ArucoDetector(MarkerDetector):
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
         
         return img_candidates_corners
-
-# =========================================================
-
-# if __name__ == "__main__":
-#     marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
-#     finder = ArucoDetector(marker)
-
-#     photo = cv2.imread("../IMAGES_TEST/medium.jpg")
-#     if photo is None:
-#         raise RuntimeError("Ошибка: не удалось загрузить изображение")
-
-#     results = finder.process(photo)
+    

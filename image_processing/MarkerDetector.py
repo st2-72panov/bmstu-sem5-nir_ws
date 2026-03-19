@@ -24,17 +24,13 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR_FOLDER = os.path.join(SCRIPT_DIR, "IMAGES_OUTPUT")
-FRAME_FACTOR = 2.0
-KEYPOINTS_TO_FIND = 32
-KEYPOINT_DISTANCE_THRESHOLD = 40
-MATCHING_KEYPOINTS_MINIMUM = 5
-
 class MarkerDetector:
     @dataclass
     class MarkerDetectorConfig:
         OUTPUT_DIR_FOLDER: str
+        KEYPOINTS_TO_FIND: int = 32
+        KEYPOINT_DISTANCE_THRESHOLD: int = 40
+        MATCHING_KEYPOINTS_MINIMUM: int = 5
     
     def __init__(self, reference_marker: Aruco):
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -125,8 +121,8 @@ class MarkerDetector:
             return None
         bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
         matches = bf.match(self.prev_descriptors, self.current_descriptors)
-        matches = [m for m in matches if m.distance <= KEYPOINT_DISTANCE_THRESHOLD]
-        if len(matches) < MATCHING_KEYPOINTS_MINIMUM:
+        matches = [m for m in matches if m.distance <= self.config.KEYPOINT_DISTANCE_THRESHOLD]
+        if len(matches) < self.config.MATCHING_KEYPOINTS_MINIMUM:
             return None
         
         # 3. Вычисление угловых точек
