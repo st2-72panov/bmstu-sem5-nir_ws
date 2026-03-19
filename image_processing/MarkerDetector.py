@@ -130,7 +130,7 @@ class MarkerDetector:
         # 3. Вычисление угловых точек
         prev_pts = np.float32([self.prev_keypoints[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)  # TODO: может, заранее переводить их в такую форму?
         curr_pts = np.float32([self.current_keypoints[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
-        H, _ = cv2.findHomography(prev_pts, curr_pts, cv2.RANSAC, 10.0)
+        H, _ = cv2.findHomography(prev_pts, curr_pts, cv2.RANSAC, 10.0)  # 10.0 — идеальный вручную подобранный коэффициент
         if H is None:
             self.logger.warning('Неудачная гомография [для примерного вычисления положения углов]')
             return None
