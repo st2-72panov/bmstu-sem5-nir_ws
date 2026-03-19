@@ -91,21 +91,23 @@ class MarkerDetector:
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Реализации шагов
 
+    def _apply_noise(self, photo):
+        noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
+        photo = np.clip(photo + noise, 0, 255).astype(np.uint8)
+        return photo
+
     def _prepare_image(self, photo):
         """
         Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии
         """
-        noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
-        self.photo = np.clip(photo + noise, 0, 255).astype(np.uint8)
-
+        self.photo = photo.copy()
         photo_with_frame = photo.copy()
+        self.framed_photo = photo.copy()
         if self.frame is not None:
             x1, y1 = self.frame[0]
             x2, y2 = self.frame[1]
             cv2.rectangle(photo_with_frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            self.framed_photo = photo[y1:y2, x1:x2]
-        else:
-            self.framed_photo = photo.copy()
+            self.framed_photo = self.framed_photo[y1:y2, x1:x2]
         self._save_image("0.crop_noise_frame.jpg", photo_with_frame)
         
         self.framed_gray = cv2.cvtColor(self.framed_photo, cv2.COLOR_BGR2GRAY)
@@ -237,8 +239,9 @@ class MarkerDetector:
         self.logger.info(f"ИТЕРАЦИЯ #{self.iteration_count}")
 
         # ...................................
+        photo = self._apply_noise(photo)
         with self.timer('0_prepare_image'):
-            photo_with_frame = self._prepare_image(photo)
+            self._prepare_image(photo)
 
         # ...................................
         # Шаг 1: поиск и сопоставление особых точек, вычисление положения углов маркера
