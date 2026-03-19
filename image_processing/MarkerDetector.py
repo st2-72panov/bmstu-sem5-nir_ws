@@ -58,9 +58,6 @@ class MarkerDetector:
         
         self.prev_keypoints = self.prev_descriptors = None
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Утилиты логгирования и тайминга
-
     def _create_output_dir(self):
         now = datetime.now()
         timestamp = now.strftime("%d.%m_%H-%M-%S")
@@ -75,7 +72,7 @@ class MarkerDetector:
     def _log_time(self, title: str, duration: float):
         """Запись времени выполнения шага"""
         self.timing_data[title] = duration
-        self.logger.info(f"{title}: {duration:.4f}s")
+        self.logger.info(f"{title:<30}\t{duration:.4f}s")
 
     @contextmanager
     def timer(self, title: str):
@@ -237,16 +234,16 @@ class MarkerDetector:
             self.iteration_count += 1
         self._create_output_dir()
         self.timing_data = {}
-        self.logger.info(f"ИТЕРАЦИЯ #{self.iteration_count}")
+        self.logger.info(f"Iteration #{self.iteration_count}")
 
         # ...................................
         photo = self._apply_noise(photo)
-        with self.timer('0_prepare_image'):
+        with self.timer('0\tprepare image'):
             self._prepare_image(photo)
 
         # ...................................
         # Шаг 1: поиск и сопоставление особых точек, вычисление положения углов маркера
-        with self.timer('1_find_and_match_keypoints'):
+        with self.timer('1\tfind and match keypoints'):
             corners = self._find_and_match_keypoints()
         # TODO: проверить работоспособность; робастность
         #       () А если на пути маркера встанет помеха? Если какая-либо новая точка отнесётся к помехе 
@@ -264,17 +261,17 @@ class MarkerDetector:
             #     x, y = int(corner[0]), int(corner[1])
             #     cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
             #     cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
-            # self._save_image('1A.calculated_corners.png', img)
+            # self._save_image('1a.calculated_corners.png', img)
             # # /DEBUG
             
-            with self.timer('2.2A_subpixel_corners'):
-                self._subpix_corners_by_keypoints(corners)  # TODO: реализовать
+            with self.timer('2a\tsubpixel corners'):
+                self._subpix_corners_by_keypoints(corners)
         else:
             # ...............................
-            with self.timer('1.1B_search_for_candidates'):
+            with self.timer('1b.1\tdetect candidates'):
                 self._detect_candidates()
 
-            with self.timer('1.2B_validate_candidates'):
+            with self.timer('1b.2\tvalidate candidates'):
                 detected_marker = self._validate_candidates()
 
             if detected_marker is None:
@@ -286,20 +283,19 @@ class MarkerDetector:
                 return None
             
             # ...............................
-            with self.timer('2B_subpixel_corners'):
+            with self.timer('2b\tsubpixel corners'):
                 self._refine_marker_corners(detected_marker)
                 
         self.prev_corners_local = self.subpixel_corners
         self.subpixel_corners_global = self._frame_to_photo_coordinates(self.subpixel_corners)
         
         # ...................................
-        # with self.timer('3_estimate_pose'):
+        # with self.timer('3\testimate pose'):
         #     pose = self._estimate_pose()
 
         # ...................................
-        with self.timer('4_prepare_next_step'):
+        with self.timer('4\tprepare next step'):
             self._save_keypoints_within_marker()
             self._calculate_next_frame()
         self._debug_result_photo()
-        self.logger.info(f"———")
         # return pose
