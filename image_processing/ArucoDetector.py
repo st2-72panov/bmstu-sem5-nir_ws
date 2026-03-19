@@ -35,35 +35,37 @@ class ArucoDetector(MarkerDetector):
         """
         Шаг 1: Бинаризация, обнаружение четырёхугольников и фильтрация.
         """
+        
+        with self.timer('1B_|binarization'):
+            framed_gray = cv2.cvtColor(self.framed_photo, cv2.COLOR_BGR2GRAY)
+            _, framed_binary = cv2.threshold(framed_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-        framed_gray = cv2.cvtColor(self.framed_photo, cv2.COLOR_BGR2GRAY)
-        _, framed_binary = cv2.threshold(framed_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        with self.timer('1B_|retrieve_contours'):    
+            contours, _ = cv2.findContours(framed_binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         
-        contours, _ = cv2.findContours(framed_binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        
-        found_quads = []
-        
-        for contour in contours:
-            area = cv2.contourArea(contour)
-            if area <= 100:
-                continue
-            
-            epsilon = 0.02 * cv2.arcLength(contour, True)
-            approx = cv2.approxPolyDP(contour, epsilon, True)
-            
-            if not (len(approx) == 4 and cv2.isContourConvex(approx)):
-                continue
-            
-            # Упорядочиваем точки для гомографии
-            points = approx.reshape(4, 2)
-            ordered = self._order_points(points)
-            
-            found_quads.append({
-                'contour': approx,              # Оригинал для отрисовки (4, 1, 2)
-                'area': area,
-                'original_contour': contour,
-                'corners': ordered              # Упорядоченные для гомографии (4, 2)
-            })
+        with self.timer('1B_|filter_quads'):
+            found_quads = []
+            for contour in contours:
+                area = cv2.contourArea(contour)
+                if area <= 100:
+                    continue
+                
+                epsilon = 0.02 * cv2.arcLength(contour, True)
+                approx = cv2.approxPolyDP(contour, epsilon, True)
+                
+                if not (len(approx) == 4 and cv2.isContourConvex(approx)):
+                    continue
+                
+                # Упорядочиваем точки для гомографии
+                points = approx.reshape(4, 2)
+                ordered = self._order_points(points)
+                
+                found_quads.append({
+                    'contour': approx,              # Оригинал для отрисовки (4, 1, 2)
+                    'area': area,
+                    'original_contour': contour,
+                    'corners': ordered              # Упорядоченные для гомографии (4, 2)
+                })
             
         self.framed_binary = framed_binary
         self.found_quads = found_quads
