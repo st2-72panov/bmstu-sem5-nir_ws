@@ -307,8 +307,8 @@ class ArucoDetector(MarkerDetector):
         1 (TL) - Красный (0, 0, 255)
         2 (TR) - Оранжевый (0, 140, 255)
         3 (BR) - Жёлтый (0, 255, 255)
-        4 (BL) - Белый (255, 255, 255)
-        
+        4 (BL) - Серый (100, 100, 100)
+                
         Возвращает: изображение с нарисованными точками
         """
         img_candidates_corners = framed_binary_bgr.copy()
