@@ -114,6 +114,9 @@ class MarkerDetector:
 
     
     def _find_and_match_keypoints(self):
+        # BUG: очень кривая оценка угловых точек. Видимо, очень маленькая терпимость к шуму.
+            # TODO: какие ещё части нуждаются в сглаживании? Сглаживание или бинаризация?
+
         # 1. Поиск точек
         orb = cv2.ORB_create()  # TODO: рассмотреть варианты аргументов
         self.current_keypoints, self.current_descriptors = orb.detectAndCompute(self.framed_gray, None)
@@ -143,6 +146,8 @@ class MarkerDetector:
     def _subpix_corners_by_keypoints(self, corners):
         # TODO: оптимизировать (работает слишком медленно)
         #       учесть, что будет найден не тот угол?
+        # BUG: может принять край за угол (видимо, если далеко от угла)
+        # BUG: куда-то пропадает четвёртый угол
         corners = np.float32(corners)
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
         winSize = (5, 5)
@@ -192,8 +197,6 @@ class MarkerDetector:
         self.frame = ((x1, y1), (x2, y2))
 
     def _save_keypoints_within_marker(self):
-        # TODO: проверить, подходит ли subpixel_corners (np.ndarray ли это)
-        # quad = np.array([[10, 10], [90, 10], [90, 90], [10, 90]], dtype=np.float32)
         mask = [cv2.pointPolygonTest(self.subpixel_corners, pt.pt, False) > 0 
                 for pt in self.current_keypoints]
         self.prev_keypoints = [pt for pt, m in zip(self.current_keypoints, mask) if m]
@@ -228,9 +231,7 @@ class MarkerDetector:
         
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    # TODO: merge steps 1 and 2; change places 4 and 5
-    # TODO: по возможности убрать self. переменные, заменив их на локальные;
-    #       рассмотреть замену subpix_corners на self. переменную
+    # TODO: по возможности убрать self. переменные, заменив их на локальные
     def process(self, photo, isRepeatedAttempt=False):
         if not isRepeatedAttempt:
             self.iteration_count += 1
