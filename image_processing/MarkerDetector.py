@@ -79,6 +79,8 @@ class MarkerDetector:
         """
         Шаг 1: Добавление шума, создание оригинала в рамке и обрезанной версии
         """
+        photo = cv2.medianBlur(photo, 5)
+
         self.photo = photo.copy()
         photo_with_frame = photo.copy()
         self.framed_photo = photo.copy()
