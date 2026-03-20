@@ -245,11 +245,11 @@ class MarkerDetector:
         cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
         
         # Окружность + точка в центре
-        for corners, color in ((self.subpixel_corners_global, (0, 0, 255)), (self.approx_corners_global, (255, 0, 0))):
+        for corners, size, color in ((self.subpixel_corners_global, 8, (0, 0, 255)), (self.approx_corners_global, 10, (255, 0, 0))):
             if corners is None: continue
             for corner in corners:
                 x, y = int(corner[0]), int(corner[1])
-                cv2.circle(img, (x, y), 8, color, 1)
+                cv2.circle(img, (x, y), size, color, 1)
                 cv2.circle(img, (x, y), 1, color, -1)
 
         self._save_image("4.result.jpg", img)
