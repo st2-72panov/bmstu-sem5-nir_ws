@@ -36,7 +36,7 @@ class PhotoProcessor:
 
     def main_loop(self):
         for i in range(2):
-            with self.time_logger.measure('total'):
+            with self.time_logger.measure('', 'total'):
                 photo = cv2.imread(f"../IMAGES_TEST/{i}.jpg")
                 self.callback(photo)
                 pose = self.marker_finder.process(self.pending_photo)

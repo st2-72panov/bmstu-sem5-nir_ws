@@ -13,7 +13,7 @@ class ArucoDetector(MarkerDetector):
 
     # Шаг 1 ...............................................
     def _detect_candidates(self):
-        with self.time_logger.measure('1b.1\t  detect candidates (real)'):
+        with self.time_logger.measure('1b.1', 'detect candidates (real)', 1):
             framed_contours = self._detect_and_filter_quads()
         
         framed_binary_bgr = cv2.cvtColor(self.framed_binary, cv2.COLOR_GRAY2BGR)  # TODO: странные названия
@@ -36,14 +36,14 @@ class ArucoDetector(MarkerDetector):
         Шаг 1: Бинаризация, обнаружение четырёхугольников и фильтрация.
         """
         
-        with self.time_logger.measure('1b.1\t  binarization'):
+        with self.time_logger.measure('1b.1', 'binarization', 1):
             framed_gray = cv2.cvtColor(self.framed_photo, cv2.COLOR_BGR2GRAY)
             _, framed_binary = cv2.threshold(framed_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-        with self.time_logger.measure('1b.1\t  retrieve contours'):    
+        with self.time_logger.measure('1b.1', 'retrieve contours', 1):    
             contours, _ = cv2.findContours(framed_binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         
-        with self.time_logger.measure('1b.1\t  filter quads'):
+        with self.time_logger.measure('1b.1', 'filter quads', 1):
             found_quads = []
             for contour in contours:
                 area = cv2.contourArea(contour)
