@@ -9,6 +9,7 @@ import cv2
 import numpy as np
 
 from Aruco import Aruco
+from util.time_logger import TimeLogger
 
 """
     Именование изображений:
@@ -18,19 +19,15 @@ from Aruco import Aruco
     frame ((x_left_up, y_left_up), (x_right_bot, y_right_bot)) - рабочая область photo; предполагается, что маркер лежит внутри неё
 """
 
-# Настройка логгера
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-
 class MarkerDetector:
     @dataclass
     class MarkerDetectorConfig:
         OUTPUT_DIR_FOLDER: str
         KEYPOINTS_TO_FIND: int = 32
         KEYPOINT_DISTANCE_THRESHOLD: int = 40
+        KEYPOINTS_TO_MATCH: int = 10
         MATCHING_KEYPOINTS_MINIMUM: int = 5
+        
     
     def __init__(self, reference_marker: Aruco):
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -38,7 +35,8 @@ class MarkerDetector:
             OUTPUT_DIR_FOLDER=os.path.join(script_dir, "IMAGES_OUTPUT")
         )
         
-        self.logger = logging.getLogger(f"MarkerDetector_{id(self)}")
+        self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
+        self.time_logger = TimeLogger(self.logger)
         self.timing_data = {}
         self.iteration_count = 0
         self.reference_marker = reference_marker
@@ -52,7 +50,7 @@ class MarkerDetector:
         self.framed_gray = None
         self.framed_binary = None
 
-        self.FRAME_FACTOR = 2.0
+        self.FRAME_FACTOR = 5.0
         self.prev_quad = ...  # TODO: ?
         # TODO: сделать поворот, перемещение фрейма, адаптивный frame_factor
         
@@ -68,22 +66,6 @@ class MarkerDetector:
     def _save_image(self, filename, image):
         path = os.path.join(self.output_dir, filename)
         cv2.imwrite(path, image)
-    
-    def _log_time(self, title: str, duration: float):
-        """Запись времени выполнения шага"""
-        self.timing_data[title] = duration
-        self.logger.info(f"{title:<30}\t{duration:.4f}s")
-
-    @contextmanager
-    def timer(self, title: str):
-        """Контекстный менеджер для замера времени выполнения блока кода"""
-        start_time = time.perf_counter()
-        try:
-            yield
-        finally:
-            end_time = time.perf_counter()
-            duration = end_time - start_time
-            self._log_time(title, duration)
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Реализации шагов
@@ -107,15 +89,19 @@ class MarkerDetector:
             self.framed_photo = self.framed_photo[y1:y2, x1:x2]
         self._save_image("0.crop_noise_frame.jpg", photo_with_frame)
         
+        self.prev_framed_gray = self.framed_gray
         self.framed_gray = cv2.cvtColor(self.framed_photo, cv2.COLOR_BGR2GRAY)
 
-    
     def _find_and_match_keypoints(self):
         # BUG: очень кривая оценка угловых точек. Видимо, очень маленькая терпимость к шуму.
-            # TODO: какие ещё части нуждаются в сглаживании? Сглаживание или бинаризация?
-
+            # 1) TODO: какие ещё части нуждаются в сглаживании? Сглаживание или бинаризация?
+            # 2) TODO: ЛИБО отредактировать ORB детектор (конфигурацию дескриптора) для запоминания 
+            #           (потому что я вижу, что в этом есть потенциал: большая часть точек детектируется ИМЕННО внутри этого маркера)
+            #          и потом надеятся, что почти все точки угадаются правильно
+            #          ЛИБО написать программу, удаляющую несоответствующие точки 
+            # TODO: почему в одной и той же точке детектируется несколько особых точек?
         # 1. Поиск точек
-        orb = cv2.ORB_create()  # TODO: рассмотреть варианты аргументов
+        orb = cv2.ORB_create()  # TODO: рассмотреть варианты аргументов. Что вообще может повлиять на них? Освещённость? Шум? Летающие объекты в воздухе?
         self.current_keypoints, self.current_descriptors = orb.detectAndCompute(self.framed_gray, None)
         
         # 2. Сравнение с точками предыдущего фото
@@ -172,7 +158,7 @@ class MarkerDetector:
     def _frame_to_photo_coordinates(self, points: np.ndarray):
         if self.frame is None:
             return points
-        return points + self.frame[0]  # TODO: проверить работу
+        return points + self.frame[0]
 
     def _estimate_pose(self):
         ...  # TODO
@@ -242,15 +228,15 @@ class MarkerDetector:
     def _render_result_img(self):
         img = self.photo.copy()
         
-        # Особые точки
-        (x1, y1), (x2, y2) = self.prev_frame
-        img[y1:y2, x1:x2] = cv2.drawKeypoints(
-            self.framed_photo.copy(),
-            self.prev_keypoints,
-            None,
-            color=(0, 255, 0), 
-            flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS
-        )
+        # # Особые точки
+        # (x1, y1), (x2, y2) = self.prev_frame
+        # img[y1:y2, x1:x2] = cv2.drawKeypoints(
+        #     self.framed_photo.copy(),
+        #     self.prev_keypoints,
+        #     None,
+        #     color=(0, 255, 0), 
+        #     flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS
+        # )
         
         # Фрейм
         (x1, y1), (x2, y2) = self.frame
@@ -265,10 +251,10 @@ class MarkerDetector:
                 cv2.circle(img, (x, y), 1, color, -1)
 
         self._save_image("4.result.jpg", img)
-        
+
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    # TODO: по возможности убрать self. переменные, заменив их на локальные
+    # TODO: убрать self. переменные, нужные лишь для следующей функции
     def process(self, photo, isRepeatedAttempt=False):
         if not isRepeatedAttempt:
             self.iteration_count += 1
@@ -278,14 +264,14 @@ class MarkerDetector:
 
         # ...................................
         photo = self._apply_noise(photo)
-        with self.timer('0\tprepare image'):
+        with self.time_logger.measure('0\tprepare image'):
             self._prepare_image(photo)
 
         # ...................................
         # Шаг 1: поиск и сопоставление особых точек, вычисление положения углов маркера
-        with self.timer('1\tfind and match keypoints'):
+        with self.time_logger.measure('1\tfind and match keypoints'):
             corners = self._find_and_match_keypoints()
-        # TODO: проверить работоспособность; робастность
+        # TODO: проверить робастность
         #       () А если на пути маркера встанет помеха? Если какая-либо новая точка отнесётся к помехе 
         
         if corners is not None:
@@ -304,14 +290,14 @@ class MarkerDetector:
             # self._save_image('1a.calculated_corners.png', img)
             # # /DEBUG
             
-            with self.timer('2a\tsubpixel corners'):
+            with self.time_logger.measure('2a\tsubpixel corners'):
                 self._subpix_corners_by_keypoints(corners)
         else:
             # ...............................
-            with self.timer('1b.1\tdetect candidates'):
+            with self.time_logger.measure('1b.1\tdetect candidates'):
                 self._detect_candidates()
 
-            with self.timer('1b.2\tvalidate candidates'):
+            with self.time_logger.measure('1b.2\tvalidate candidates'):
                 detected_marker = self._validate_candidates()
 
             if detected_marker is None:
@@ -323,18 +309,18 @@ class MarkerDetector:
                 return None
             
             # ...............................
-            with self.timer('2b\tsubpixel corners'):
+            with self.time_logger.measure('2b\tsubpixel corners'):
                 self._refine_marker_corners(detected_marker)
                 
         self.prev_corners_local = self.subpixel_corners
         self.subpixel_corners_global = self._frame_to_photo_coordinates(self.subpixel_corners)
         
         # ...................................
-        # with self.timer('3\testimate pose'):
+        # with self.time_logger.measure('3\testimate pose'):
         #     pose = self._estimate_pose()
 
         # ...................................
-        with self.timer('4\tprepare next step'):
+        with self.time_logger.measure('4\tprepare next step'):
             self._save_keypoints_within_marker()
             self._calculate_next_frame()
         self._render_result_img()
