@@ -138,6 +138,12 @@ class MarkerDetector:
         prev_corners = self.prev_corners_local.reshape(-1, 1, 2).astype(np.float32)
         corners = cv2.perspectiveTransform(prev_corners, H)
         corners = corners.reshape(-1, 2)
+
+        # 4. Матчинг
+        c = min(len(matches), self.config.KEYPOINTS_TO_MATCH)
+        best_matches = sorted(matches, key=lambda m: m.distance)[:c]
+        self._render_keypoint_match_img(self.prev_framed_gray, self.framed_gray, best_matches)
+
         return corners
 
     def _subpix_corners_by_keypoints(self, corners):
@@ -204,7 +210,36 @@ class MarkerDetector:
         self.prev_keypoints = [pt for pt, m in zip(self.current_keypoints, mask) if m]
         self.prev_descriptors = self.current_descriptors[mask]
     
-    def _debug_result_photo(self):
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    def _render_keypoint_match_img(self, prev_img, cur_img, matches):
+        # Создание цветного изображения для визуализации
+        h1, w1 = prev_img.shape[:2]
+        h2, w2 = cur_img.shape[:2]
+        img_matching = np.zeros((max(h1, h2), w1 + w2, 3), dtype=np.uint8)
+        img_matching[:h1, :w1] = cv2.cvtColor(prev_img, cv2.COLOR_GRAY2BGR)
+        img_matching[:h2, w1:w1+w2] = cv2.cvtColor(cur_img, cv2.COLOR_GRAY2BGR)
+
+        # Отрисовка точек и линий с разными цветами
+        for i, m in enumerate(matches):
+            # Генерация цвета через HSV (OpenCV формат: H[0-180], S[0-255], V[0-255])
+            hue = int(180 * i / len(matches)) if len(matches) > 1 else 60
+            color_bgr = cv2.cvtColor(np.uint8([[[hue, 200, 255]]]), cv2.COLOR_HSV2BGR)[0][0]
+            color = tuple(int(c) for c in color_bgr)  # Конвертация в кортеж int
+            
+            # Координаты точек
+            pt1 = tuple(int(x) for x in self.prev_keypoints[m.queryIdx].pt)
+            pt2 = (int(self.current_keypoints[m.trainIdx].pt[0] + w1), 
+                int(self.current_keypoints[m.trainIdx].pt[1]))
+            
+            # Отрисовка
+            cv2.line(img_matching, pt1, pt2, color, 1)
+            cv2.circle(img_matching, pt1, 3, color, -1)
+            cv2.circle(img_matching, pt2, 3, color, -1)
+            
+        self._save_image('1.matching_keypoints.png', img_matching)
+
+    def _render_result_img(self):
         img = self.photo.copy()
         
         # Особые точки
@@ -302,5 +337,5 @@ class MarkerDetector:
         with self.timer('4\tprepare next step'):
             self._save_keypoints_within_marker()
             self._calculate_next_frame()
-        self._debug_result_photo()
+        self._render_result_img()
         # return pose
