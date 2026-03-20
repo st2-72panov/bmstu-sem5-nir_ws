@@ -194,7 +194,12 @@ class MarkerDetector:
         self.frame = ((x1, y1), (x2, y2))
 
     def _save_keypoints_within_marker(self):
-        mask = [cv2.pointPolygonTest(self.subpixel_corners, pt.pt, False) > 0 
+        # Shrink marker for not to save black edge keypoints
+        quad = self.subpixel_corners
+        quad = np.array([p + 0.1 * (quad[(i + 2) % 4] - p) for i, p in enumerate(quad)])
+
+        # Filter keypoints
+        mask = [cv2.pointPolygonTest(quad, pt.pt, False) > 0 
                 for pt in self.current_keypoints]
         self.prev_keypoints = [pt for pt, m in zip(self.current_keypoints, mask) if m]
         self.prev_descriptors = self.current_descriptors[mask]
