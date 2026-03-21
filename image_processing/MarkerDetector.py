@@ -139,11 +139,9 @@ class MarkerDetector:
         return corners
 
     def _subpix_corners_by_keypoints(self, corners):
-        # BUG: может принять край за угол (видимо, если далеко от угла)
-        # BUG: куда-то пропадает четвёртый угол (я даже не знаю, как эта функция работает)
         corners = np.float32(corners)
-        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-        winSize = (5, 5)
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 50, 0.001)
+        winSize = (5, 5)  # TODO! вычислять программно
         zeroZone = (-1, -1)
         self.subpixel_corners = cv2.cornerSubPix(self.framed_gray, corners, winSize, zeroZone, criteria)
         
