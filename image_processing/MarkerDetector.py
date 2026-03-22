@@ -1,9 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 import os
-import time
 import logging
-from contextlib import contextmanager
 
 import cv2
 import numpy as np
@@ -28,27 +26,28 @@ class MarkerDetector:
         KEYPOINTS_TO_MATCH: int = 10
         MATCHING_KEYPOINTS_MINIMUM: int = 5
         
-    
     def __init__(self, reference_marker: Aruco):
+        # Неизменная конфигурация детектора
+        self.reference_marker = reference_marker
         script_dir = os.path.dirname(os.path.abspath(__file__))
         self.config = MarkerDetector.MarkerDetectorConfig(
             OUTPUT_DIR_FOLDER=os.path.join(script_dir, "IMAGES_OUTPUT")
         )
         
+        # Метаданные
         self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
         self.time_logger = TimeLogger(self.logger)
-        self.timing_data = {}
         self.iteration_count = 0
-        self.reference_marker = reference_marker
-        # self.frame содержит координаты противоположных диагональных точек фрейма: ((x1, y1), (x2, y2))
-        self.frame = None  # Frame - весь экран
-        # self.frame = ((1280 // 4, 0), (1280 * 4 // 5, 720 * 2 // 3))
-        # self.frame = ((0, 0), (100, 100))
-
+        
+        # Рабочие переменные
         self.photo = None
         self.framed_photo = None
         self.framed_gray = None
         self.framed_binary = None
+        
+        self.frame = None  # координаты противоположных диагональных точек фрейма: ((x1, y1), (x2, y2))
+        # self.frame = ((1280 // 4, 0), (1280 * 4 // 5, 720 * 2 // 3))
+        # self.frame = ((0, 0), (100, 100))
 
         self.FRAME_FACTOR = 5.0
         self.prev_quad = ...  # TODO: ?
@@ -70,6 +69,7 @@ class MarkerDetector:
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Реализации шагов
 
+    # Шаг 0 ...............................................
     def _apply_noise(self, photo):
         noise = np.random.normal(0, 10, photo.shape).astype(np.int16)
         photo = np.clip(photo + noise, 0, 255).astype(np.uint8)
@@ -94,6 +94,7 @@ class MarkerDetector:
         self.prev_framed_gray = self.framed_gray
         self.framed_gray = cv2.cvtColor(self.framed_photo, cv2.COLOR_BGR2GRAY)
 
+    # Шаг 1 ...............................................
     def _find_and_match_keypoints(self):
         # BUG: очень кривая оценка угловых точек. Видимо, очень маленькая терпимость к шуму.
             # 1) TODO: какие ещё части нуждаются в сглаживании? Сглаживание или бинаризация?
@@ -121,7 +122,7 @@ class MarkerDetector:
         with self.time_logger.measure('1', 'corners calculation', 1):
             prev_pts = np.float32([self.prev_keypoints[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)  # TODO: может, заранее переводить их в такую форму?
             curr_pts = np.float32([self.current_keypoints[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
-            H, _ = cv2.findHomography(prev_pts, curr_pts, cv2.RANSAC, 10.0)  # 10.0 — идеальный вручную подобранный коэффициент
+            H, _ = cv2.findHomography(prev_pts, curr_pts, cv2.RANSAC, 100.0)  # 10.0 — идеальный вручную подобранный коэффициент
             if H is None:
                 self.logger.warning('Неудачная гомография [для примерного вычисления положения углов]')
                 return None
@@ -137,7 +138,13 @@ class MarkerDetector:
             self._render_keypoint_match_img(self.prev_framed_gray, self.framed_gray, best_matches)
 
         return corners
-
+    
+    # Шаг 1b ..............................................
+    def _detect_candidates(self): pass
+    def _validate_candidates(self): pass
+    
+    # Шаг 2 ...............................................
+    def _refine_marker_corners(self, detected_marker): pass
     def _subpix_corners_by_keypoints(self, corners):
         corners = np.float32(corners)
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 50, 0.001)
@@ -153,19 +160,13 @@ class MarkerDetector:
         #     cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
         # self._save_image('2A.subpix_corners.png', img)
         # # /DEBUG
-        
-    def _detect_candidates(self): pass
-    def _validate_candidates(self): pass
-    def _refine_marker_corners(self, detected_marker): pass
-    def _frame_to_photo_coordinates(self, points: np.ndarray):
-        if self.frame is None:
-            return points
-        return points + self.frame[0]
 
+    # Шаг 3 ...............................................
     def _estimate_pose(self):
         ...  # TODO
         # TODO: провращать точки в каждом из методов субпиксельного уточнения
 
+    # Шаг 4 ...............................................
     def _calculate_next_frame(self):
         # Координаты следующего фрейма
         center = np.mean(self.subpixel_corners_global, axis=0)
@@ -199,7 +200,16 @@ class MarkerDetector:
         self.prev_descriptors = self.current_descriptors[mask]
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+    # Вспомогательные функции
+    
+    def _frame_to_photo_coordinates(self, points: np.ndarray):
+        if self.frame is None:
+            return points
+        return points + self.frame[0]
+    
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Отрисовка изображений
+    
     def _render_keypoint_match_img(self, prev_img, cur_img, matches):
         # Создание цветного изображения для визуализации
         h1, w1 = prev_img.shape[:2]
@@ -261,7 +271,6 @@ class MarkerDetector:
         if not isRepeatedAttempt:
             self.iteration_count += 1
         self._create_output_dir()
-        self.timing_data = {}
         self.logger.info(f"Iteration #{self.iteration_count}")
 
         # ...................................
