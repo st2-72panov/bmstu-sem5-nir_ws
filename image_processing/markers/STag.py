@@ -67,12 +67,29 @@ class STag:
         
         return False
     
-    def _extract_marker_region(self, img: np.ndarray) -> np.ndarray:
-        # Обрезка чёрного фона. Остаётся только круговая часть маркера
-        h, w = img.shape[:2]
-        l, r = int(0.1 * w), int(0.9 * w)
-        return img[l:r, l:r]
-    
+    def _extract_marker_region(self, img0: np.ndarray) -> np.ndarray:
+        h, w = img0.shape
+        img = img0 > 127
+        ws = int(0.05 * w) // 2
+        coords = [(0.1*w, 0.5*h, 0), (0.5*w, 0.1*h, 1), (0.5*w, 0.9*h, 1), (0.9*w, 0.5*h, 0)]
+        bounds = [w, h, 0, 0]
+        
+        for cx, cy, axis in coords:
+            x1, y1 = int(cx - ws), int(cy - ws)
+            x2, y2 = int(cx + ws), int(cy + ws)
+            win = img[max(0,y1):min(h,y2), max(0,x1):min(w,x2)]
+            if not win.any(): continue
+            
+            idx = np.argmax(win.any(axis=axis))
+            rev = np.argmax(win.any(axis=axis)[::-1])
+            
+            if cx < w/2: bounds[0] = min(bounds[0], x1 + idx)
+            elif cx > w/2: bounds[2] = max(bounds[2], x2 - rev)
+            if cy < h/2: bounds[1] = min(bounds[1], y1 + idx)
+            elif cy > h/2: bounds[3] = max(bounds[3], y2 - rev)
+        
+        return img0[bounds[1]:bounds[3]+1, bounds[0]:bounds[2]+1]
+
     def _compute_circle_centers(self) -> List[Tuple[float, float]]:
         """
         Вычисляет координаты 48 кружков в нормализованной системе (0-1).
