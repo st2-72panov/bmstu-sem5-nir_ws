@@ -106,7 +106,9 @@ class MarkerDetector:
         with self.time_logger.measure('1', 'keypoint search', 1):
             orb = cv2.ORB_create()  # TODO: рассмотреть варианты аргументов. Что вообще может повлиять на них? Освещённость? Шум? Летающие объекты в воздухе?
             self.current_keypoints, self.current_descriptors = orb.detectAndCompute(self.framed_gray, None)
-        
+        img_keypoins = self._draw_keypoints(self.framed_photo, self.current_keypoints)
+        self._save_image('1.all_keypoints.png', img_keypoins)
+
         # 2. Сравнение с точками предыдущего фото
         with self.time_logger.measure('1', 'keypoint matching', 1):
             if self.prev_keypoints is None or self.current_descriptors is None:
@@ -150,7 +152,7 @@ class MarkerDetector:
         w, h = ordered_corners[1][0] - ordered_corners[3][0], ordered_corners[2][1] - ordered_corners[0][1]
 
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 50, 0.001)
-        winSize = (int(0.15 * w), int(0.15 * h))
+        winSize = (int(0.2 * w), int(0.2 * h))
         zeroZone = (-1, -1)
         return cv2.cornerSubPix(self.framed_gray, ordered_corners, winSize, zeroZone, criteria)
         
@@ -286,6 +288,20 @@ class MarkerDetector:
                 cv2.circle(img, (x, y), 1, color, -1)
 
         self._save_image("4.result.jpg", img)
+
+    def _draw_keypoints(self, img0, keypoints):
+        img = img0.copy()
+        # Отрисовка точек и линий с разными цветами
+        for i, pt in enumerate(keypoints):
+            # Генерация цвета через HSV (OpenCV формат: H[0-180], S[0-255], V[0-255])
+            hue = int(180 * i / len(keypoints)) if len(keypoints) > 1 else 60
+            color_bgr = cv2.cvtColor(np.uint8([[[hue, 200, 255]]]), cv2.COLOR_HSV2BGR)[0][0]
+            color = tuple(int(c) for c in color_bgr)  # Конвертация в кортеж int
+            
+            # Координаты точек
+            pt = tuple(int(x) for x in pt.pt)
+            cv2.circle(img, pt, 3, color, -1)
+        return img
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
