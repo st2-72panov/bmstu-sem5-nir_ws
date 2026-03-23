@@ -75,7 +75,7 @@ class QuadDetector(MarkerDetector):
     def _validate_candidates(self): pass
 
     # Шаг 2 ...............................................
-    def _refine_marker_corners(self, detected_marker):
+    def _refine_quad_corners(self, detected_marker):
         """
         Субпиксельное вычисление углов маркера.
         
@@ -118,26 +118,6 @@ class QuadDetector(MarkerDetector):
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Вспомогательные функции
-
-    def _order_points(self, points):
-        """
-        Упорядочивает 4 точки в порядке: TL, TR, BR, BL
-        Использует сумму и разность координат (работает при любом повороте)
-        """
-        if len(points) != 4:
-            return points
-        
-        # Сумма координат: TL минимальная, BR максимальная
-        s = points.sum(axis=1)
-        tl = points[np.argmin(s)]
-        br = points[np.argmax(s)]
-        
-        # Разность координат: TR минимальная, BL максимальная
-        diff = np.diff(points, axis=1).flatten()
-        tr = points[np.argmin(diff)]
-        bl = points[np.argmax(diff)]
-        
-        return np.array([tl, tr, br, bl], dtype=np.float32)
 
     def _split_contour_to_sides(self, contour, corners):
         """

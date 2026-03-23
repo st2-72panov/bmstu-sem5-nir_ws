@@ -143,13 +143,16 @@ class MarkerDetector:
     def _validate_candidates(self): pass
     
     # Шаг 2 ...............................................
-    def _refine_marker_corners(self, detected_marker): pass
-    def _subpix_corners_by_keypoints(self, corners):
+    def _refine_quad_corners(self, detected_marker): pass  # refine_quad_corners_with_line_intersections
+    def _refine_corners(self, corners):  # _refine_corners_by_harris
         corners = np.float32(corners)
+        ordered_corners = self._order_points(corners)
+        w, h = ordered_corners[1][0] - ordered_corners[3][0], ordered_corners[2][1] - ordered_corners[0][1]
+
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 50, 0.001)
-        winSize = (5, 5)  # TODO! вычислять программно
+        winSize = (int(0.15 * w), int(0.15 * h))
         zeroZone = (-1, -1)
-        self.subpixel_corners = cv2.cornerSubPix(self.framed_gray, corners, winSize, zeroZone, criteria)
+        return cv2.cornerSubPix(self.framed_gray, ordered_corners, winSize, zeroZone, criteria)
         
         # # DEBUG
         # img = self.framed_photo.copy()
@@ -206,6 +209,27 @@ class MarkerDetector:
             return points
         return points + self.frame[0]
     
+
+    def _order_points(self, points):
+        """
+        Упорядочивает 4 точки в порядке: TL, TR, BR, BL
+        Использует сумму и разность координат (работает при любом повороте)
+        """
+        if len(points) != 4:
+            return points
+        
+        # Сумма координат: TL минимальная, BR максимальная
+        s = points.sum(axis=1)
+        tl = points[np.argmin(s)]
+        br = points[np.argmax(s)]
+        
+        # Разность координат: TR минимальная, BL максимальная
+        diff = np.diff(points, axis=1).flatten()
+        tr = points[np.argmin(diff)]
+        bl = points[np.argmax(diff)]
+        
+        return np.array([tl, tr, br, bl], dtype=np.float32)
+
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Отрисовка изображений
     
@@ -301,7 +325,7 @@ class MarkerDetector:
             # # /DEBUG
             
             with self.time_logger.measure('2a', 'subpixel corners'):
-                self._subpix_corners_by_keypoints(corners)
+                self.subpixel_corners = self._refine_corners(corners)
         else:
             # ...............................
             with self.time_logger.measure('1b.1', 'detect candidates'):
@@ -320,7 +344,7 @@ class MarkerDetector:
             
             # ...............................
             with self.time_logger.measure('2b', 'subpixel corners'):
-                self._refine_marker_corners(detected_marker)
+                self._refine_quad_corners(detected_marker)
                 
         self.prev_corners_local = self.subpixel_corners
         self.subpixel_corners_global = self._frame_to_photo_coordinates(self.subpixel_corners)
