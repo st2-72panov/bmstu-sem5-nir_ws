@@ -7,7 +7,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
-OUTPUT_DIR = "IMAGES_RAW"
+OUTPUT_DIR = ".IMAGES_RAW"
 ONLY_IMAGE = True
 
 class ImageSaver(Node):

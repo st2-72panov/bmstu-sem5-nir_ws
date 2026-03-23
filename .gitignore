@@ -1,5 +1,5 @@
 **/.venv
 **/.cursor
 **/__pycache__
-IMAGES_RAW
-image_processing/IMAGES_OUTPUT
+.IMAGES_RAW
+image_processing/.IMAGES_OUTPUT

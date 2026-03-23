@@ -6,7 +6,7 @@ import logging
 import cv2
 import numpy as np
 
-from Aruco import Aruco
+from markers.Aruco import Aruco
 from util.time_logger import TimeLogger
 
 """
@@ -26,12 +26,11 @@ class MarkerDetector:
         KEYPOINTS_TO_MATCH: int = 10
         MATCHING_KEYPOINTS_MINIMUM: int = 5
         
-    def __init__(self, reference_marker: Aruco):
+    def __init__(self, reference_marker: Aruco, output_dir_folder: str):
         # Неизменная конфигурация детектора
         self.reference_marker = reference_marker
-        script_dir = os.path.dirname(os.path.abspath(__file__))
         self.config = MarkerDetector.MarkerDetectorConfig(
-            OUTPUT_DIR_FOLDER=os.path.join(script_dir, "IMAGES_OUTPUT")
+            OUTPUT_DIR_FOLDER=output_dir_folder
         )
         
         # Метаданные

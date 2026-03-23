@@ -1,17 +1,17 @@
 import cv2
 import numpy as np
 
-from Aruco import Aruco
-from MarkerDetector import MarkerDetector
+from markers.Aruco import Aruco
+from detectors.MarkerDetector import MarkerDetector
 
-class ArucoDetector(MarkerDetector):
-    def __init__(self, reference_marker: Aruco):
-        super().__init__(reference_marker)
+class QuadDetector(MarkerDetector):
+    def __init__(self, reference_marker: Aruco, output_dir_folder: str):
+        super().__init__(reference_marker, output_dir_folder)
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Реализации шагов
 
-    # Шаг 1 ...............................................
+    # Шаг 1.1 .............................................
     def _detect_candidates(self):
         with self.time_logger.measure('1b.1', 'detect candidates (real)', 1):
             framed_contours = self._detect_and_filter_quads()
@@ -33,7 +33,7 @@ class ArucoDetector(MarkerDetector):
 
     def _detect_and_filter_quads(self):
         """
-        Шаг 1: Бинаризация, обнаружение четырёхугольников и фильтрация.
+        Шаг 1.1: Бинаризация, обнаружение четырёхугольников и фильтрация.
         """
         
         with self.time_logger.measure('1b.1', 'binarization', 1):
@@ -71,10 +71,10 @@ class ArucoDetector(MarkerDetector):
         self.found_quads = found_quads
         return contours
 
-    # Шаг 2 ...............................................
+    # Шаг 1.2 .............................................
     def _validate_candidates(self):
         """
-        Шаг 2: Детекция нужного маркера ArUco.
+        Шаг 1.2: Детекция нужного маркера ArUco.
         
         1. Вычисляет гомографию для каждого кандидата
         2. Нормализует изображение маркера

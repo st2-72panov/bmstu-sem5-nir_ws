@@ -1,18 +1,21 @@
 import copy
 import logging
+import os
 
 import cv2
 
-from Aruco import Aruco
-from ArucoDetector import ArucoDetector
+from markers.Aruco import Aruco
+from detectors.QuadDetector import QuadDetector
 from util.logging_config import setup_logging
 from util.time_logger import TimeLogger
 
 class PhotoProcessor:
     def __init__(self):
         ...
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        output_dir_folder = os.path.join(script_dir, ".IMAGES_OUTPUT")
         reference_marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
-        self.marker_finder = ArucoDetector(reference_marker)
+        self.marker_finder = QuadDetector(reference_marker, output_dir_folder)
         self.pending_photo = None
         self.is_new_photo_there = False
 
