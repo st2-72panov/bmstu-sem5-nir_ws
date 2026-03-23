@@ -5,17 +5,26 @@ import os
 import cv2
 
 from markers.Aruco import Aruco
-from detectors.QuadDetector import QuadDetector
+from markers.STag import STag
+from detectors.ArucoDetector import ArucoDetector
+from detectors.STagDetector import STagDetector
 from util.logging_config import setup_logging
 from util.time_logger import TimeLogger
 
 class PhotoProcessor:
     def __init__(self):
-        ...
         script_dir = os.path.dirname(os.path.abspath(__file__))
         output_dir_folder = os.path.join(script_dir, ".IMAGES_OUTPUT")
-        reference_marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
-        self.marker_finder = QuadDetector(reference_marker, output_dir_folder)
+
+        if False:
+            reference_marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
+            self.input_file_prefix = "aruco_"
+            self.marker_finder = ArucoDetector(reference_marker, output_dir_folder)
+        else:
+            reference_marker = STag(output_dir_folder)
+            self.input_file_prefix = "stag_"
+            self.marker_finder = STagDetector(reference_marker, output_dir_folder)
+            
         self.pending_photo = None
         self.is_new_photo_there = False
 
@@ -39,9 +48,15 @@ class PhotoProcessor:
     def main_loop(self):
         for i in range(2):
             with self.time_logger.measure('', 'total'):
-                photo = cv2.imread(f"../IMAGES_TEST/{i}.jpg")
+                photo = cv2.imread(f"../IMAGES_TEST/{self.input_file_prefix}{i}.jpg")
                 self.callback(photo)
                 pose = self.marker_finder.process(self.pending_photo)
+
+    # def main_loop(self):
+    #     photo = cv2.imread(f"../IMAGES_TEST/stags.jpg")
+    #     self.callback(photo)
+    #     pose = self.marker_finder.process(self.pending_photo)
+
         
 if __name__ == "__main__":
     pp = PhotoProcessor()

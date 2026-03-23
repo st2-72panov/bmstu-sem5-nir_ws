@@ -6,7 +6,7 @@ import numpy as np
 
 # Константы из stag_detector.cpp
 HALF_PI = 1.570796326794897
-INNER_CIRCLE_RADIUS = 0.4 * 0.9  # outerCircleRadius * 0.9
+INNER_CIRCLE_RADIUS = 0.4  # outerCircleRadius * 0.9
 
 # Параметры для 12 позиций в каждом квадранте (radius, angle)
 CIRCLE_PARAMS = [
@@ -27,12 +27,23 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 IMG_PATH = os.path.join(SCRIPT_DIR, "stag.png")
 
 class STag:
-    def __init__(self):
+    def __init__(self, output_dir):
+        self.count = 0
+        self.OUTPUT_DIR = output_dir
+
         self.circle_centers = self._compute_circle_centers()
+        
         pattern_img = cv2.imread(IMG_PATH, cv2.IMREAD_GRAYSCALE)
         pattern_img = self._extract_marker_region(pattern_img)
+        self._save_debug_img(pattern_img)
         self.pattern = self._decode_pattern(pattern_img)
-        
+    
+    def _save_debug_img(self, img):
+        if self.count > 5:
+            return
+        cv2.imwrite(os.path.join(self.OUTPUT_DIR, f"img_debug_{self.count}.png"), img)
+        self.count += 1    
+
     def is_valid(self, pattern_img: np.ndarray) -> bool:
         """
         Проверяет, совпадает ли паттерн на изображении с эталонным.
@@ -121,8 +132,8 @@ class STag:
             # Рисуем точку для отладки
             # Красная = белый кружок (value=0), Синяя = чёрный кружок (value=1)
             color = (0, 0, 255) if value == 1 else (255, 0, 0)  # BGR формат
-            cv2.circle(debug_img, (px, py), 5, color, -1)
-        cv2.imwrite(os.path.join(SCRIPT_DIR, "img_debug.png"), debug_img)
+            cv2.circle(debug_img, (px, py), 3, color, -1)
+        self._save_debug_img(debug_img)
         
         # Группируем по уровням:
         # Индексы в circle_values:
@@ -170,17 +181,17 @@ class STag:
         return True
 
 
-if __name__ == "__main__":
-    stag = STag()
+# if __name__ == "__main__":
+#     stag = STag()
     
-    # Проверяем другой паттерн
-    test_img = cv2.imread(os.path.join(SCRIPT_DIR, "stag.png"), cv2.IMREAD_GRAYSCALE)
-    is_valid = stag.is_valid(test_img)
+#     # Проверяем другой паттерн
+#     test_img = cv2.imread(os.path.join(SCRIPT_DIR, "stag.png"), cv2.IMREAD_GRAYSCALE)
+#     is_valid = stag.is_valid(test_img)
     
-    print(f"Pattern is valid: {is_valid}")
+#     print(f"Pattern is valid: {is_valid}")
     
-    # Можно также получить декодированный паттерн
-    pattern = stag._decode_pattern(test_img)
-    print("Decoded pattern:")
-    for i, level in enumerate(pattern):
-        print(f"Level {i}: {level}")
+#     # Можно также получить декодированный паттерн
+#     pattern = stag._decode_pattern(test_img)
+#     print("Decoded pattern:")
+#     for i, level in enumerate(pattern):
+#         print(f"Level {i}: {level}")
