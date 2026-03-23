@@ -1,9 +1,11 @@
+import cv2
+import os
+import time
+
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
-import cv2
-import os
 
 OUTPUT_DIR = "IMAGES_RAW"
 ONLY_IMAGE = True
@@ -30,7 +32,7 @@ class ImageSaver(Node):
             return
             
         cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
-        filename = os.path.join(OUTPUT_DIR, f'image_{self.count:04d}.jpg')
+        filename = os.path.join(OUTPUT_DIR, f'image_{time.strftime('%H:%M:%S')}.jpg')
         cv2.imwrite(filename, cv_image)
         self.get_logger().info(f'Saved: {filename}')
         self.image_saved = True

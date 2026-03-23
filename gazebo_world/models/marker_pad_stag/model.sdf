@@ -1,11 +1,11 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
-  <model name='marker_pad'>
+  <model name='marker_pad_stag'>
     <pose>0 0 0.0001 0 0 0</pose>
     <static>true</static>
     
     <!-- Asphalt patch -->
-    <link name='marker_pad/base_link'>
+    <link name='marker_pad_stag/base_link'>
       <pose>0 0 -0.0001 0 0 0</pose>
       <collision name="collision">
         <geometry>
@@ -37,9 +37,9 @@
 
     <!-- MARKERS -->
 
-    <link name="marker_pad/marker_0">
+    <link name="marker_pad_stag/marker_0">
     <pose>-0.6 -0.6 0 0 0 0</pose>
-      <collision name="marker_pad/marker_0_collision">
+      <collision name="marker_pad_stag/marker_0_collision">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -47,7 +47,7 @@
           </plane>
         </geometry>
       </collision>
-      <visual name="marker_pad/marker_0_visual">
+      <visual name="marker_pad_stag/marker_0_visual">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -59,21 +59,21 @@
           <specular>1 1 1 1</specular>
           <pbr>
             <metal>
-              <albedo_map>materials/textures/markers/101.png</albedo_map>
-              <normal_map>materials/textures/markers/101.png</normal_map>
+              <albedo_map>materials/textures/markers/00000.png</albedo_map>
+              <normal_map>materials/textures/markers/00000.png</normal_map>
             </metal>
           </pbr>
         </material>
       </visual>
     </link>
-    <joint name="marker_pad/marker_0_joint" type="fixed">
-      <parent>marker_pad/base_link</parent>
-      <child>marker_pad/marker_0</child>
+    <joint name="marker_pad_stag/marker_0_joint" type="fixed">
+      <parent>marker_pad_stag/base_link</parent>
+      <child>marker_pad_stag/marker_0</child>
     </joint>
 
-    <link name="marker_pad/marker_1">
+    <link name="marker_pad_stag/marker_1">
     <pose>0 -0.6 0 0 0 0</pose>
-      <collision name="marker_pad/marker_1_collision">
+      <collision name="marker_pad_stag/marker_1_collision">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -81,7 +81,7 @@
           </plane>
         </geometry>
       </collision>
-      <visual name="marker_pad/marker_1_visual">
+      <visual name="marker_pad_stag/marker_1_visual">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -93,21 +93,21 @@
           <specular>1 1 1 1</specular>
           <pbr>
             <metal>
-              <albedo_map>materials/textures/markers/102.png</albedo_map>
-              <normal_map>materials/textures/markers/102.png</normal_map>
+              <albedo_map>materials/textures/markers/00001.png</albedo_map>
+              <normal_map>materials/textures/markers/00001.png</normal_map>
             </metal>
           </pbr>
         </material>
       </visual>
     </link>
-    <joint name="marker_pad/marker_1_joint" type="fixed">
-      <parent>marker_pad/base_link</parent>
-      <child>marker_pad/marker_1</child>
+    <joint name="marker_pad_stag/marker_1_joint" type="fixed">
+      <parent>marker_pad_stag/base_link</parent>
+      <child>marker_pad_stag/marker_1</child>
     </joint>
 
-    <link name="marker_pad/marker_2">
+    <link name="marker_pad_stag/marker_2">
     <pose>0.6 -0.6 0 0 0 0</pose>
-      <collision name="marker_pad/marker_2_collision">
+      <collision name="marker_pad_stag/marker_2_collision">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -115,7 +115,7 @@
           </plane>
         </geometry>
       </collision>
-      <visual name="marker_pad/marker_2_visual">
+      <visual name="marker_pad_stag/marker_2_visual">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -127,21 +127,21 @@
           <specular>1 1 1 1</specular>
           <pbr>
             <metal>
-              <albedo_map>materials/textures/markers/103.png</albedo_map>
-              <normal_map>materials/textures/markers/103.png</normal_map>
+              <albedo_map>materials/textures/markers/00002.png</albedo_map>
+              <normal_map>materials/textures/markers/00002.png</normal_map>
             </metal>
           </pbr>
         </material>
       </visual>
     </link>
-    <joint name="marker_pad/marker_2_joint" type="fixed">
-      <parent>marker_pad/base_link</parent>
-      <child>marker_pad/marker_2</child>
+    <joint name="marker_pad_stag/marker_2_joint" type="fixed">
+      <parent>marker_pad_stag/base_link</parent>
+      <child>marker_pad_stag/marker_2</child>
     </joint>
 
-    <link name="marker_pad/marker_3">
+    <link name="marker_pad_stag/marker_3">
     <pose>-0.6 0 0 0 0 0</pose>
-      <collision name="marker_pad/marker_3_collision">
+      <collision name="marker_pad_stag/marker_3_collision">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -149,7 +149,7 @@
           </plane>
         </geometry>
       </collision>
-      <visual name="marker_pad/marker_3_visual">
+      <visual name="marker_pad_stag/marker_3_visual">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -161,21 +161,21 @@
           <specular>1 1 1 1</specular>
           <pbr>
             <metal>
-              <albedo_map>materials/textures/markers/104.png</albedo_map>
-              <normal_map>materials/textures/markers/104.png</normal_map>
+              <albedo_map>materials/textures/markers/00003.png</albedo_map>
+              <normal_map>materials/textures/markers/00003.png</normal_map>
             </metal>
           </pbr>
         </material>
       </visual>
     </link>
-    <joint name="marker_pad/marker_3_joint" type="fixed">
-      <parent>marker_pad/base_link</parent>
-      <child>marker_pad/marker_3</child>
+    <joint name="marker_pad_stag/marker_3_joint" type="fixed">
+      <parent>marker_pad_stag/base_link</parent>
+      <child>marker_pad_stag/marker_3</child>
     </joint>
 
-    <link name="marker_pad/marker_4">
+    <link name="marker_pad_stag/marker_4">
     <pose>0 0 0 0 0 0</pose>
-      <collision name="marker_pad/marker_4_collision">
+      <collision name="marker_pad_stag/marker_4_collision">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -183,7 +183,7 @@
           </plane>
         </geometry>
       </collision>
-      <visual name="marker_pad/marker_4_visual">
+      <visual name="marker_pad_stag/marker_4_visual">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -195,21 +195,21 @@
           <specular>1 1 1 1</specular>
           <pbr>
             <metal>
-              <albedo_map>materials/textures/markers/105.png</albedo_map>
-              <normal_map>materials/textures/markers/105.png</normal_map>
+              <albedo_map>materials/textures/markers/00004.png</albedo_map>
+              <normal_map>materials/textures/markers/00004.png</normal_map>
             </metal>
           </pbr>
         </material>
       </visual>
     </link>
-    <joint name="marker_pad/marker_4_joint" type="fixed">
-      <parent>marker_pad/base_link</parent>
-      <child>marker_pad/marker_4</child>
+    <joint name="marker_pad_stag/marker_4_joint" type="fixed">
+      <parent>marker_pad_stag/base_link</parent>
+      <child>marker_pad_stag/marker_4</child>
     </joint>
 
-    <link name="marker_pad/marker_5">
+    <link name="marker_pad_stag/marker_5">
     <pose>0.6 0 0 0 0 0</pose>
-      <collision name="marker_pad/marker_5_collision">
+      <collision name="marker_pad_stag/marker_5_collision">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -217,7 +217,7 @@
           </plane>
         </geometry>
       </collision>
-      <visual name="marker_pad/marker_5_visual">
+      <visual name="marker_pad_stag/marker_5_visual">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -229,21 +229,21 @@
           <specular>1 1 1 1</specular>
           <pbr>
             <metal>
-              <albedo_map>materials/textures/markers/106.png</albedo_map>
-              <normal_map>materials/textures/markers/106.png</normal_map>
+              <albedo_map>materials/textures/markers/00005.png</albedo_map>
+              <normal_map>materials/textures/markers/00005.png</normal_map>
             </metal>
           </pbr>
         </material>
       </visual>
     </link>
-    <joint name="marker_pad/marker_5_joint" type="fixed">
-      <parent>marker_pad/base_link</parent>
-      <child>marker_pad/marker_5</child>
+    <joint name="marker_pad_stag/marker_5_joint" type="fixed">
+      <parent>marker_pad_stag/base_link</parent>
+      <child>marker_pad_stag/marker_5</child>
     </joint>
 
-    <link name="marker_pad/marker_6">
+    <link name="marker_pad_stag/marker_6">
     <pose>-0.6 0.6 0 0 0 0</pose>
-      <collision name="marker_pad/marker_6_collision">
+      <collision name="marker_pad_stag/marker_6_collision">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -251,7 +251,7 @@
           </plane>
         </geometry>
       </collision>
-      <visual name="marker_pad/marker_6_visual">
+      <visual name="marker_pad_stag/marker_6_visual">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -263,21 +263,21 @@
           <specular>1 1 1 1</specular>
           <pbr>
             <metal>
-              <albedo_map>materials/textures/markers/107.png</albedo_map>
-              <normal_map>materials/textures/markers/107.png</normal_map>
+              <albedo_map>materials/textures/markers/00006.png</albedo_map>
+              <normal_map>materials/textures/markers/00006.png</normal_map>
             </metal>
           </pbr>
         </material>
       </visual>
     </link>
-    <joint name="marker_pad/marker_6_joint" type="fixed">
-      <parent>marker_pad/base_link</parent>
-      <child>marker_pad/marker_6</child>
+    <joint name="marker_pad_stag/marker_6_joint" type="fixed">
+      <parent>marker_pad_stag/base_link</parent>
+      <child>marker_pad_stag/marker_6</child>
     </joint>
 
-    <link name="marker_pad/marker_7">
+    <link name="marker_pad_stag/marker_7">
     <pose>0 0.6 0 0 0 0</pose>
-      <collision name="marker_pad/marker_7_collision">
+      <collision name="marker_pad_stag/marker_7_collision">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -285,7 +285,7 @@
           </plane>
         </geometry>
       </collision>
-      <visual name="marker_pad/marker_7_visual">
+      <visual name="marker_pad_stag/marker_7_visual">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -297,21 +297,21 @@
           <specular>1 1 1 1</specular>
           <pbr>
             <metal>
-              <albedo_map>materials/textures/markers/108.png</albedo_map>
-              <normal_map>materials/textures/markers/108.png</normal_map>
+              <albedo_map>materials/textures/markers/00007.png</albedo_map>
+              <normal_map>materials/textures/markers/00007.png</normal_map>
             </metal>
           </pbr>
         </material>
       </visual>
     </link>
-    <joint name="marker_pad/marker_7_joint" type="fixed">
-      <parent>marker_pad/base_link</parent>
-      <child>marker_pad/marker_7</child>
+    <joint name="marker_pad_stag/marker_7_joint" type="fixed">
+      <parent>marker_pad_stag/base_link</parent>
+      <child>marker_pad_stag/marker_7</child>
     </joint>
 
-    <link name="marker_pad/marker_8">
+    <link name="marker_pad_stag/marker_8">
     <pose>0.6 0.6 0 0 0 0</pose>
-      <collision name="marker_pad/marker_8_collision">
+      <collision name="marker_pad_stag/marker_8_collision">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -319,7 +319,7 @@
           </plane>
         </geometry>
       </collision>
-      <visual name="marker_pad/marker_8_visual">
+      <visual name="marker_pad_stag/marker_8_visual">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -331,16 +331,16 @@
           <specular>1 1 1 1</specular>
           <pbr>
             <metal>
-              <albedo_map>materials/textures/markers/109.png</albedo_map>
-              <normal_map>materials/textures/markers/109.png</normal_map>
+              <albedo_map>materials/textures/markers/00008.png</albedo_map>
+              <normal_map>materials/textures/markers/00008.png</normal_map>
             </metal>
           </pbr>
         </material>
       </visual>
     </link>
-    <joint name="marker_pad/marker_8_joint" type="fixed">
-      <parent>marker_pad/base_link</parent>
-      <child>marker_pad/marker_8</child>
+    <joint name="marker_pad_stag/marker_8_joint" type="fixed">
+      <parent>marker_pad_stag/base_link</parent>
+      <child>marker_pad_stag/marker_8</child>
     </joint>
 
   </model>

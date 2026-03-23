@@ -121,9 +121,14 @@
       <direction>-0.5 0.1 -0.9</direction>
     </light>
 
+    <!-- <include>
+      <name>marker_pad_aruco</name>
+      <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/marker_pad_aruco</uri>
+      <pose>5.5 -4 0.003 0 0 0</pose>
+    </include> -->
     <include>
-      <name>marker_pad</name>
-      <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/marker_pad</uri>
+      <name>marker_pad_stag</name>
+      <uri>file:///home/viktor/BMSTU/nir_ws/gazebo_world/models/marker_pad_stag</uri>
       <pose>5.5 -4 0.003 0 0 0</pose>
     </include>
 

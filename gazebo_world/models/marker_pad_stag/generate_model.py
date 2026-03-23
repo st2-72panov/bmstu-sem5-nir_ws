@@ -8,12 +8,12 @@ COORDS = [-STEP, 0, STEP]  # -0.6, 0, 0.6
 
 SDR_START = """<?xml version='1.0'?>
 <sdf version='1.6'>
-  <model name='marker_pad'>
+  <model name='marker_pad_stag'>
     <pose>0 0 0.0001 0 0 0</pose>
     <static>true</static>
     
     <!-- Asphalt patch -->
-    <link name='marker_pad/base_link'>
+    <link name='marker_pad_stag/base_link'>
       <pose>0 0 -0.0001 0 0 0</pose>
       <collision name="collision">
         <geometry>
@@ -47,9 +47,9 @@ SDR_START = """<?xml version='1.0'?>
 """
 
 MARKER_TEMPLATE = """
-    <link name="marker_pad/marker_{idx}">
+    <link name="marker_pad_stag/marker_{idx}">
     <pose>{x} {y} 0 0 0 0</pose>
-      <collision name="marker_pad/marker_{idx}_collision">
+      <collision name="marker_pad_stag/marker_{idx}_collision">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -57,7 +57,7 @@ MARKER_TEMPLATE = """
           </plane>
         </geometry>
       </collision>
-      <visual name="marker_pad/marker_{idx}_visual">
+      <visual name="marker_pad_stag/marker_{idx}_visual">
         <geometry>
           <plane>
             <normal>0 0 1</normal>
@@ -76,9 +76,9 @@ MARKER_TEMPLATE = """
         </material>
       </visual>
     </link>
-    <joint name="marker_pad/marker_{idx}_joint" type="fixed">
-      <parent>marker_pad/base_link</parent>
-      <child>marker_pad/marker_{idx}</child>
+    <joint name="marker_pad_stag/marker_{idx}_joint" type="fixed">
+      <parent>marker_pad_stag/base_link</parent>
+      <child>marker_pad_stag/marker_{idx}</child>
     </joint>
 """
 
@@ -93,7 +93,7 @@ def generate_sdf():
     for row in COORDS:
         for col in COORDS:
             # Текстуры: 101.png ... 109.png
-            tex_num = 101 + marker_idx
+            tex_num = f'{marker_idx:05d}'
             content += MARKER_TEMPLATE.format(
                 idx=marker_idx,
                 x=col,

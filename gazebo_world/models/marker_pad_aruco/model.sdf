@@ -1,0 +1,347 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <model name='marker_pad_aruco'>
+    <pose>0 0 0.0001 0 0 0</pose>
+    <static>true</static>
+    
+    <!-- Asphalt patch -->
+    <link name='marker_pad_aruco/base_link'>
+      <pose>0 0 -0.0001 0 0 0</pose>
+      <collision name="collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>5 5</size>
+          </plane>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>5 5</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/tarmac.png</albedo_map>
+              <normal_map>materials/textures/tarmac.png</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+
+    <!-- MARKERS -->
+
+    <link name="marker_pad_aruco/marker_0">
+    <pose>-0.6 -0.6 0 0 0 0</pose>
+      <collision name="marker_pad_aruco/marker_0_collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+      </collision>
+      <visual name="marker_pad_aruco/marker_0_visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/markers/101.png</albedo_map>
+              <normal_map>materials/textures/markers/101.png</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="marker_pad_aruco/marker_0_joint" type="fixed">
+      <parent>marker_pad_aruco/base_link</parent>
+      <child>marker_pad_aruco/marker_0</child>
+    </joint>
+
+    <link name="marker_pad_aruco/marker_1">
+    <pose>0 -0.6 0 0 0 0</pose>
+      <collision name="marker_pad_aruco/marker_1_collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+      </collision>
+      <visual name="marker_pad_aruco/marker_1_visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/markers/102.png</albedo_map>
+              <normal_map>materials/textures/markers/102.png</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="marker_pad_aruco/marker_1_joint" type="fixed">
+      <parent>marker_pad_aruco/base_link</parent>
+      <child>marker_pad_aruco/marker_1</child>
+    </joint>
+
+    <link name="marker_pad_aruco/marker_2">
+    <pose>0.6 -0.6 0 0 0 0</pose>
+      <collision name="marker_pad_aruco/marker_2_collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+      </collision>
+      <visual name="marker_pad_aruco/marker_2_visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/markers/103.png</albedo_map>
+              <normal_map>materials/textures/markers/103.png</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="marker_pad_aruco/marker_2_joint" type="fixed">
+      <parent>marker_pad_aruco/base_link</parent>
+      <child>marker_pad_aruco/marker_2</child>
+    </joint>
+
+    <link name="marker_pad_aruco/marker_3">
+    <pose>-0.6 0 0 0 0 0</pose>
+      <collision name="marker_pad_aruco/marker_3_collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+      </collision>
+      <visual name="marker_pad_aruco/marker_3_visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/markers/104.png</albedo_map>
+              <normal_map>materials/textures/markers/104.png</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="marker_pad_aruco/marker_3_joint" type="fixed">
+      <parent>marker_pad_aruco/base_link</parent>
+      <child>marker_pad_aruco/marker_3</child>
+    </joint>
+
+    <link name="marker_pad_aruco/marker_4">
+    <pose>0 0 0 0 0 0</pose>
+      <collision name="marker_pad_aruco/marker_4_collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+      </collision>
+      <visual name="marker_pad_aruco/marker_4_visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/markers/105.png</albedo_map>
+              <normal_map>materials/textures/markers/105.png</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="marker_pad_aruco/marker_4_joint" type="fixed">
+      <parent>marker_pad_aruco/base_link</parent>
+      <child>marker_pad_aruco/marker_4</child>
+    </joint>
+
+    <link name="marker_pad_aruco/marker_5">
+    <pose>0.6 0 0 0 0 0</pose>
+      <collision name="marker_pad_aruco/marker_5_collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+      </collision>
+      <visual name="marker_pad_aruco/marker_5_visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/markers/106.png</albedo_map>
+              <normal_map>materials/textures/markers/106.png</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="marker_pad_aruco/marker_5_joint" type="fixed">
+      <parent>marker_pad_aruco/base_link</parent>
+      <child>marker_pad_aruco/marker_5</child>
+    </joint>
+
+    <link name="marker_pad_aruco/marker_6">
+    <pose>-0.6 0.6 0 0 0 0</pose>
+      <collision name="marker_pad_aruco/marker_6_collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+      </collision>
+      <visual name="marker_pad_aruco/marker_6_visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/markers/107.png</albedo_map>
+              <normal_map>materials/textures/markers/107.png</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="marker_pad_aruco/marker_6_joint" type="fixed">
+      <parent>marker_pad_aruco/base_link</parent>
+      <child>marker_pad_aruco/marker_6</child>
+    </joint>
+
+    <link name="marker_pad_aruco/marker_7">
+    <pose>0 0.6 0 0 0 0</pose>
+      <collision name="marker_pad_aruco/marker_7_collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+      </collision>
+      <visual name="marker_pad_aruco/marker_7_visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/markers/108.png</albedo_map>
+              <normal_map>materials/textures/markers/108.png</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="marker_pad_aruco/marker_7_joint" type="fixed">
+      <parent>marker_pad_aruco/base_link</parent>
+      <child>marker_pad_aruco/marker_7</child>
+    </joint>
+
+    <link name="marker_pad_aruco/marker_8">
+    <pose>0.6 0.6 0 0 0 0</pose>
+      <collision name="marker_pad_aruco/marker_8_collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+      </collision>
+      <visual name="marker_pad_aruco/marker_8_visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>0.5 0.5</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/markers/109.png</albedo_map>
+              <normal_map>materials/textures/markers/109.png</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="marker_pad_aruco/marker_8_joint" type="fixed">
+      <parent>marker_pad_aruco/base_link</parent>
+      <child>marker_pad_aruco/marker_8</child>
+    </joint>
+
+  </model>
+</sdf>
