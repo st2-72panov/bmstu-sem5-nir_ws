@@ -44,6 +44,6 @@ class STagDetector(QuadDetector):
                 continue
             pattern_flat = cv2.warpPerspective(framed_binary_cropped, homography, (w, w))
             
-            if self.reference_marker.is_valid(pattern_flat):  # Часто маркер достаточно кривой, чтобы валидация проводилась некорректно => TODO: добавить corner refinement 
+            if self.reference_marker.is_valid(pattern_flat):
                 return quad
         return None
