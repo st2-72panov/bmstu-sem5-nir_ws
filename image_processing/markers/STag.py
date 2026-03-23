@@ -60,8 +60,7 @@ class STag:
         # Обрезка чёрного фона. Остаётся только круговая часть маркера
         h, w = img.shape[:2]
         l, r = int(0.1 * w), int(0.9 * w)
-        t, b = int(0.1 * h), int(0.9 * h)
-        return img[t:b, l:r]
+        return img[l:r, l:r]
     
     def _compute_circle_centers(self) -> List[Tuple[float, float]]:
         """
@@ -115,13 +114,13 @@ class STag:
             avg_value = np.mean(region)
             
             # Как в stag_detector.cpp: THRESH_BINARY_INV
-            # Чёрные кружки (< 128) = 1, белые (>= 128) = 0
-            value = 1 if avg_value < 128 else 0
+            # Чёрные кружки (< 128) = 0, белые (>= 128) = 1
+            value = 0 if avg_value < 128 else 1
             circle_values.append(value)
             
             # Рисуем точку для отладки
             # Красная = белый кружок (value=0), Синяя = чёрный кружок (value=1)
-            color = (0, 0, 255) if value == 0 else (255, 0, 0)  # BGR формат
+            color = (0, 0, 255) if value == 1 else (255, 0, 0)  # BGR формат
             cv2.circle(debug_img, (px, py), 5, color, -1)
         cv2.imwrite(os.path.join(SCRIPT_DIR, "img_debug.png"), debug_img)
         
