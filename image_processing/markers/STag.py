@@ -37,6 +37,8 @@ class STag:
         pattern_img = self._extract_marker_region(pattern_img)
         self._save_debug_img(pattern_img)
         self.pattern = self._decode_pattern(pattern_img)
+
+        self.MAX_MISMATCHES = int(0.11 * 48)
     
     def _save_debug_img(self, img):
         if self.count > 5:
@@ -188,13 +190,17 @@ class STag:
         """Сравнивает два паттерна"""
         if len(pattern1) != len(pattern2):
             return False
+
+        mismatch_count = 0
         
         for level1, level2 in zip(pattern1, pattern2):
             if len(level1) != len(level2):
                 return False
             for val1, val2 in zip(level1, level2):
                 if val1 != val2:
-                    return False
+                    mismatch_count += 1
+                    if mismatch_count > self.MAX_MISMATCHES:
+                        return False
         return True
 
 
