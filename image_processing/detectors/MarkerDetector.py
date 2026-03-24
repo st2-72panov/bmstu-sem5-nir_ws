@@ -121,16 +121,41 @@ class MarkerDetector:
         
         # 3. Вычисление угловых точек
         with self.time_logger.measure('1', 'corners calculation', 1):
-            prev_pts = np.float32([self.prev_keypoints[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)  # TODO: может, заранее переводить их в такую форму?
-            curr_pts = np.float32([self.current_keypoints[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
-            H, _ = cv2.findHomography(prev_pts, curr_pts, cv2.RANSAC, 10.0)  # 10.0 — идеальный вручную подобранный коэффициент
-            if H is None:
-                self.logger.warning('Неудачная гомография [для примерного вычисления положения углов]')
-                return None
-            # Это работает даже с учётом того, что prev_corners в локальных координатах, потому что pts тоже в них
-            prev_corners = self.prev_corners_local.reshape(-1, 1, 2).astype(np.float32)
-            corners = cv2.perspectiveTransform(prev_corners, H)
-            corners = corners.reshape(-1, 2)
+            # 3.1 Грубая гомография .......................
+            with self.time_logger.measure('1', 'rough homography', 2):
+                prev_pts = np.float32([self.prev_keypoints[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)  # TODO: может, заранее переводить их в такую форму?
+                curr_pts = np.float32([self.current_keypoints[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
+                H, _ = cv2.findHomography(prev_pts, curr_pts, cv2.RANSAC, 10.0)  # 10.0 — идеальный вручную подобранный коэффициент
+                if H is None:
+                    self.logger.warning('Неудачная гомография [для примерного вычисления положения углов]')
+                    return None
+
+            # 3.2 Фильтрация худших точек .................
+            with self.time_logger.measure('1', 'worst kp filtration', 2):
+                projected_prev_pts = cv2.perspectiveTransform(prev_pts, H)
+
+                # diff имеет размерность (N, 1, 2), norm считаем по последнему измерению (axis=2)
+                diff = projected_prev_pts - curr_pts
+                distances = np.linalg.norm(diff, axis=2).flatten()
+    
+                partition_idx = len(distances) // 2
+                median_dist = np.partition(distances, partition_idx)[partition_idx]  # Альтернатива медленному np.median
+                good_mask = distances <= median_dist
+                good_prev_pts = prev_pts[good_mask]
+                good_curr_pts = curr_pts[good_mask]
+
+            # 3.3 Улучшенная гомография ...................
+            with self.time_logger.measure('1', 'good homography', 2):
+                if len(good_prev_pts) >= 4:
+                    H, _ = cv2.findHomography(good_prev_pts, good_curr_pts, cv2.RANSAC, 2.0)
+                    matches = [m for i, m in enumerate(matches) if good_mask[i]]
+
+            # 3.4 Вычисление углов ........................
+            with self.time_logger.measure('1', 'corners calculation', 2):
+                # Это работает даже с учётом того, что prev_corners в локальных координатах, потому что pts тоже в них
+                prev_corners = self.prev_corners_local.reshape(-1, 1, 2).astype(np.float32)
+                corners = cv2.perspectiveTransform(prev_corners, H)
+                corners = corners.reshape(-1, 2)
 
         # 4. Матчинг
         with self.time_logger.measure('1', 'render keypoint match img', 1):
@@ -151,8 +176,8 @@ class MarkerDetector:
         ordered_corners = self._order_points(corners)
         w, h = ordered_corners[1][0] - ordered_corners[3][0], ordered_corners[2][1] - ordered_corners[0][1]
 
-        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 50, 0.001)
-        winSize = (int(0.2 * w), int(0.2 * h))
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.001)
+        winSize = (int(0.1 * w), int(0.1 * h))
         zeroZone = (-1, -1)
         return cv2.cornerSubPix(self.framed_gray, ordered_corners, winSize, zeroZone, criteria)
         
