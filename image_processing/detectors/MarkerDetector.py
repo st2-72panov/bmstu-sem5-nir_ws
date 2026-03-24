@@ -160,7 +160,7 @@ class MarkerDetector:
         # 4. Матчинг
         with self.time_logger.measure('1', 'render keypoint match img', 1):
             c = min(len(matches), self.config.KEYPOINTS_TO_MATCH)
-            best_matches = sorted(matches, key=lambda m: m.distance)[:c]
+            best_matches = sorted(matches, key=lambda m: m.distance)[:c]  # TODO: можно провести сортировку через distances
             self._render_keypoint_match_img(self.prev_framed_gray, self.framed_gray, best_matches)
 
         return corners
