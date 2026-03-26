@@ -16,7 +16,7 @@ class PhotoProcessor:
         script_dir = os.path.dirname(os.path.abspath(__file__))
         output_dir_folder = os.path.join(script_dir, ".IMAGES_OUTPUT")
 
-        if False:
+        if 0:
             reference_marker = Aruco(101, 6, cv2.aruco.DICT_6X6_250)
             self.input_file_prefix = "aruco_"
             self.marker_finder = ArucoDetector(reference_marker, output_dir_folder)
@@ -49,6 +49,7 @@ class PhotoProcessor:
         for i in range(2):
             with self.time_logger.measure('', 'total'):
                 photo = cv2.imread(f"../IMAGES_TEST/{self.input_file_prefix}{i}.jpg")
+                # photo = cv2.imread(f"../IMAGES_TEST/{i*2}.jpg")
                 self.callback(photo)
                 pose = self.marker_finder.process(self.pending_photo)
 

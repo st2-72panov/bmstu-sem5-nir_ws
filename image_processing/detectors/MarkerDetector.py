@@ -8,6 +8,7 @@ import numpy as np
 
 from markers.Aruco import Aruco
 from util.time_logger import TimeLogger
+import PoseEstimator
 
 """
     Именование изображений:
@@ -95,13 +96,6 @@ class MarkerDetector:
 
     # Шаг 1 ...............................................
     def _find_and_match_keypoints(self):
-        # BUG: очень кривая оценка угловых точек. Видимо, очень маленькая терпимость к шуму.
-            # 1) TODO: какие ещё части нуждаются в сглаживании? Сглаживание или бинаризация?
-            # 2) TODO: ЛИБО отредактировать ORB детектор (область запоминания дескриптора)
-            #           (потому что я вижу, что в этом есть потенциал: большая часть точек детектируется ИМЕННО внутри этого маркера)
-            #          и потом надеятся, что почти все точки угадаются правильно
-            #          ЛИБО написать программу, удаляющую несоответствующие точки
-            # TODO: почему в одной и той же точке детектируется несколько особых точек?
         # 1. Поиск точек
         with self.time_logger.measure('1', 'keypoint search', 1):
             detector = cv2.ORB_create()  # TODO: рассмотреть варианты аргументов. Что вообще может повлиять на них? Освещённость? Шум? Летающие объекты в воздухе?
@@ -233,11 +227,6 @@ class MarkerDetector:
         winSize = (int(0.1 * w), int(0.1 * h))
         zeroZone = (-1, -1)
         return cv2.cornerSubPix(self.framed_gray, corners, winSize, zeroZone, criteria)
-
-    # Шаг 3 ...............................................
-    def _estimate_pose(self):
-        ...  # TODO
-        # TODO: провращать точки в каждом из методов субпиксельного уточнения
 
     # Шаг 4 ...............................................
     def _calculate_next_frame(self):
@@ -441,8 +430,8 @@ class MarkerDetector:
         
         # ...................................
         with self.time_logger.measure('3', 'estimate pose'):
-            pose = self._estimate_pose()
-        self.logger.info('pose = {pose}')
+            tvec = PoseEstimator.estimate_pose(self.subpixel_corners_global)
+        self.logger.info(f'{tvec = }')
 
         # ...................................
         with self.time_logger.measure('4', 'prepare next step'):
