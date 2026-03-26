@@ -231,7 +231,7 @@ class MarkerDetector:
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Вспомогательные функции
 
-    def rescale_quad(self, quad, scale):
+    def rescale_quad(self, quad, scale):  # Точки в quad должны следовать друг за другом по кругу
         return np.array([p + (scale - 1.0) * (p - quad[(i + 2) % 4]) for i, p in enumerate(quad)])
 
     def _frame_to_photo_coordinates(self, points: np.ndarray):
