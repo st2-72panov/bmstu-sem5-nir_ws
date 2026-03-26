@@ -104,8 +104,9 @@ class MarkerDetector:
             # TODO: почему в одной и той же точке детектируется несколько особых точек?
         # 1. Поиск точек
         with self.time_logger.measure('1', 'keypoint search', 1):
-            orb = cv2.ORB_create()  # TODO: рассмотреть варианты аргументов. Что вообще может повлиять на них? Освещённость? Шум? Летающие объекты в воздухе?
-            self.current_keypoints, self.current_descriptors = orb.detectAndCompute(self.framed_gray, None)
+            detector = cv2.ORB_create()  # TODO: рассмотреть варианты аргументов. Что вообще может повлиять на них? Освещённость? Шум? Летающие объекты в воздухе?
+            # detector = cv2.SIFT_create()
+            self.current_keypoints, self.current_descriptors = detector.detectAndCompute(self.framed_gray, None)
         img_keypoins = self._draw_keypoints(self.framed_photo, self.current_keypoints)
         self._save_image('1.all_keypoints.png', img_keypoins)
 
@@ -114,6 +115,7 @@ class MarkerDetector:
             if self.prev_keypoints is None or self.current_descriptors is None:
                 return None
             bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+            # bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
             matches = bf.match(self.prev_descriptors, self.current_descriptors)
             matches = [m for m in matches if m.distance <= self.config.KEYPOINT_DISTANCE_THRESHOLD]
             if len(matches) < self.config.MATCHING_KEYPOINTS_MINIMUM:
@@ -171,24 +173,66 @@ class MarkerDetector:
     
     # Шаг 2 ...............................................
     def _refine_quad_corners(self, detected_marker): pass  # refine_quad_corners_with_line_intersections
-    def _refine_corners(self, corners):  # _refine_corners_by_harris
-        corners = np.float32(corners)
-        ordered_corners = self._order_points(corners)
-        w, h = ordered_corners[1][0] - ordered_corners[3][0], ordered_corners[2][1] - ordered_corners[0][1]
+    def _refine_corners(self, corners):
+        frame_corners = self._rescale_quad(corners, 1.5)
+        x1 = int(np.min(frame_corners[:, 0]))
+        x2 = int(np.max(frame_corners[:, 0]))
+        y1 = int(np.min(frame_corners[:, 1]))
+        y2 = int(np.max(frame_corners[:, 1]))
+        gray_img = self.framed_gray[y1:y2, x1:x2]
+        _, bin_img = cv2.threshold(gray_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
+        contours, _ = cv2.findContours(bin_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+        # DEBUG
+        # img = cv2.cvtColor(self.framed_binary, cv2.COLOR_GRAY2BGR)
+        # img = np.zeros_like(img)
+        # cv2.drawContours(img, contours, -1, (0, 255, 0), 1)
+        # self._save_image("arstarst.jpg", img)
+
+        refined_corners = None
+
+        # Площадь исходного четырёхугольника (для сравнения)
+        original_area = cv2.contourArea(corners.astype(np.float32))
+
+        for contour in sorted(contours, key=cv2.contourArea, reverse=True):
+            epsilon = 0.02 * cv2.arcLength(contour, True)
+            approx = cv2.approxPolyDP(contour, epsilon, True)
+
+            if len(approx) != 4:
+                continue
+
+            # Площадь нового контура отличается от площади оригинального более чем на 1/3
+            contour_area = cv2.contourArea(contour)
+            if abs(contour_area - original_area) > original_area / 2:
+                continue
+
+            refined_corners = approx.reshape(4, 2)
+            break
+
+        if refined_corners is not None:
+            # Перевести в старые координаты (учесть смещение кропа)
+            refined_corners[:, 0] += x1
+            refined_corners[:, 1] += y1
+
+            # Поставить refined_corners в том же порядке, в каком углы были до этого
+            refined_corners = self._order_points(refined_corners)
+            old_ordered_corners = self._order_points(corners)
+            rotation = 0
+            for i, point in enumerate(old_ordered_corners):
+                if np.allclose(corners[0], point, atol=1.0):  # atol=1.0 для учёта погрешности округления
+                    rotation = i
+                    break
+            refined_corners = np.roll(refined_corners, -rotation, axis=0)
+            
+            return refined_corners
+
+        # Fallback: cornerSubPix
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.001)
+        w, h = x2 - x1, y2 - y1
         winSize = (int(0.1 * w), int(0.1 * h))
         zeroZone = (-1, -1)
-        return cv2.cornerSubPix(self.framed_gray, ordered_corners, winSize, zeroZone, criteria)
-        
-        # # DEBUG
-        # img = self.framed_photo.copy()
-        # for corner in self.subpixel_corners:
-        #     x, y = int(corner[0]), int(corner[1])
-        #     cv2.circle(img, (x, y), 8, (0, 0, 255), 1)
-        #     cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
-        # self._save_image('2A.subpix_corners.png', img)
-        # # /DEBUG
+        return cv2.cornerSubPix(self.framed_gray, corners, winSize, zeroZone, criteria)
 
     # Шаг 3 ...............................................
     def _estimate_pose(self):
@@ -216,11 +260,12 @@ class MarkerDetector:
             height, width = self.photo.shape[:2]
             self.prev_frame = ((0, 0), (width, height))
         self.frame = ((x1, y1), (x2, y2))
+        # self.frame = ((0, 0), (1920, 720))
 
     def _save_keypoints_within_marker(self):
         # Shrink marker for not to save black edge keypoints
         quad = self.subpixel_corners
-        quad = np.array(self.rescale_quad(quad, 0.9))
+        quad = np.array(self._rescale_quad(quad, 0.9))
 
         # Filter keypoints
         mask = [cv2.pointPolygonTest(quad, pt.pt, False) > 0 
@@ -232,7 +277,8 @@ class MarkerDetector:
     # Вспомогательные функции
 
     def _rescale_quad(self, quad, scale):  # Точки в quad должны следовать друг за другом по кругу
-        return np.array([p + (scale - 1.0) * (p - quad[(i + 2) % 4]) for i, p in enumerate(quad)])
+        rescaled_quad = [p + (scale - 1.0) * (p - quad[(i + 2) % 4]) for i, p in enumerate(quad)]
+        return np.array(rescaled_quad).astype(np.int32)
 
     def _frame_to_photo_coordinates(self, points: np.ndarray):
         if self.frame is None:
@@ -394,8 +440,9 @@ class MarkerDetector:
         self.subpixel_corners_global = self._frame_to_photo_coordinates(self.subpixel_corners)
         
         # ...................................
-        # with self.time_logger.measure('3', 'estimate pose'):
-        #     pose = self._estimate_pose()
+        with self.time_logger.measure('3', 'estimate pose'):
+            pose = self._estimate_pose()
+        self.logger.info('pose = {pose}')
 
         # ...................................
         with self.time_logger.measure('4', 'prepare next step'):

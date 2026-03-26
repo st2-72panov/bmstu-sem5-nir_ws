@@ -57,6 +57,8 @@ class ArucoDetector(QuadDetector):
             )
             pattern = (pattern_adjusted > 127).astype(np.uint8)
 
-            if self.reference_marker.is_valid(pattern):
+            rotation = self.reference_marker.check(pattern)
+            if rotation is not None:
+                quad['corners'] = [quad['corners'][(i - rotation + 4) % 4] for i in range(4)]
                 return quad
         return None

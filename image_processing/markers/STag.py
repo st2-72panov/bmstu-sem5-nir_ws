@@ -46,7 +46,7 @@ class STag:
         cv2.imwrite(os.path.join(self.OUTPUT_DIR, f"img_debug_{self.count}.png"), img)
         self.count += 1    
 
-    def is_valid(self, pattern_img: np.ndarray) -> bool:
+    def check(self, pattern_img: np.ndarray) -> int:
         """
         Проверяет, совпадает ли паттерн на изображении с эталонным.
         Проверяет все 4 поворота против часовой стрелки.
@@ -65,9 +65,9 @@ class STag:
             
             # Сравниваем с эталонным паттерном
             if self._patterns_match(self.pattern, decoded_pattern):
-                return True
+                return rotation
         
-        return False
+        return None
     
     def _extract_marker_region(self, img0: np.ndarray) -> np.ndarray:
         h, w = img0.shape
@@ -209,9 +209,9 @@ class STag:
     
 #     # Проверяем другой паттерн
 #     test_img = cv2.imread(os.path.join(SCRIPT_DIR, "stag.png"), cv2.IMREAD_GRAYSCALE)
-#     is_valid = stag.is_valid(test_img)
+#     check = stag.check(test_img)
     
-#     print(f"Pattern is valid: {is_valid}")
+#     print(f"Pattern is valid: {check}")
     
 #     # Можно также получить декодированный паттерн
 #     pattern = stag._decode_pattern(test_img)

@@ -44,6 +44,8 @@ class STagDetector(QuadDetector):
                 continue
             pattern_flat = cv2.warpPerspective(framed_binary_cropped, homography, (w, w))
             
-            if self.reference_marker.is_valid(pattern_flat):
+            rotation = self.reference_marker.check(pattern_flat)
+            if rotation is not None:
+                quad['corners'] = [quad['corners'][(i - rotation + 4) % 4] for i in range(4)]
                 return quad
         return None

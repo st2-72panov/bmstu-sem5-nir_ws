@@ -14,7 +14,7 @@ class Aruco:
         img = cv2.aruco.generateImageMarker(dictionary, self.id, self.size)
         return (img > 127).astype(np.uint8)
 
-    def is_valid(self, pattern: np.ndarray) -> bool:
+    def check(self, pattern: np.ndarray) -> bool:
         if pattern.shape != (self.size, self.size):
             raise RuntimeError()
 
@@ -22,6 +22,6 @@ class Aruco:
         for rotation in range(4):
             rotated_pattern = np.rot90(self.pattern, k=rotation)
             if np.array_equal(pattern, rotated_pattern):  # TODO: возможно, ввести процентное сравнение (пр.: >90%)
-                return True
+                return rotation
         
-        return False
+        return None
