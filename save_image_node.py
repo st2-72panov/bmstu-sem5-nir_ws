@@ -13,6 +13,7 @@ ONLY_IMAGE = True
 class ImageSaver(Node):
     def __init__(self):
         super().__init__('image_saver')
+        
         self.subscription = self.create_subscription(
             Image,
             '/X3/camera',
@@ -21,18 +22,24 @@ class ImageSaver(Node):
         
         self.bridge = CvBridge()
         self.count = 0
-        
+
+        if not ONLY_IMAGE:
+            OUTPUT_DIR += f'/{time.strftime('%H:%M:%S')}'
         if not os.path.exists(OUTPUT_DIR):
             os.makedirs(OUTPUT_DIR)
             
         self.get_logger().info('Node started. Waiting for images...')
 
     def listener_callback(self, msg):
-        if self.count == 1:
+        if ONLY_IMAGE and self.count == 1:
             return
-            
+
         cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
-        filename = os.path.join(OUTPUT_DIR, f'image_{time.strftime('%H:%M:%S')}.jpg')
+        if ONLY_IMAGE:
+            filename = f'image_{time.strftime('%H:%M:%S')}.jpg'
+        else:
+            filename = f'{self.count}.jpg'
+        filename = os.path.join(OUTPUT_DIR, filename)
         cv2.imwrite(filename, cv_image)
         self.get_logger().info(f'Saved: {filename}')
         self.image_saved = True
