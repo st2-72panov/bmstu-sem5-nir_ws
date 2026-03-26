@@ -220,7 +220,7 @@ class MarkerDetector:
     def _save_keypoints_within_marker(self):
         # Shrink marker for not to save black edge keypoints
         quad = self.subpixel_corners
-        quad = np.array([p + 0.1 * (quad[(i + 2) % 4] - p) for i, p in enumerate(quad)])
+        quad = np.array(self.rescale_quad(quad, 0.9))
 
         # Filter keypoints
         mask = [cv2.pointPolygonTest(quad, pt.pt, False) > 0 
@@ -230,7 +230,10 @@ class MarkerDetector:
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Вспомогательные функции
-    
+
+    def rescale_quad(self, quad, scale):
+        return np.array([p + (scale - 1.0) * (p - quad[(i + 2) % 4]) for i, p in enumerate(quad)])
+
     def _frame_to_photo_coordinates(self, points: np.ndarray):
         if self.frame is None:
             return points
